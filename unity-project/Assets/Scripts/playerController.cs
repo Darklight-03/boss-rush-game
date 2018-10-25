@@ -17,10 +17,10 @@ public class playerController : MonoBehaviour {
     float iy = Input.GetAxis("Vertical");
     
     // get velocity input
-    Vector2 inputvelocity = new Vector2(ix,iy);
+    var inputvelocity = new Vector2(ix,iy);
 
     // later can add velocity vectors together for knockback and stuff
-    rb.velocity = inputvelocity*0.5f;
+    rb.velocity = inputvelocity*0.5f; 
   }
 	
 	// Update is called once per frame
