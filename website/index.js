@@ -7,6 +7,14 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/index.css', function(req, res){
+  res.sendFile(__dirname + '/index.css');
+});
+
+app.get('/index-script.js', function(req, res){
+  res.sendFile(__dirname + '/index-script.js');
+});
+
 io.on('connection', function(socket){
   io.emit('uinfo', {content:'user connected'});
   socket.on('chat message', function(msg){
