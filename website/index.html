@@ -11,6 +11,7 @@
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+      #messages li.uinfo { color: grey; }
       #messages { margin-bottom: 40px }
     </style>
   </head>
@@ -19,7 +20,7 @@
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
     </form>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.7.3.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       $(function () {
@@ -33,6 +34,10 @@
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
         });
+	socket.on('uinfo', function(msg){
+          $('#messages').append($('<li class="uinfo">').text(msg.content)); 
+	  window.scrollTo(0, document.body.scrollHeight);
+	});
       });
     </script>
   </body>
