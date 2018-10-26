@@ -21,13 +21,18 @@ app.get('/assets/logo.png', function(req, res){
 
 
 io.on('connection', function(socket){
-  io.emit('uinfo', {content:'user connected'});
+  console.log('user connected');
+
+  /*
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
+  */
+
   socket.on('disconnect', function(){
-    io.emit('uinfo', {content:'user disconnected'});
+    console.log('user disconnected');
   });
+  
 });
 
 http.listen(port, function(){
