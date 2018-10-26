@@ -15,6 +15,11 @@ app.get('/index-script.js', function(req, res){
   res.sendFile(__dirname + '/index-script.js');
 });
 
+app.get('/assets/logo.png', function(req, res){
+  res.sendFile(__dirname + '/assets/logo.png');
+});
+
+
 io.on('connection', function(socket){
   io.emit('uinfo', {content:'user connected'});
   socket.on('chat message', function(msg){

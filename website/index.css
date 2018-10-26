@@ -1,5 +1,6 @@
 body {
   font: 13px Helvetica, Arial;
+  background: #505050;
 }
 
 * {
@@ -32,4 +33,23 @@ form button {
 }
 #messages {
   margin-bottom: 40px;
+}
+
+#logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 25%;
+}
+
+#gamecontainer {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+#game {
+  border: 5px solid white;
+  width: 100%;
+  padding-bottom: 56.25%;
 }
