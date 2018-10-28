@@ -12,11 +12,29 @@
     <div class="header">
       <img id="logo" src="logo-hq.png" alt="LOGO">
     </div>
+
+  	<button type='button' onclick='createLobby()'>create lobby</button><br>
+    <button type='button' onclick='joinLobby()'>join lobby</button><br><br>
+
+    <form id="f1" onsubmit="return false">
+      <input type="text" id="unamec" placeholder="username"><br>
+      <button type="button" onclick="fcreateLobby()">create lobby</button><br><br>
+    </form>
+    <form id="f2" onsubmit="return false">
+      <input type="text" id="unamej" placeholder="username"><br>
+      <input type="number" id="lobbyid" placeholder="lobby id"><br>
+      <button type="button" onclick="fjoinLobby()">join lobby</button><br><br>
+    </form>
+    
+    <form id="f3" onsubmit="return false">
+      <input type="text" id="mess" placeholder="message"><br>
+      <button type="button" onclick="sendMessage()">send</button><br><br>
+    </form>
+  
     <div id="gamecontainer">
       <div id="game">
         <!-- game here -->
-	<div style="text-align: center; color: white; font-size: 50px;">Game here</div>
-	<button type='button' onclick='createLobby()'>create lobby></button>
+      	<div style="text-align: center; color: white; font-size: 50px;">Game here</div>
       </div>
     </div>
     <!--

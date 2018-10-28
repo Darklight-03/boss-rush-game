@@ -26,12 +26,12 @@ io.on('connection', function(socket){
   
   
   socket.on('create lobby', function(msg){
+    console.log(lobbies);
     // msg { uname:"username" }
-    console.log(msg);
-    var obj = JSON.parse(msg);
-    console.log(obj);
-    var lobby = [ { uname: obj['uname'] } ];
-    console.log(lobby);
+    console.log('msg=');
+    //console.log(msg);
+    var lobby = [ { sock: socket, uname: msg['uname'] } ];
+    //console.log(lobby);
     var thislobbyid = lobbies.length;
     lobbies[thislobbyid] = lobby;
     socket.emit('create lobby', { lobbyid: thislobbyid } );
@@ -40,26 +40,33 @@ io.on('connection', function(socket){
 
   socket.on('join lobby', function(msg){
     // msg { uname:"username", lobbyid:14 }
-    console.log(msg);
-    var obj = JSON.parse(msg);
-    if (obj['lobbyid'] >= lobbies.length) {
+    //console.log(msg);
+    if (msg['lobbyid'] >= lobbies.length) {
       socket.emit('join lobby', { ret: 'fail' } );
     }
     else {
-      var lobby = lobbies[obj['lobbyid']];
-      lobby[lobby.length] = { uname: obj['uname'] };
-      lobbies[obj['lobbyid']] = lobby;
+      var lobby = lobbies[msg['lobbyid']];
+      lobby[lobby.length] = { sock: socket, uname: msg['uname'] };
+      lobbies[msg['lobbyid']] = lobby;
       socket.emit('join lobby', { ret: 'success' } );
     }
     console.log(lobbies);
   });
 
   socket.on('disband lobby', function(msg){
-    
+    lobbies.splice(msg['lobbyid'], 1);
+    socket.emit('disband lobby', { ret: 'success' } );
   });
 
   socket.on('general message', function(msg){
-    
+    console.log(msg);
+    var lobby = lobbies[msg['lobbyid']];
+    console.log(lobby);
+    for (i = 0; i < lobby.length; i++) {
+      console.log(lobby[i]['uname']);
+      
+      lobby[i]['sock'].emit('general message', msg['content']);
+    }
   });
   
   socket.on('disconnect', function(){
