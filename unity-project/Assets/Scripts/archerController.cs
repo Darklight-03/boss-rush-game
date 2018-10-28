@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class archerController : MonoBehaviour {
@@ -7,8 +8,13 @@ public class archerController : MonoBehaviour {
   private GameObject bow;
   private Health health;
   private SpriteRenderer render;
+  private GameObject healthbar;
+  private GameObject healthbarback;
+  private Text interfaceplayertext;
   float bowdistance;
+  Vector3 healthbarsize;
   List<Vector2> forces;
+  int hbarupdatetime;
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +23,14 @@ public class archerController : MonoBehaviour {
     bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
     render = GetComponent<SpriteRenderer>();
     health = GetComponent<Health>();
+    health.SetHP(100,100);
     forces = new List<Vector2>();
+    healthbar = GameObject.FindWithTag("Health-bar");
+    healthbarback = GameObject.FindWithTag("Health-bar-background");
+    interfaceplayertext = GameObject.FindWithTag("Player-text").GetComponent<Text>();
+    interfaceplayertext.text = "You: Archer";
+    healthbarsize = healthbar.transform.localScale;
+    hbarupdatetime = 0;
 	}
 
   // called in fixed interval
@@ -40,8 +53,11 @@ public class archerController : MonoBehaviour {
 
     rb.AddForce(forcesSum);
 
-    forces.Clear();
-
+    forces.Clear(); 
+  }
+	
+	// Update is called once per frame
+	void Update () {
     /* ROTATION */ 
     // get position of main sprite and mouse
     Vector2 pos = rb.position;
@@ -54,11 +70,15 @@ public class archerController : MonoBehaviour {
     // use angle to rotate bow
     bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg*angle,Vector3.forward);
     bow.transform.position = pos + -1*direction.normalized*bowdistance;
-  }
-	
-	// Update is called once per frame
-	void Update () {
 
+    /* HEALTH BAR */
+    if(hbarupdatetime == 0){
+      healthbarback.transform.localScale = healthbar.transform.localScale;
+      hbarupdatetime = 100;
+    }
+    else{
+      hbarupdatetime--;
+    }
 	}
 
   // makes player invisible and unresponsive so that they could potentially be
@@ -73,9 +93,17 @@ public class archerController : MonoBehaviour {
     forces.Add(force);
   }
 
+  void OnMouseDown(){
+    Debug.Log("mdown");
+    TakeDamage(10,Vector2.zero);
+  }
+
   // reduces player health, if its 0 then call Dead(), if not then apply
   // a knockback force given by dir
   public void TakeDamage(float dmg, Vector2 dir){
+    var hsize = new Vector3((health.getCurrentHP()/health.getMaxHP())*healthbarsize.x,healthbarsize.y,healthbarsize.z);
+    healthbar.transform.localScale = hsize; 
+    hbarupdatetime=20;
     if(!health.TakeDamage(dmg)){
       Dead();
     }

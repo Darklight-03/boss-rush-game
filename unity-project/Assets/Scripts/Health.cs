@@ -19,7 +19,7 @@ public class Health : MonoBehaviour {
 
   public bool TakeDamage(float dmg){
     hp -= dmg;
-    if(hp<0){
+    if(hp<=0){
       return false;
     }
     if(hp>max_hp){
@@ -31,5 +31,13 @@ public class Health : MonoBehaviour {
   public void SetHP(float current, float max){
     hp = current;
     max_hp = max;
+  }
+
+  public float getCurrentHP(){
+    return hp;
+  }
+  
+  public float getMaxHP(){
+    return max_hp;
   }
 }
