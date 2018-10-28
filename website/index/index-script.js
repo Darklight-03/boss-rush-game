@@ -1,6 +1,8 @@
+var socket = io();
+var lobbyid = -1;
+
 $(function () {
-  var socket = io();
-  
+    
   // send messages
   /*$('form').submit(function(){
     socket.emit('chat message', $('#m').val());
@@ -20,3 +22,13 @@ $(function () {
   });*/
 
 });
+
+function createLobby() {
+	socket.emit('create lobby', { uname: "aaaa" } );
+
+  socket.on('create lobby', function(msg){
+    var obj = JSON.parse(msg);
+    console.log(obj['lobbyid']);
+    lobbyid = obj['lobbyid'];
+  });
+}
