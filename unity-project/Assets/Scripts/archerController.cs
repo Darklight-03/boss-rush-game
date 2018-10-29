@@ -19,9 +19,13 @@ public class archerController : MonoBehaviour {
   int knocked;
   Vector2 realvelocity;
 
+
+
+
 	// Use this for initialization
 	void Start () {
     rb = GetComponent<Rigidbody2D>();
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     bow = gameObject.transform.GetChild(0).gameObject;
     bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
     render = GetComponent<SpriteRenderer>();
@@ -99,8 +103,9 @@ public class archerController : MonoBehaviour {
     enabled = false;
   }
 
-  // simply adds a force to the list to be applied next update.
-  void applyForce(Vector2 force){
+
+    // simply adds a force to the list to be applied next update.
+    void applyForce(Vector2 force){
     forces.Add(force);
   }
 
