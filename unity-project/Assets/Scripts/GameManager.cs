@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     t = GetComponent<Transform>();
-    GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"),t);
+    //GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"),t);
+    GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("boss"),t);
 		
 	}
 	
