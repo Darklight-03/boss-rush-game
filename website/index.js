@@ -71,6 +71,23 @@ io.on('connection', function(socket){
   
   socket.on('disconnect', function(){
     console.log('user disconnected');
+    var lobsl = lobbies.length;
+    for (i = 0; i < lobsl; i++) {
+      var lobl = lobbies[i].length;
+      for (j = 0; j < lobl; j++) {
+        if (lobbies[i][j]['sock']['id'] == socket['id']) {
+          lobbies[i].splice(j, 1);
+          lobl--;
+          break;
+        }
+      }
+      if (lobl == 0) {
+        lobbies.splice(i, 1);
+        lobsl--;
+        break;
+      }
+    }
+    console.log(lobbies);
   });
   
 });
