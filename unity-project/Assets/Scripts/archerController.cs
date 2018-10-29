@@ -15,6 +15,9 @@ public class archerController : MonoBehaviour {
   Vector3 healthbarsize;
   List<Vector2> forces;
   int hbarupdatetime;
+  public float MOVEMENT_SPEED;
+  int knocked;
+  Vector2 realvelocity;
 
 
 
@@ -27,7 +30,6 @@ public class archerController : MonoBehaviour {
     bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
     render = GetComponent<SpriteRenderer>();
     health = GetComponent<Health>();
-    health.SetHP(100,100);
     forces = new List<Vector2>();
     healthbar = GameObject.FindWithTag("Health-bar");
     healthbarback = GameObject.FindWithTag("Health-bar-background");
@@ -35,6 +37,8 @@ public class archerController : MonoBehaviour {
     interfaceplayertext.text = "You: Archer";
     healthbarsize = healthbar.transform.localScale;
     hbarupdatetime = 0;
+    knocked = 0;
+    realvelocity = new Vector2(0,0);
 	}
 
   // called in fixed interval
@@ -48,7 +52,13 @@ public class archerController : MonoBehaviour {
     var inputvelocity = new Vector2(ix,iy);
 
     // later can add velocity vectors together for knockback and stuff
-    rb.position = rb.position + inputvelocity*0.5f; 
+    if(knocked == 0){
+      rb.position = rb.position + inputvelocity*MOVEMENT_SPEED; 
+      //rb.velocity = (inputvelocity*MOVEMENT_SPEED);
+    }
+    else{
+      knocked--;
+    }
 
     var forcesSum = new Vector2(0,0);
     foreach(Vector2 v in forces){
@@ -56,6 +66,7 @@ public class archerController : MonoBehaviour {
     }
 
     rb.AddForce(forcesSum);
+    realvelocity = rb.velocity + inputvelocity;
 
     forces.Clear(); 
   }
@@ -100,7 +111,12 @@ public class archerController : MonoBehaviour {
 
   void OnMouseDown(){
     Debug.Log("mdown");
-    TakeDamage(10,Vector2.zero);
+    TakeDamage(10,Vector2.up*100);
+  }
+
+  void OnCollisionEnter2D(Collision2D collision){
+    Debug.Log("coll");
+    rb.velocity = rb.velocity*-1;
   }
 
   // reduces player health, if its 0 then call Dead(), if not then apply
@@ -114,6 +130,7 @@ public class archerController : MonoBehaviour {
     }
     else{
       applyForce(dir); 
+      knocked = 20;
     }
   }
 }
