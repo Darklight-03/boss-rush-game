@@ -72,6 +72,10 @@ io.on('connection', function(socket){
       }
     }
   });
+
+  socket.on('get lobbies', function(){
+    socket.emit('get lobbies', lobbies);
+  });
   
 });
 

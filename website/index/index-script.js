@@ -92,3 +92,6 @@ socket.on('join lobby', function(msg){
 socket.on('general message', function(msg){
   console.log(msg);
 });
+socket.on('get lobbies', function(msg){
+  console.log(msg);
+});
