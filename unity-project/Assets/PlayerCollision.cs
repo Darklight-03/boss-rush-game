@@ -21,8 +21,10 @@ public class PlayerCollision : MonoBehaviour {
         Vector3 playerpos = collision.gameObject.transform.position;
         Vector3 spikepos =rb.transform.position;
         Vector3 dir = (playerpos - spikepos).normalized * knockback;
-
+        if (collision.gameObject.tag == "Player")
+        {
             collision.gameObject.GetComponent<archerController>().TakeDamage(10, dir);
+        }
 
 
         Debug.Log(collision.gameObject.name);
