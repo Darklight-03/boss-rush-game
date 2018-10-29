@@ -16,6 +16,9 @@ public class archerController : MonoBehaviour {
   List<Vector2> forces;
   int hbarupdatetime;
 
+
+
+
 	// Use this for initialization
 	void Start () {
     rb = GetComponent<Rigidbody2D>();
