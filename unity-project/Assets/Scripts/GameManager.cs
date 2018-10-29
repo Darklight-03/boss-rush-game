@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
     t = GetComponent<Transform>();
     GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"),t);
-		
+	GameObject obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
 	}
 	
 	// Update is called once per frame
