@@ -76,6 +76,7 @@ function sendMessage() {
   var inputMessage = document.getElementById("mess");
   if (inputMessage.value != '') {
     socket.emit('general message', { lobbyid: lobbyid, content: inputMessage.value } );
+    inputMessage.value = '';
   }
   else {
   }
