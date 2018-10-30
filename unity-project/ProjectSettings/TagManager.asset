@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Health-bar
+  - Health-bar-background
+  - Player-text
+  - boundary
+  - projectile
   layers:
   - Default
   - TransparentFX
