@@ -18,22 +18,20 @@ public class playerController : MonoBehaviour {
 
   // called in fixed interval
   void FixedUpdate(){
-    // input x and y
-    float ix = Input.GetAxis("Horizontal");
-    float iy = Input.GetAxis("Vertical");
-    
-    // get velocity input
-    var inputvelocity = new Vector2(ix,iy);
+        GameObject player = GameObject.FindWithTag("Player");
+        Vector2 v1 = transform.position;
+        Vector2 v2 = player.transform.position;
 
-        // later can add velocity vectors together for knockback and stuff
-        rb.AddForce(inputvelocity * speed);
-       
+        rb.velocity = v2 - v1;
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if(Input.GetKeyDown(KeyCode.R))
+
+    // Update is called once per frame
+    void Update () {
+        GameObject player = GameObject.FindWithTag("Player");
+        Vector2 v1 = transform.position;
+        Vector2 v2 = player.transform.position;
+        if ((v1-v2).magnitude < 3)
         {
             animation.Play("huijian");
         }
