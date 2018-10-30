@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
     t = GetComponent<Transform>();
         Vector2 archerpos = new Vector2(2, -2);
-        Vector2 bosspos = new Vector2((float)-0.5, 2);
+        Vector2 bosspos = new Vector2(-2, 2);
     GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"),archerpos,Quaternion.identity);
 	  GameObject obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
     //GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"),t);
