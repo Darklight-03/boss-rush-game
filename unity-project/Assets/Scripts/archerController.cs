@@ -16,8 +16,10 @@ public class archerController : MonoBehaviour {
   List<Vector2> forces;
   int hbarupdatetime;
   public float MOVEMENT_SPEED;
+  public float ARROW_SPEED;
   int knocked;
   Vector2 realvelocity;
+  bool clicked;
 
 
 
@@ -25,7 +27,7 @@ public class archerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+    rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     bow = gameObject.transform.GetChild(0).gameObject;
     bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
     render = GetComponent<SpriteRenderer>();
@@ -39,6 +41,7 @@ public class archerController : MonoBehaviour {
     hbarupdatetime = 0;
     knocked = 0;
     realvelocity = new Vector2(0,0);
+    clicked = false;
 	}
 
   // called in fixed interval
@@ -73,6 +76,7 @@ public class archerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
     /* ROTATION */ 
     // get position of main sprite and mouse
     Vector2 pos = rb.position;
@@ -85,6 +89,17 @@ public class archerController : MonoBehaviour {
     // use angle to rotate bow
     bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg*angle,Vector3.forward);
     bow.transform.position = pos + -1*direction.normalized*bowdistance;
+
+    /* ARROW */
+    if(Input.GetMouseButton(0)){
+      if(!clicked){
+        clicked = true;
+      }
+    }else if(clicked){ 
+      GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
+      arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
+      clicked = false;
+    }
 
     /* HEALTH BAR */
     if(hbarupdatetime == 0){
