@@ -27,6 +27,5 @@ public class PlayerCollision : MonoBehaviour {
         }
 
 
-        Debug.Log(collision.gameObject.name);
     }
 }

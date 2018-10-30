@@ -25,10 +25,11 @@ public class SwordDamage : MonoBehaviour {
         //Vector3 dir = (playerpos - spikepos).normalized * knockback;
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<archerController>().TakeDamage(10, Vector2.zero);
+          collision.gameObject.GetComponent<archerController>().TakeDamage(10, Vector2.zero);
         }
+        
 
 
-        Debug.Log(collision.gameObject.name);
     }
+
 }
