@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
   }
 
   void socketInit () {
-    socket = new WebSocket(new Uri("ws://localhost:3000/"), "you-good-protocol");
+    socket = new WebSocket(new Uri("ws://10.254.16.97:3000/"), "you-good-protocol");
     socket.connect();
     StartCoroutine(listener);
   }
@@ -40,16 +40,16 @@ public class GameManager : MonoBehaviour {
   }
 
   void createLobby () {
-    socket.send("{ msgtype:\"create lobby\" }");
+    socket.SendString("{ msgtype:\"create lobby\" }");
   }
   
   void joinLobby (int lobbyid) {
     this.lobbyid = lobbyid;
-    socket.send(string.Format("{ msgtype:\"join lobby\", lobbyid: {0} }", lobbyid)); 
+    socket.SendString(string.Format("{ msgtype:\"join lobby\", lobbyid: {0} }", lobbyid)); 
   }
   
   void sendMessage (string content) {
-    socket.send(string.Format("{ msgtype:\"general message\", lobbyid: {0}, content: {1} }", lobbyid, content));
+    socket.SendString(string.Format("{ msgtype:\"general message\", lobbyid: {0}, content: {1} }", lobbyid, content));
    }
 }
 
