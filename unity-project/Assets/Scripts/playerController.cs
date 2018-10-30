@@ -11,23 +11,14 @@ public class playerController : MonoBehaviour {
     // Use this for initialization
     void Start () {
         animation = this.GetComponent<Animation>();
-    rb = GetComponent<Rigidbody2D>();
-        swordcol = GameObject.Find("short-sword").GetComponent<Collider2D>();
+        rb = GetComponent<Rigidbody2D>();
+ 
 
     }
 
   // called in fixed interval
   void FixedUpdate(){
-    // input x and y
-    float ix = Input.GetAxis("Horizontal");
-    float iy = Input.GetAxis("Vertical");
-    
-    // get velocity input
-    var inputvelocity = new Vector2(ix,iy);
 
-        // later can add velocity vectors together for knockback and stuff
-        rb.AddForce(inputvelocity * speed);
-       
 
     }
 	
@@ -38,4 +29,9 @@ public class playerController : MonoBehaviour {
             animation.Play("huijian");
         }
 	}
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+    }
 }
