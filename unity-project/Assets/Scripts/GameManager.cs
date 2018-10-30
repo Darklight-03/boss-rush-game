@@ -50,10 +50,14 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator listener()
     {
+        string msg;
         while (true)
         {
-            string msg = w.RecvString();
-            Debug.Log(msg);
+            msg = w.RecvString();
+            if (msg != null)
+            {
+                Debug.Log(msg);
+            }
             yield return null;
         }
     }
