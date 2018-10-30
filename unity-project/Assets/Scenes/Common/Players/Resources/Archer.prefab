@@ -131,6 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MOVEMENT_SPEED: 0.15
+  ARROW_SPEED: 10
 --- !u!114 &114927458386824952
 MonoBehaviour:
   m_ObjectHideFlags: 1
