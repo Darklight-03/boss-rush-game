@@ -19,12 +19,20 @@ public class playerController : MonoBehaviour {
   // called in fixed interval
   void FixedUpdate(){
 
+        GameObject player = GameObject.FindWithTag("Player");
+        Vector2 v1 = transform.position;
+        Vector2 v2 = player.transform.position;
+
+        rb.velocity = v2 - v1;
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if(Input.GetKeyDown(KeyCode.R))
+
+    // Update is called once per frame
+    void Update () {
+        GameObject player = GameObject.FindWithTag("Player");
+        Vector2 v1 = transform.position;
+        Vector2 v2 = player.transform.position;
+        if ((v1-v2).magnitude < 3)
         {
             animation.Play("huijian");
         }
