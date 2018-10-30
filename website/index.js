@@ -1,8 +1,8 @@
 const express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var port = process.env.PORT || 3000;
+var WebSocketServer = require('websocket').server;
+var port = 3000;
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index/index.html');
@@ -11,52 +11,66 @@ app.get('/', function(req, res){
 app.use(express.static('index'));
 app.use(express.static('assets'));
 
+io = new WebSocketServer({
+  httpServer: http
+});
 
 var lobbies = [];
-console.log(io);
 
-io.on('connection', function(socket){
+io.on('request', function(request){
+  var socket = request.accept('you-good-protocol', request.origin);
+  socket.id = getUniqueID();
   console.log('user connected');
-  console.log(socket);
 
-  
-  socket.on('create lobby', function(msg){
-    // msg { uname:"username" }
-    var lobby = [ { sock: socket, uname: msg['uname'] } ];
-    var thislobbyid = lobbies.length;
-    lobbies[thislobbyid] = lobby;
-    socket.emit('create lobby', { lobbyid: thislobbyid } );
-  });
+  socket.on('message', function(fmsg) {
+    msg = JSON.parse(fmsg['utf8Data']);
+    switch (msg['msgtype']) {
+      case 'create lobby':
+        // msg { uname:"username" }
+        var lobby = [ { sock: socket, uname: msg['uname'] } ];
+        var thislobbyid = lobbies.length;
+        lobbies[thislobbyid] = lobby;
+        //socket.sendUTF(JSON.stringify({ msgtype:'create lobby', { lobbyid: thislobbyid } );
+        socket.sendUTF(JSON.stringify({ msgtype: 'create lobby', lobbyid: thislobbyid }));
+      break;
 
-  socket.on('join lobby', function(msg){
-    // msg { uname:"username", lobbyid:14 }
-    if (msg['lobbyid'] >= lobbies.length) {
-      socket.emit('join lobby', { ret: 'fail' } );
+      case 'join lobby':
+        // msg { uname:"username", lobbyid:14 }
+        if (msg['lobbyid'] >= lobbies.length) {
+          socket.sendUTF(JSON.stringify({ msgtype: 'join lobby', ret:'fail' }));
+        }
+        else {
+          var lobby = lobbies[msg['lobbyid']];
+          lobby[lobby.length] = { sock: socket, uname: msg['uname'] };
+          lobbies[msg['lobbyid']] = lobby;
+          socket.sendUTF(JSON.stringify({ msgtype: 'join lobby', ret: 'success' }));
+        } 
+      break;
+
+      case 'disband lobby':
+        // msg { lobbyid:14 }
+        lobbies.splice(msg['lobbyid'], 1);
+        socket.sendUTF(JSON.stringify({ msgtype: 'disband lobby', ret: 'success' })); 
+      break;
+
+      case 'general message':
+        // msg { lobbyid:14, content:"hello there" }
+        var lobby = lobbies[msg['lobbyid']];
+        for (i = 0; i < lobby.length; i++) {   
+          lobby[i]['sock'].sendUTF(JSON.stringify({ msgtype: 'general message', content: msg['content'] }));
+        }       
+      break;
+
+      case 'get lobbies':
+        socket.sendUTF(JSON.stringify({ msgtype: 'get lobbies', lob: lobbies }));
+      break;
+
     }
-    else {
-      var lobby = lobbies[msg['lobbyid']];
-      lobby[lobby.length] = { sock: socket, uname: msg['uname'] };
-      lobbies[msg['lobbyid']] = lobby;
-      socket.emit('join lobby', { ret: 'success' } );
-    }
+    console.log(lobbies);
   });
 
-  socket.on('disband lobby', function(msg){
-    // msg { lobbyid:14 }
-    lobbies.splice(msg['lobbyid'], 1);
-    socket.emit('disband lobby', { ret: 'success' } );
-  });
-
-  socket.on('general message', function(msg){
-    // msg { lobbyid:14, content:"hello there" }
-    var lobby = lobbies[msg['lobbyid']];
-    for (i = 0; i < lobby.length; i++) {   
-      lobby[i]['sock'].emit('general message', msg['content']);
-    }
-  });
-  
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
+  socket.on('close', function(reasonCode, description) {
+    console.log((new Date()) + ' Peer ' + socket.remoteAddress + ' disconnected.');
     var lobsl = lobbies.length;
     for (i = 0; i < lobsl; i++) {
       var lobl = lobbies[i].length;
@@ -73,14 +87,18 @@ io.on('connection', function(socket){
         break;
       }
     }
+    console.log(lobbies);
   });
 
-  socket.on('get lobbies', function(){
-    socket.emit('get lobbies', lobbies);
-  });
-  
 });
 
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
+
+getUniqueID = function () {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+    }
+    return s4() + s4() + '-' + s4();
+};
