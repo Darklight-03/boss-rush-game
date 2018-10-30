@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212612001099972604}
   - component: {fileID: 50718698571944860}
   - component: {fileID: 61176050138407782}
+  - component: {fileID: 114026295076026768}
   m_Layer: 0
   m_Name: spikedwall
   m_TagString: Untagged
@@ -36,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1111564288907470}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.2726862, y: -2.434278, z: 0}
+  m_LocalPosition: {x: -6.244486, y: -1.8398333, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,6 +88,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.61, y: 1.32}
   m_EdgeRadius: 0
+--- !u!114 &114026295076026768
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1111564288907470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b53bd986ede0f2f43b3504b8909d7fe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockback: 200
 --- !u!212 &212612001099972604
 SpriteRenderer:
   m_ObjectHideFlags: 1
