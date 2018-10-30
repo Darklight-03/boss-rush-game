@@ -1,6 +1,7 @@
 //var WebSocketClient = require('websocket').client;
 var lobbyid = -1;
-var socket = new WebSocket('ws://localhost:3000/', 'you-good-protocol');
+var socket = new WebSocket('ws://10.254.16.97:3000/', 'ws');
+console.log(socket);
 
 socket.onopen = function (event) {
   console.log(event);
@@ -35,7 +36,7 @@ socket.onmessage = function(event) {
 function createLobby() {
   var input = document.getElementById("unamec");
   if (input.value != '') {
-    socket.send(JSON.stringify({ msgtype:'create lobby', uname: input.value }));
+    socket.send(JSON.stringify({ msgtype:'create lobby' }));
     input.value = '';
   }
   else {
