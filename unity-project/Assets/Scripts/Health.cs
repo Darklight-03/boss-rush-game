@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour {
-  float hp;
-  float max_hp;
+  public float hp;
+  public float max_hp;
 
 	// Use this for initialization
 	void Start () {
-    hp = 100;
-    max_hp = 100;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 
   public bool TakeDamage(float dmg){
