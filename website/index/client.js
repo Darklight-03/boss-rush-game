@@ -1,60 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-
-public class GameManager : MonoBehaviour {
-  private Transform t;
-  private WebSocket socket;
-  private int lobbyid;
-  private bool stoplistener;
-
-	// Use this for initialization
-	void Start () {
-    t = GetComponent<Transform>();
-    GameObject player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"),t);
-		stoplistener = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-  void OnDestroy() {
-    stoplistener = true;
-    socket.close();
-  }
-
-  void socketInit () {
-    socket = new WebSocket(new Uri("ws://localhost:3000/"), "you-good-protocol");
-    socket.connect();
-    StartCoroutine(listener);
-  }
-
-  void listener () {
-    while (!stoplistener) {
-      string msg = socket.recvString();
-      Debug.Log(msg);
-    }
-  }
-
-  void createLobby () {
-    socket.send("{ msgtype:\"create lobby\" }");
-  }
-  
-  void joinLobby (int lobbyid) {
-    this.lobbyid = lobbyid;
-    socket.send(string.Format("{ msgtype:\"join lobby\", lobbyid: {0} }", lobbyid)); 
-  }
-  
-  void sendMessage (string content) {
-    socket.send(string.Format("{ msgtype:\"general message\", lobbyid: {0}, content: {1} }", lobbyid, content));
-   }
-}
-
-
-/*
+//var WebSocketClient = require('websocket').client;
 var lobbyid = -1;
 var socket = new WebSocket('ws://localhost:3000/', 'you-good-protocol');
 
@@ -120,4 +64,3 @@ function sendMessage() {
   else {
   }
 }
-*/

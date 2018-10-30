@@ -26,7 +26,7 @@ io.on('request', function(request){
     msg = JSON.parse(fmsg['utf8Data']);
     switch (msg['msgtype']) {
       case 'create lobby':
-        // msg { uname:"username" }
+        // msg { }
         var lobby = [ { sock: socket, uname: msg['uname'] } ];
         var thislobbyid = lobbies.length;
         lobbies[thislobbyid] = lobby;
@@ -35,13 +35,13 @@ io.on('request', function(request){
       break;
 
       case 'join lobby':
-        // msg { uname:"username", lobbyid:14 }
+        // msg { lobbyid:14 }
         if (msg['lobbyid'] >= lobbies.length) {
           socket.sendUTF(JSON.stringify({ msgtype: 'join lobby', ret:'fail' }));
         }
         else {
           var lobby = lobbies[msg['lobbyid']];
-          lobby[lobby.length] = { sock: socket, uname: msg['uname'] };
+          lobby[lobby.length] = { sock: socket };
           lobbies[msg['lobbyid']] = lobby;
           socket.sendUTF(JSON.stringify({ msgtype: 'join lobby', ret: 'success' }));
         } 
