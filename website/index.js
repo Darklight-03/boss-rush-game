@@ -13,9 +13,11 @@ app.use(express.static('assets'));
 
 
 var lobbies = [];
+console.log(io);
 
 io.on('connection', function(socket){
   console.log('user connected');
+  console.log(socket);
 
   
   socket.on('create lobby', function(msg){
