@@ -20,6 +20,9 @@ public class archerController : MonoBehaviour {
   int knocked;
   Vector2 realvelocity;
   bool clicked;
+  private Sprite f1;
+  private Sprite f2;
+  private SpriteRenderer bowrender;
 
 
 
@@ -42,6 +45,9 @@ public class archerController : MonoBehaviour {
     knocked = 0;
     realvelocity = new Vector2(0,0);
     clicked = false;
+    f2 = Resources.Load<Sprite>("bow2");
+    f1 = Resources.Load<Sprite>("bow");
+    bowrender = bow.GetComponent<SpriteRenderer>();
 	}
 
   // called in fixed interval
@@ -94,8 +100,10 @@ public class archerController : MonoBehaviour {
     if(Input.GetMouseButton(0)){
       if(!clicked){
         clicked = true;
+        bowrender.sprite = f2;
       }
     }else if(clicked){ 
+      bowrender.sprite = f1;
       GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
       arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
       clicked = false;
@@ -114,6 +122,8 @@ public class archerController : MonoBehaviour {
   // makes player invisible and unresponsive so that they could potentially be
   // revived
   void Dead(){
+    bowrender.enabled = false;
+    health.enabled = false;
     render.enabled = false;
     enabled = false;
   }

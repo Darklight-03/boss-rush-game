@@ -14,7 +14,6 @@ public class playerController : MonoBehaviour {
       animation = this.GetComponent<Animation>();
       rb = GetComponent<Rigidbody2D>();
       health = GetComponent<Health>();
-
     }
 
   // called in fixed interval
