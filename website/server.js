@@ -12,13 +12,15 @@ app.use(express.static('index'));
 app.use(express.static('assets'));
 
 io = new WebSocketServer({
-  httpServer: http
+  httpServer: http,
+  autoAcceptConnections: true
 });
 
 var lobbies = [];
 
 io.on('request', function(request){
-  var socket = request.accept('you-good-protocol', request.origin);
+  console.log(request);
+  var socket = request.accept('ws', request.origin);
   socket.id = getUniqueID();
   console.log('user connected');
 
@@ -27,7 +29,7 @@ io.on('request', function(request){
     switch (msg['msgtype']) {
       case 'create lobby':
         // msg { }
-        var lobby = [ { sock: socket, uname: msg['uname'] } ];
+        var lobby = [ { sock: socket } ];
         var thislobbyid = lobbies.length;
         lobbies[thislobbyid] = lobby;
         //socket.sendUTF(JSON.stringify({ msgtype:'create lobby', { lobbyid: thislobbyid } );
@@ -63,6 +65,10 @@ io.on('request', function(request){
 
       case 'get lobbies':
         socket.sendUTF(JSON.stringify({ msgtype: 'get lobbies', lob: lobbies }));
+      break;
+
+      default:
+        socket.sendUTF(JSON.stringify({ ret: 'recieved' }));
       break;
 
     }
