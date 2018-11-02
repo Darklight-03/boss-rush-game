@@ -180,7 +180,7 @@ Transform:
   m_LocalScale: {x: 240.00017, y: 20.000013, z: 4.999923}
   m_Children: []
   m_Father: {fileID: 1564335459}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &378178973
 SpriteRenderer:
@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -252,6 +253,18 @@ AudioListener:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1093a77b6b1ef48937572982a739ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverurl: ws://168.61.48.136:3000/
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -270,7 +283,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.54
+    width: 1
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -407,7 +420,7 @@ Transform:
   m_LocalScale: {x: 606.01263, y: 505.01053, z: 505.01053}
   m_Children: []
   m_Father: {fileID: 1564335459}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1140234302
 SpriteRenderer:
@@ -742,9 +755,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 621925579}
-  - {fileID: 1140234301}
   - {fileID: 2129511138}
   - {fileID: 378178972}
+  - {fileID: 1140234301}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -860,7 +873,7 @@ Transform:
   m_LocalScale: {x: 240, y: 20, z: 5}
   m_Children: []
   m_Father: {fileID: 1564335459}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2129511139
 SpriteRenderer:

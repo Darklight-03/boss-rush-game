@@ -107,14 +107,35 @@ public class WebSocket
 
 	public IEnumerator Connect()
 	{
+        Debug.Log(mUrl.ToString());
 		m_Socket = new WebSocketSharp.WebSocket(mUrl.ToString());
 		m_Socket.OnMessage += (sender, e) => m_Messages.Enqueue (e.RawData);
-		m_Socket.OnOpen += (sender, e) => m_IsConnected = true;
-		m_Socket.OnError += (sender, e) => m_Error = e.Message;
+		m_Socket.OnOpen += stuffonopen;
+        m_Socket.OnError += stuffonerror;
+        m_Socket.OnClose += stuffonclose;
 		m_Socket.ConnectAsync();
-		while (!m_IsConnected && m_Error == null)
+		while (!m_IsConnected && m_Error == null)   
 			yield return 0;
 	}
+
+    void stuffonopen(object sender, EventArgs e)
+    {
+        m_IsConnected = true;
+        Debug.Log("officially connected");
+    }
+
+    void stuffonerror(object sender, WebSocketSharp.ErrorEventArgs e)
+    {
+        m_Error = e.Message;
+        Debug.Log(e.Message);
+    }
+
+    void stuffonclose(object sender, WebSocketSharp.CloseEventArgs e)
+    {
+        Debug.Log("code: " + e.Code.ToString());
+        Debug.Log("reason: " + e.Reason.ToString());
+        Debug.Log("clean?: " + e.WasClean.ToString());
+    }
 
 	public void Send(byte[] buffer)
 	{
