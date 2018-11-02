@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
     GameObject boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"),bosspos,Quaternion.identity,t);
 
 
-        w = new WebSocket(new Uri("ws://10.254.16.97:3000/"));
+        w = new WebSocket(new Uri("ws://teamproject1.ddns.net:3000/"));
         yield return StartCoroutine(w.Connect());
         StartCoroutine(listener());
         
