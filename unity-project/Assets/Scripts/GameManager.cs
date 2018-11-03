@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour {
         }
         else
         {
-            waitPlayers[waitPlayers.Count] = cl;
-            waitPlayerIds[waitPlayerIds.Count] = id;
+            waitPlayers.Add(cl);
+            waitPlayerIds.Add(id);
         }
     }
 
