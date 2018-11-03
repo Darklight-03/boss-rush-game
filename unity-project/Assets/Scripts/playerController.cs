@@ -10,6 +10,7 @@ public class playerController : MonoBehaviour {
     Health health;
     public float speed;
     public Animation animation;
+    Vector2 prevPos;
 
 
     // Use this for initialization
@@ -57,7 +58,13 @@ public class playerController : MonoBehaviour {
         {
             animation.Play("huijian");
         }
-	}
+
+        if (Vector2.Distance(prevPos, rb.position) > 0.1f)
+        {
+            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + 0.ToString() + ", \"ry\": " + 0.ToString() + " }");
+            prevPos = rb.position;
+        }
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {

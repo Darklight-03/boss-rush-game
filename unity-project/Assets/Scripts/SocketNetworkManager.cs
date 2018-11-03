@@ -36,6 +36,10 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate void DealDamageRes(string sender, float dmg, Vector2 dir);
     public static event DealDamageRes DealDamageHandle;
 
+    public delegate void BossPositionRes(float x, float y, float rx, float ry);
+    public static event BossPositionRes UpdateBossPositionHandle;
+    
+
 
     // Use this for initialization
     IEnumerator Start()
@@ -143,6 +147,12 @@ public class SocketNetworkManager : MonoBehaviour
                                     DealDamageHandle(gms.sender, odd.dmg, new Vector2(odd.dirx, odd.diry));
                                 break;
 
+                            case "bp": // boss position
+                                bossPos bp = JsonUtility.FromJson<bossPos>(gms.content);
+                                if (UpdateBossPositionHandle != null)
+                                    UpdateBossPositionHandle(bp.x, bp.y, bp.rx, bp.ry);
+                                break;
+
                             default:
                                 Debug.Log("unknown general message type");
                                 break;
@@ -225,4 +235,13 @@ public class opDealDam
     public float dmg;
     public float dirx;
     public float diry;
+}
+
+[Serializable]
+public class bossPos
+{
+    public float x;
+    public float y;
+    public float rx;
+    public float ry;
 }
