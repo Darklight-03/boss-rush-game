@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour {
     GameObject obstacle1;
     private bool gameStarted = false;
     private List<Vector2> playerInitPos = new List<Vector2>(3);
+    private List<string> playerClasses = new List<string>();
 
     // Use this for initialization
     void Start () {
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour {
         playerInitPos.Add(new Vector2(2, -2));
         playerInitPos.Add(new Vector2(0, -2));
         playerInitPos.Add(new Vector2(-2, -2));
+        playerClasses.Add("ArcherOP");
+        playerClasses.Add("KnightOP");
+        playerClasses.Add("PriestOP");
     }
 
     private void OnDestroy()
@@ -69,14 +73,14 @@ public class GameManager : MonoBehaviour {
         // argument will specify class later
         if (player2 == null)
         {
-            player2 = Instantiate(Resources.Load<GameObject>("ArcherOP"), playerInitPos[num], Quaternion.identity);
+            player2 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
             Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player2.GetComponent<archerControllerOP>().playernum = num;
             player2.GetComponent<archerControllerOP>().id = id;
         }
         else if (player3 == null)
         {
-            player3 = Instantiate(Resources.Load<GameObject>("ArcherOP"), playerInitPos[num], Quaternion.identity);
+            player3 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
             Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;

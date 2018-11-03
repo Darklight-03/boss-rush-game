@@ -3,21 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class playerController : MonoBehaviour {
-  private Rigidbody2D rb;
+    private SocketNetworkManager snm;
+    private Rigidbody2D rb;
     Collider2D swordcol;
     Animator myanmitor;
     Health health;
     public float speed;
     public Animation animation;
+
+
     // Use this for initialization
-    void Start () {
-      animation = this.GetComponent<Animation>();
-      rb = GetComponent<Rigidbody2D>();
-      health = GetComponent<Health>();
+    void Start ()
+    {
+        animation = this.GetComponent<Animation>();
+        rb = GetComponent<Rigidbody2D>();
+        health = GetComponent<Health>();
     }
 
-  // called in fixed interval
-  void FixedUpdate(){
+    private void OnEnable()
+    {
+        SocketNetworkManager.DealDamageHandle += DealDamageHandle;
+    }
+
+    private void OnDisable()
+    {
+        SocketNetworkManager.DealDamageHandle -= DealDamageHandle;
+    }
+
+    void DealDamageHandle(string sender, float dmg, Vector2 dir)
+    {
+        // display health, if dead, etc
+    }
+
+    // called in fixed interval
+    void FixedUpdate()
+    {
 
         GameObject player = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
@@ -28,7 +48,8 @@ public class playerController : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update ()
+    {
         GameObject player = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
         Vector2 v2 = player.transform.position;
@@ -37,15 +58,21 @@ public class playerController : MonoBehaviour {
             animation.Play("huijian");
         }
 	}
-    void OnCollisionEnter2D(Collision2D collision){
-      if(collision.gameObject.tag == "projectile"){
-        Debug.Log(health.getCurrentHP());
-        if(health.TakeDamage(10)){
-        }else{
-          Destroy(this);
-        }
-           // do stuff only for the circle collider
-      }
-    }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "projectile")
+        {
+            Debug.Log(health.getCurrentHP());
+            if (health.TakeDamage(10))
+            {
+
+            }
+            else
+            {
+                Destroy(this);
+            }
+            // do stuff only for the circle collider
+        }
+    }
 }

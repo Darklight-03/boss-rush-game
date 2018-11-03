@@ -30,6 +30,12 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate void StartGameRes();
     public static event StartGameRes StartGameHandle;
 
+    public delegate void TakeDamageRes(string sender, float dmg);
+    public static event TakeDamageRes TakeDamageHandle;
+
+    public delegate void DealDamageRes(string sender, float dmg, Vector2 dir);
+    public static event DealDamageRes DealDamageHandle;
+
 
     // Use this for initialization
     IEnumerator Start()
@@ -114,15 +120,29 @@ public class SocketNetworkManager : MonoBehaviour
                         genMess gms = JsonUtility.FromJson<genMess>(msgo.content);
                         switch (gms.ct)
                         {
-                            case "pp":
+                            case "pp": // player position
                                 playerPos pp = JsonUtility.FromJson<playerPos>(gms.content);
                                 if (UpdateOtherPlayerPos != null)
                                     UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry);
                                 break;
-                            case "sg":
+
+                            case "sg": // start game
                                 if (StartGameHandle != null)
                                     StartGameHandle();
                                 break;
+
+                            case "td": // take damage (from boss)
+                                opTakeDam otd = JsonUtility.FromJson<opTakeDam>(gms.content);
+                                if (TakeDamageHandle != null)
+                                    TakeDamageHandle(gms.sender, otd.dmg);
+                                break;
+
+                            case "dd": // deal damage (to boss)
+                                opDealDam odd = JsonUtility.FromJson<opDealDam>(gms.content);
+                                if (DealDamageHandle != null)
+                                    DealDamageHandle(gms.sender, odd.dmg, new Vector2(odd.dirx, odd.diry));
+                                break;
+
                             default:
                                 Debug.Log("unknown general message type");
                                 break;
@@ -191,4 +211,18 @@ public class playerPos
     public float y;
     public float rx;
     public float ry;
+}
+
+[Serializable]
+public class opTakeDam
+{
+    public float dmg;
+}
+
+[Serializable]
+public class opDealDam
+{
+    public float dmg;
+    public float dirx;
+    public float diry;
 }
