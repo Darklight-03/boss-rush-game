@@ -97,7 +97,6 @@ public class SocketNetworkManager : MonoBehaviour
                         creLobby crel = JsonUtility.FromJson<creLobby>(msgo.content);
                         lobbyid = crel.lobbyid;
                         playernum = crel.playernum;
-                        Debug.Log("created lobby");
                         if (CreateLobbyHandle != null)
                             CreateLobbyHandle(crel.lobbyid);
                         break;

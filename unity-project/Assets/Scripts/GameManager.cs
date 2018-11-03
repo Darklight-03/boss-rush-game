@@ -48,26 +48,24 @@ public class GameManager : MonoBehaviour {
 
         if (lDown && SocketNetworkManager.isHost)
         {
-            Debug.Log("lPressed");
+            Debug.Log("l Pressed");
             snm.sendMessage("sg", "{ }");
             StartGame();
         }
         if (oDown)
         {
-            Debug.Log("oPressed");
+            Debug.Log("o Pressed");
             snm.createLobby();
         }
         if (pDown)
         {
-            Debug.Log("pPressed");
+            Debug.Log("p Pressed");
             snm.joinLobby(0);
         }
     }
 
     void StartPlayer(string id, int cl, int num)
     {
-        Debug.Log("called");
-
         // argument will specify class later
         if (player2 == null)
         {
@@ -87,7 +85,7 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator NewPlayerHandle(string id, int cl, int num)
     {
-        Debug.Log("handling " + num.ToString());
+        Debug.Log("new player joined lobby");
         yield return new WaitUntil(() => gameStarted);
         StartPlayer(id, cl, num);
     }
