@@ -176,9 +176,9 @@ public class archerController : MonoBehaviour {
                 hbarupdatetime--;
             }
 
-            if (prevPos != rb.position || prevRot != direction)
+            if (prevPos != rb.position || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.5f), Vector2.right))
             {
-                snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.x.ToString() + ", \"ry\": " + direction.y.ToString() + " }");
+                snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
             }
 
             prevPos = rb.position;
