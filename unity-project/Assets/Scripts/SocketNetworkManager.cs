@@ -91,7 +91,7 @@ public class SocketNetworkManager : MonoBehaviour
                     case "new player":
                         newPly np = JsonUtility.FromJson<newPly>(msgo.content);
                         if (NewPlayerHandle != null)
-                            NewPlayerHandle(np.theirid, np.cl, np.theirnum);
+                            StartCoroutine(NewPlayerHandle(np.theirid, np.cl, np.theirnum));
                         break;
                     case "create lobby":
                         creLobby crel = JsonUtility.FromJson<creLobby>(msgo.content);

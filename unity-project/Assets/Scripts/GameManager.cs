@@ -88,10 +88,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator NewPlayerHandle(string id, int cl, int num)
     {
         Debug.Log("handling " + num.ToString());
-        while (!gameStarted)
-        {
-            yield return new WaitForEndOfFrame();
-        }
+        yield return new WaitUntil(() => gameStarted);
         StartPlayer(id, cl, num);
     }
 
