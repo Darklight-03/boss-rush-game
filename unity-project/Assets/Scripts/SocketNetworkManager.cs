@@ -16,12 +16,14 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate void OtherPlayerPos(string id, float x, float y, float rx, float ry);
     public static event OtherPlayerPos UpdateOtherPlayerPos;
 
-    public delegate void CreateLobbyRes(string id, int lobbyid);
+    public delegate void CreateLobbyRes(int lobbyid);
     public static event CreateLobbyRes CreateLobbyHandle;
 
-    public delegate void JoinLobbyRes(string id, string ret);
+    public delegate void JoinLobbyRes(string ret);
     public static event JoinLobbyRes JoinLobbyHandle;
 
+    public delegate void NewPlayerRes(string id, int cl);
+    public static event NewPlayerRes NewPlayerHandle;
 
 
     // Use this for initialization
@@ -79,21 +81,31 @@ public class SocketNetworkManager : MonoBehaviour
                 //Debug.Log("content " + msgo.content);
                 switch (msgo.msgtype)
                 {
+                    case "new connection":
+                        newCon nc = JsonUtility.FromJson<newCon>(msgo.content);
+                        SocketNetworkManager.id = nc.yourid;
+                        break;
+
+                    case "new player":
+                        newPly np = JsonUtility.FromJson<newPly>(msgo.content);
+                        if (NewPlayerHandle != null)
+                            NewPlayerHandle(np.theirid, np.cl);
+                        break;
                     case "create lobby":
                         creLobby crel = JsonUtility.FromJson<creLobby>(msgo.content);
                         lobbyid = crel.lobbyid;
-                        SocketNetworkManager.id = crel.yourid;
                         Debug.Log("created lobby");
                         if (CreateLobbyHandle != null)
-                            CreateLobbyHandle(crel.yourid, crel.lobbyid);
+                            CreateLobbyHandle(crel.lobbyid);
                         break;
+
                     case "join lobby":
                         joinLobby jnl = JsonUtility.FromJson<joinLobby>(msgo.content);
-                        SocketNetworkManager.id = jnl.yourid;
                         Debug.Log("joined lobby");
                         if (JoinLobbyHandle != null)
-                            JoinLobbyHandle(jnl.yourid, jnl.ret);
+                            JoinLobbyHandle(jnl.ret);
                         break;
+
                     case "general message":
                         genMess gms = JsonUtility.FromJson<genMess>(msgo.content);
                         switch (gms.ct)
@@ -108,6 +120,7 @@ public class SocketNetworkManager : MonoBehaviour
                                 break;
                         }
                         break;
+
                     default:
                         Debug.Log("unknown message type");
                         break;
@@ -128,16 +141,27 @@ public class mess
 }
 
 [Serializable]
-public class creLobby
+public class newCon
 {
     public string yourid;
+}
+
+[Serializable]
+public class newPly
+{
+    public string theirid;
+    public int cl;
+}
+
+[Serializable]
+public class creLobby
+{
     public int lobbyid;
 }
 
 [Serializable]
 public class joinLobby
 {
-    public string yourid;
     public string ret;
 }
 

@@ -18,7 +18,7 @@ public class archerController : MonoBehaviour {
     int hbarupdatetime;
     public float MOVEMENT_SPEED;
     public float ARROW_SPEED;
-    public bool isPlayer = true;
+    //public bool isPlayer = true;
     int knocked;
     Vector2 realvelocity;
     bool clicked;
@@ -32,19 +32,20 @@ public class archerController : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         snm = GetComponent<SocketNetworkManager>();
-        if (!isPlayer)
-        {
-            SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
-        }
+        //if (!isPlayer)
+        //{
+        //    SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
+        //}
         rb = GetComponent<Rigidbody2D>();
         bow = gameObject.transform.GetChild(0).gameObject;
         bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
         render = GetComponent<SpriteRenderer>();
         health = GetComponent<Health>();
-        if (isPlayer)
-        {
+        //if (isPlayer)
+        //{
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             forces = new List<Vector2>();
             healthbar = GameObject.FindWithTag("Health-bar");
@@ -56,7 +57,7 @@ public class archerController : MonoBehaviour {
             knocked = 0;
             realvelocity = new Vector2(0, 0);
             clicked = false;
-        }
+        //}
         f2 = Resources.Load<Sprite>("bow2");
         f1 = Resources.Load<Sprite>("bow");
         bowrender = bow.GetComponent<SpriteRenderer>();
@@ -64,25 +65,26 @@ public class archerController : MonoBehaviour {
 
     void OnEnable()
     {
-        if (!isPlayer)
-        {
-            Debug.Log("event handler set");
-            SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
-        }
+        //if (!isPlayer)
+        //{
+        //    Debug.Log("event handler set");
+        //    SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
+        //}
     }
 
     void OnDisable()
     {
-        if (!isPlayer)
-        {
-            SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPos;
-        }
+        //if (!isPlayer)
+        //{
+        //    SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPos;
+        //}
     }
 
-  // called in fixed interval
-  void FixedUpdate(){
-        if (isPlayer)
-        {
+    // called in fixed interval
+    void FixedUpdate()
+    {
+        //if (isPlayer)
+        //{
             /* MOVEMENT */
             // input x and y
             float ix = Input.GetAxis("Horizontal");
@@ -113,27 +115,14 @@ public class archerController : MonoBehaviour {
             realvelocity = rb.velocity + inputvelocity;
 
             forces.Clear();
-        }
-  }
+        //}
+    }
 	
 	// Update is called once per frame
-	void Update () {
-        if (isPlayer)
-        {
-            bool oDown = Input.GetKeyDown(KeyCode.O);
-            bool pDown = Input.GetKeyDown(KeyCode.P);
-
-            if (oDown)
-            {
-                Debug.Log("oPressed");
-                snm.createLobby();
-            }
-            if (pDown)
-            {
-                Debug.Log("pPressed");
-                snm.joinLobby(0);
-            }
-
+	void Update ()
+    {
+        //if (isPlayer)
+        //{
 
             /* ROTATION */
             // get position of main sprite and mouse
@@ -182,43 +171,45 @@ public class archerController : MonoBehaviour {
                 prevPos = rb.position;
                 prevRot = direction;
             }
-        }
+        //}
 	}
 
-  // makes player invisible and unresponsive so that they could potentially be
-  // revived
-  void Dead(){
-    bowrender.enabled = false;
-    health.enabled = false;
-    render.enabled = false;
-    enabled = false;
-  }
+    // makes player invisible and unresponsive so that they could potentially be
+    // revived
+    void Dead()
+    {
+        bowrender.enabled = false;
+        health.enabled = false;
+        render.enabled = false;
+        enabled = false;
+    }
 
 
     // simply adds a force to the list to be applied next update.
-  void applyForce(Vector2 force){
+    void applyForce(Vector2 force)
+    {
     forces.Add(force);
-  }
+    }
 
-  void OnMouseDown(){
-        if (isPlayer)
-        {
-            
-        }
-  }
+    void OnMouseDown()
+    {
 
-  void OnCollisionEnter2D(Collision2D collision){
-        if (isPlayer)
-        {
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        //if (isPlayer)
+        //{
             rb.velocity = rb.velocity * -0.5f;
-        }
-  }
+        //}
+    }
 
-  // reduces player health, if its 0 then call Dead(), if not then apply
-  // a knockback force given by dir
-  public void TakeDamage(float dmg, Vector2 dir){
-        if (isPlayer)
-        {
+    // reduces player health, if its 0 then call Dead(), if not then apply
+    // a knockback force given by dir
+    public void TakeDamage(float dmg, Vector2 dir)
+    {
+        //if (isPlayer)
+        //{
             var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
             healthbar.transform.localScale = hsize;
             hbarupdatetime = 20;
@@ -231,23 +222,23 @@ public class archerController : MonoBehaviour {
                 applyForce(dir);
                 knocked = 20;
             }
-        }
-  }
-
-    void UpdateOtherPlayerPos(string id, float x, float y, float rx, float ry)
-    {
-        if (SocketNetworkManager.id != id)
-        {
-            Vector2 pos = transform.position;
-            pos.x = x;
-            pos.y = y;
-            transform.position = pos;
-
-            Vector2 dir = new Vector2(rx, ry);
-
-            // use angle to rotate bow
-            bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
-            bow.transform.position = pos + -1 * dir.normalized * bowdistance;
-        }
+        //}
     }
+
+    //void UpdateOtherPlayerPos(string id, float x, float y, float rx, float ry)
+    //{
+    //    if (SocketNetworkManager.id != id)
+    //    {
+    //        Vector2 pos = transform.position;
+    //        pos.x = x;
+    //        pos.y = y;
+    //        transform.position = pos;
+
+    //        Vector2 dir = new Vector2(rx, ry);
+
+    //        // use angle to rotate bow
+    //        bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
+    //        bow.transform.position = pos + -1 * dir.normalized * bowdistance;
+    //    }
+    //}
 }
