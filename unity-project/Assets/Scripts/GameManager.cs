@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
         Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         //boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), new Vector2(-2, 2), Quaternion.identity, t);
+        Debug.Log("SHIT " + plnums.Count.ToString());
         for (int i = 0; i < plnums.Count; i++)
         {
             StartPlayer();
@@ -78,19 +79,24 @@ public class GameManager : MonoBehaviour {
         if (player2 == null)
         {
             player2 = Instantiate(Resources.Load<GameObject>("ArcherOP"), playerInitPos[plnum], Quaternion.identity);
+            Debug.Log("instantiate " + plnum + " at " + playerInitPos[plnum].ToString());
             player2.GetComponent<archerControllerOP>().playernum = plnum;
             player2.GetComponent<archerControllerOP>().id = plid;
         }
         else if (player3 == null)
         {
             player3 = Instantiate(Resources.Load<GameObject>("ArcherOP"), playerInitPos[plnum], Quaternion.identity);
+            Debug.Log("instantiate " + plnum + " at " + playerInitPos[plnum].ToString());
             player3.GetComponent<archerControllerOP>().playernum = plnum;
             player3.GetComponent<archerControllerOP>().id = plid;
+            Debug.Log(player2.GetComponent<archerControllerOP>().id);
+            Debug.Log(player3.GetComponent<archerControllerOP>().id);
         }
     }
 
     void NewPlayerHandle(string id, int cl, int num)
     {
+        Debug.Log("handling " + num.ToString());
         if (gameStarted)
         {
             plnums.Enqueue(num);
