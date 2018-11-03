@@ -15,21 +15,29 @@ public class archerController : MonoBehaviour {
   Vector3 healthbarsize;
   List<Vector2> forces;
   int hbarupdatetime;
-  public float MOVEMENT_SPEED;
+  public float MOVEMENT_SPEED=0.1f;
   public float ARROW_SPEED;
+  public float MAX_DASH = 2f;
+  public int DASH_CD = 500;
+  public int GLOBAL_CD = 20;
   int knocked;
   Vector2 realvelocity;
   bool clicked;
   private Sprite f1;
   private Sprite f2;
   private SpriteRenderer bowrender;
-
+  int numarrows;
+  int dashcd;
+  int gcd;
+  int autocd;
+  int hit;
 
 
 
 	// Use this for initialization
 	void Start () {
     rb = GetComponent<Rigidbody2D>();
+    hit = 0;
     rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     bow = gameObject.transform.GetChild(0).gameObject;
     bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
@@ -48,6 +56,7 @@ public class archerController : MonoBehaviour {
     f2 = Resources.Load<Sprite>("bow2");
     f1 = Resources.Load<Sprite>("bow");
     bowrender = bow.GetComponent<SpriteRenderer>();
+    numarrows = 0;
 	}
 
   // called in fixed interval
@@ -82,6 +91,12 @@ public class archerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+    /* ON HIT */
+    if (hit >= 0){
+      Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit)/Mathf.Sqrt(25));
+      render.color = lerpedColor;
+      hit--;
+    }
 
     /* ROTATION */ 
     // get position of main sprite and mouse
@@ -95,28 +110,43 @@ public class archerController : MonoBehaviour {
     // use angle to rotate bow
     bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg*angle,Vector3.forward);
     bow.transform.position = pos + -1*direction.normalized*bowdistance;
+    
+    /* ABILITIES */
+    while(gcd<0){
 
-    if(Input.GetKey("q")){
-      addArrow();
-    }
-    if(Input.GetKey("e")){
-      poisonArrow();
-    }
-    if(Input.GetKey(KeyCode.LeftShift)){
-      dash();
-    }
-
-    /* ARROW */
-    if(Input.GetMouseButton(0)){
-      if(!clicked){
-        clicked = true;
-        bowrender.sprite = f2;
+      if(Input.GetKey("q")){
+        addArrow();
+        gcd = GLOBAL_CD;
+        break;
       }
-    }else if(clicked){ 
-      bowrender.sprite = f1;
-      GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
-      arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
-      clicked = false;
+      if(Input.GetKey("e")){
+        poisonArrow();
+        gcd = GLOBAL_CD;
+        break;
+      }
+      if(Input.GetKey(KeyCode.LeftShift)){
+        if(dashcd<0){
+          dash(direction);
+        }
+        gcd = GLOBAL_CD;
+        break;
+      }
+ 
+    /* ARROW */
+      if(Input.GetMouseButton(0)){
+        if(!clicked){
+          clicked = true;
+          bowrender.sprite = f2;
+        }
+      }else if(clicked){ 
+        bowrender.sprite = f1;
+        GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
+        arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
+        clicked = false;
+        gcd = GLOBAL_CD;
+        break;
+      }
+      break;
     }
 
     /* HEALTH BAR */
@@ -127,16 +157,40 @@ public class archerController : MonoBehaviour {
     else{
       hbarupdatetime--;
     }
+    dashcd--;
+    gcd--;
+    autocd--;
 	}
 
   void addArrow(){
     // adds an arrow to player inventory if they don't have one.
+    if(numarrows==0)
+      numarrows++;
   }
   void poisonArrow(){
     // 
   }
-  void dash(){
+  void dash(Vector2 direction){
+    float m = direction.magnitude;
+    var v = direction.normalized;
+    if(m>MAX_DASH){ 
+      m = MAX_DASH;
+    }
+    v*=m;
+    v = rb.position - v;
+    dashcd = DASH_CD;
+    StartCoroutine(dashAnim(rb.position,v));
+  }
 
+  IEnumerator dashAnim(Vector3 opos, Vector3 mpos){
+    for(int i = -10;i<=10;i++){
+      Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i)-10)/10);
+      render.color = c;
+      Vector3 curpos = Vector3.Lerp(opos,mpos,(float)i/10);
+      Debug.Log(Mathf.Abs(Mathf.Abs(i)-15));
+      rb.position = curpos;
+      yield return null;
+    }
   }
 
   // makes player invisible and unresponsive so that they could potentially be
@@ -169,6 +223,7 @@ public class archerController : MonoBehaviour {
   public void TakeDamage(float dmg, Vector2 dir){
     var hsize = new Vector3((health.getCurrentHP()/health.getMaxHP())*healthbarsize.x,healthbarsize.y,healthbarsize.z);
     healthbar.transform.localScale = hsize; 
+    hit = 25;
     hbarupdatetime=20;
     if(!health.TakeDamage(dmg)){
       Dead();
