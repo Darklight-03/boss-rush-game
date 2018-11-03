@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), new Vector2(2, -2), Quaternion.identity);
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
         boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), new Vector2(-2, 2), Quaternion.identity, t);
-        for (int i = 0; i < waitPlayers.Length; i++)
+        for (int i = 0; i < waitPlayers.Count; i++)
         {
             StartPlayer(waitPlayerIds[i], waitPlayers[i]);
         }
