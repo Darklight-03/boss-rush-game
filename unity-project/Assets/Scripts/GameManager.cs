@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour {
     GameObject boss;
     GameObject obstacle1;
     private bool gameStarted = false;
-    private int[] waitPlayers = new int[2];
-    private string[] waitPlayerIds = new string[2];
+    private List<int> waitPlayers = new List<int>(2);
+    private List<string> waitPlayerIds = new List<string>(2);
 
     // Use this for initialization
     void Start () {
@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour {
         }
         else
         {
-            waitPlayers[waitPlayers.Length] = cl;
-            waitPlayerIds[waitPlayerIds.Length] = id;
+            waitPlayers[waitPlayers.Count] = cl;
+            waitPlayerIds[waitPlayerIds.Count] = id;
         }
     }
 
