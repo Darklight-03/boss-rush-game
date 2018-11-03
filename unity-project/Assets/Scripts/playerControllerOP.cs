@@ -57,6 +57,12 @@ public class playerControllerOP : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.tag == "projectile")
+        {
+            Vector2 collPoint = collision.GetContact(0).point;
+            Vector2 objPos = collision.GetContact(0).otherRigidbody.position;
+            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + (objPos.x - collPoint.x) + ", \"diry\": " + (objPos.y - collPoint.y) + " }");
+        }
         //if (collision.gameObject.tag == "projectile")
         //{
         //    Debug.Log(health.getCurrentHP());

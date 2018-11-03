@@ -71,7 +71,6 @@ public class playerController : MonoBehaviour {
     {
         if (collision.gameObject.tag == "projectile")
         {
-            Debug.Log(health.getCurrentHP());
             if (health.TakeDamage(10))
             {
 
