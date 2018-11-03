@@ -239,10 +239,16 @@ public class archerController : MonoBehaviour {
     {
         if (SocketNetworkManager.id != id)
         {
-            Vector3 pos = transform.position;
+            Vector2 pos = transform.position;
             pos.x = x;
             pos.y = y;
             transform.position = pos;
+
+            Vector2 dir = new Vector2(rx, ry);
+
+            // use angle to rotate bow
+            bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
+            bow.transform.position = pos + -1 * dir.normalized * bowdistance;
         }
     }
 }
