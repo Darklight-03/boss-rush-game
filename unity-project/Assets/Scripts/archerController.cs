@@ -25,8 +25,8 @@ public class archerController : MonoBehaviour {
     private Sprite f1;
     private Sprite f2;
     private SpriteRenderer bowrender;
-    private float prevPosX = 0;
-    private float prevPosY = 0;
+    private Vector2 prevPos;
+    private Vector2 prevRot;
 
 
 
@@ -176,13 +176,13 @@ public class archerController : MonoBehaviour {
                 hbarupdatetime--;
             }
 
-            if (prevPosX != rb.position.x || prevPosY != rb.position.y)
+            if (prevPos != rb.position || prevRot != direction)
             {
                 snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.x.ToString() + ", \"ry\": " + direction.y.ToString() + " }");
             }
 
-            prevPosX = rb.position.x;
-            prevPosY = rb.position.y;
+            prevPos = rb.position;
+            prevRot = direction;
         }
 	}
 
