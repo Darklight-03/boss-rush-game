@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class SwordDamage : MonoBehaviour {
 
-    public int knockback;
     private Rigidbody2D rb;
 
 
     // Use this for initialization
     void Start () {
-		
+	    
 	}
 	
 	// Update is called once per frame
@@ -20,9 +19,7 @@ public class SwordDamage : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //Vector3 playerpos = collision.gameObject.transform.position;
-        //Vector3 spikepos = rb.transform.position;
-        //Vector3 dir = (playerpos - spikepos).normalized * knockback;
+
         if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<archerController>().TakeDamage(10, Vector2.zero);

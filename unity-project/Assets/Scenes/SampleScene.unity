@@ -305,6 +305,52 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &524570584
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -3.1479466
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -1.862164
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4318795064629280, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1761031550380380, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+      propertyPath: m_Name
+      value: tank-100
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e2e1fa862756dcd4aa716448344bf4d1, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &621925578
 GameObject:
   m_ObjectHideFlags: 0
