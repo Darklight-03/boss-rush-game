@@ -7,10 +7,11 @@ public class SocketNetworkManager : MonoBehaviour
 {
     static WebSocket w;
     static int lobbyid = -1;
-    public static string id;
     static bool contli;
     static bool started = false;
-    public string serverurl = "ws://168.61.48.136:3000/";
+    public static string id;
+    public static bool isHost = true;
+    public static string serverurl = "ws://168.61.48.136:3000/";
 
     // events
     public delegate void OtherPlayerPos(string id, float x, float y, float rx, float ry);
@@ -24,6 +25,9 @@ public class SocketNetworkManager : MonoBehaviour
 
     public delegate void NewPlayerRes(string id, int cl);
     public static event NewPlayerRes NewPlayerHandle;
+
+    public delegate void StartGameRes();
+    public static event StartGameRes StartGameHandle;
 
 
     // Use this for initialization
@@ -102,6 +106,7 @@ public class SocketNetworkManager : MonoBehaviour
                     case "join lobby":
                         joinLobby jnl = JsonUtility.FromJson<joinLobby>(msgo.content);
                         Debug.Log("joined lobby");
+                        isHost = false;
                         if (JoinLobbyHandle != null)
                             JoinLobbyHandle(jnl.ret);
                         break;
@@ -114,6 +119,10 @@ public class SocketNetworkManager : MonoBehaviour
                                 playerPos pp = JsonUtility.FromJson<playerPos>(gms.content);
                                 if (UpdateOtherPlayerPos != null)
                                     UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry);
+                                break;
+                            case "sg":
+                                if (StartGameHandle != null)
+                                    StartGameHandle();
                                 break;
                             default:
                                 Debug.Log("unknown general message type");

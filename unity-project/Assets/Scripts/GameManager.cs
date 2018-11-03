@@ -19,6 +19,14 @@ public class GameManager : MonoBehaviour {
     void Start () {
         snm = GetComponent<SocketNetworkManager>();
         t = GetComponent<Transform>();
+        SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
+        SocketNetworkManager.StartGameHandle += StartGameHandle;
+    }
+
+    private void OnDestroy()
+    {
+        SocketNetworkManager.NewPlayerHandle -= NewPlayerHandle;
+        SocketNetworkManager.StartGameHandle -= StartGameHandle;
     }
 
     void StartGame()
@@ -39,9 +47,10 @@ public class GameManager : MonoBehaviour {
         bool oDown = Input.GetKeyDown(KeyCode.O);
         bool pDown = Input.GetKeyDown(KeyCode.P);
 
-        if (lDown)
+        if (lDown && SocketNetworkManager.isHost)
         {
             Debug.Log("lPressed");
+            snm.sendMessage("sg", "{ }");
             StartGame();
         }
         if (oDown)
@@ -82,6 +91,11 @@ public class GameManager : MonoBehaviour {
             waitPlayers[waitPlayers.Length] = cl;
             waitPlayerIds[waitPlayerIds.Length] = id;
         }
+    }
+
+    void StartGameHandle()
+    {
+        StartGame();
     }
 }
 
