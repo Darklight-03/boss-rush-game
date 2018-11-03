@@ -69,7 +69,6 @@ public class archerControllerOP : MonoBehaviour {
     {
         //if (!isPlayer)
         //{
-            Debug.Log("event handler set");
             SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
         //}
     }

@@ -25,8 +25,8 @@ public class archerController : MonoBehaviour {
     private Sprite f1;
     private Sprite f2;
     private SpriteRenderer bowrender;
-    private Vector2 prevPos;
-    private Vector2 prevRot;
+    private Vector2 prevPos = new Vector2(0,0);
+    private Vector2 prevRot = new Vector2(0,0);
 
 
 
