@@ -35,6 +35,14 @@ public class playerController : MonoBehaviour {
     void DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
         // display health, if dead, etc
+        if (health.TakeDamage(dmg))
+        {
+
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     // called in fixed interval
@@ -71,6 +79,7 @@ public class playerController : MonoBehaviour {
     {
         if (collision.gameObject.tag == "projectile")
         {
+            Destroy(collision.gameObject);
             if (health.TakeDamage(10))
             {
 

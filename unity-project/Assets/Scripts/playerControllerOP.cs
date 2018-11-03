@@ -62,6 +62,7 @@ public class playerControllerOP : MonoBehaviour {
             Vector2 collPoint = collision.GetContact(0).point;
             Vector2 objPos = collision.GetContact(0).otherRigidbody.position;
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + (objPos.x - collPoint.x) + ", \"diry\": " + (objPos.y - collPoint.y) + " }");
+            Destroy(collision.gameObject);
         }
         //if (collision.gameObject.tag == "projectile")
         //{
