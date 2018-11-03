@@ -23,7 +23,10 @@ public class PlayerCollision : MonoBehaviour {
         Vector3 dir = (playerpos - spikepos).normalized * knockback;
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<archerController>().TakeDamage(10, dir);
+            if (collision.gameObject.name == "Archer")
+            {
+                collision.gameObject.GetComponent<archerController>().TakeDamage(10, dir);
+            }
         }
 
 

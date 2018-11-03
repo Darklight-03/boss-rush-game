@@ -18,6 +18,7 @@ public class archerController : MonoBehaviour {
   public float MOVEMENT_SPEED;
   int knocked;
   Vector2 realvelocity;
+  bool invincible;
 
 
 
@@ -39,6 +40,7 @@ public class archerController : MonoBehaviour {
     hbarupdatetime = 0;
     knocked = 0;
     realvelocity = new Vector2(0,0);
+    invincible = false;
 	}
 
   // called in fixed interval
@@ -109,11 +111,6 @@ public class archerController : MonoBehaviour {
     forces.Add(force);
   }
 
-  void OnMouseDown(){
-    Debug.Log("mdown");
-    TakeDamage(10,Vector2.up*100);
-  }
-
   void OnCollisionEnter2D(Collision2D collision){
     Debug.Log("coll");
     rb.velocity = rb.velocity*-1;
@@ -128,9 +125,21 @@ public class archerController : MonoBehaviour {
     if(!health.TakeDamage(dmg)){
       Dead();
     }
-    else{
-      applyForce(dir); 
+    else if (invincible == false){
+      applyForce(dir);
       knocked = 20;
+      StartCoroutine(damageflash());
     }
   }
+
+    IEnumerator damageflash()
+    {
+        GetComponent<SpriteRenderer>().color = Color.red;
+        invincible = true;
+        yield return new WaitForSeconds(0.5f);
+        invincible = false;
+        GetComponent<SpriteRenderer>().color = Color.white;
+
+    }
 }
+
