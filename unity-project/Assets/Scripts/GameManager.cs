@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour {
     GameObject boss;
     GameObject obstacle1;
     private bool gameStarted = false;
-    private List<int> waitPlayers = new List<int>(2);
-    private List<string> waitPlayerIds = new List<string>(2);
+    private List<GameObject> players = new List<GameObject>(2);
+    private List<Vector2> playerInitPos = new List<Vector2>(3);
 
     // Use this for initialization
     void Start () {
@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour {
         t = GetComponent<Transform>();
         SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
         SocketNetworkManager.StartGameHandle += StartGameHandle;
+        playerInitPos[0] = new Vector2(2, -2);
+        playerInitPos[1] = new Vector2(0, -2);
+        playerInitPos[2] = new Vector2(-2, -2);
     }
 
     private void OnDestroy()
@@ -32,12 +35,12 @@ public class GameManager : MonoBehaviour {
     void StartGame()
     {
         gameStarted = true;
-        player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), new Vector2(2, -2), Quaternion.identity);
+        player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
         //boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), new Vector2(-2, 2), Quaternion.identity, t);
-        for (int i = 0; i < waitPlayers.Count; i++)
+        for (int i = 0; i < players.Count; i++)
         {
-            StartPlayer(waitPlayerIds[i], waitPlayers[i]);
+            StartPlayer(players[i]);
         }
     }
 	
@@ -65,33 +68,33 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void StartPlayer(string id, int cl)
+    void StartPlayer(GameObject newPlayer)
     {
         // argument will specify class later
         if (player2 == null)
         {
-            player2 = Instantiate(Resources.Load<GameObject>("ArcherOP"), new Vector2(0f, -2f), Quaternion.identity);
-            player2.GetComponent<archerControllerOP>().id = id;
+            player2 = Instantiate(newPlayer, playerInitPos[newPlayer.GetComponent<archerControllerOP>().playernum], Quaternion.identity);
         }
         else if (player3 == null)
         {
-            player3 = Instantiate(Resources.Load<GameObject>("ArcherOP"), new Vector2(-2f, -2f), Quaternion.identity);
-            player3.GetComponent<archerControllerOP>().id = id;
+            player3 = Instantiate(newPlayer, playerInitPos[newPlayer.GetComponent<archerControllerOP>().playernum], Quaternion.identity);
         }
     }
 
-    void NewPlayerHandle(string id, int cl)
+    void NewPlayerHandle(string id, int cl, int num)
     {
+        GameObject newPlayer = Resources.Load<GameObject>("ArcherOP");
+        newPlayer.GetComponent<archerControllerOP>().id = id;
+        newPlayer.GetComponent<archerControllerOP>().playernum = num;
         if (gameStarted)
         {
-            StartPlayer(id, cl);
+            StartPlayer(newPlayer);
         }
         else
         {
             Debug.Log("myid        = " + SocketNetworkManager.id);
             Debug.Log("newplayerid = " + id);
-            waitPlayers.Add(cl);
-            waitPlayerIds.Add(id);
+            players.Add(newPlayer);
         }
     }
 

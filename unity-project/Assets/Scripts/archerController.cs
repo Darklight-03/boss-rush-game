@@ -165,7 +165,7 @@ public class archerController : MonoBehaviour {
                 hbarupdatetime--;
             }
 
-            if (prevPos != rb.position || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.5f), Vector2.right))
+            if (Vector2.Distance(prevPos, rb.position) > 0.25f || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.25f), Vector2.right))
             {
                 snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
                 prevPos = rb.position;
@@ -200,9 +200,7 @@ public class archerController : MonoBehaviour {
     {
         //if (isPlayer)
         //{
-        //Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.name != "ArcherOP(Clone")
-            rb.velocity = rb.velocity * -0.5f;
+        rb.velocity = rb.velocity * -0.5f;
         //}
     }
 

@@ -28,12 +28,13 @@ public class archerControllerOP : MonoBehaviour {
     private Vector2 prevPos;
     private Vector2 prevRot;
     public string id;
+    public int playernum;
 
 
 
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         snm = GetComponent<SocketNetworkManager>();
         //if (!isPlayer)

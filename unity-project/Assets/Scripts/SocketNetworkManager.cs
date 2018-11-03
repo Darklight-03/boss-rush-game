@@ -11,6 +11,7 @@ public class SocketNetworkManager : MonoBehaviour
     static bool started = false;
     public static string id;
     public static bool isHost = true;
+    public static int playernum;
     public static string serverurl = "ws://168.61.48.136:3000/";
 
     // events
@@ -23,7 +24,7 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate void JoinLobbyRes(string ret);
     public static event JoinLobbyRes JoinLobbyHandle;
 
-    public delegate void NewPlayerRes(string id, int cl);
+    public delegate void NewPlayerRes(string id, int cl, int num);
     public static event NewPlayerRes NewPlayerHandle;
 
     public delegate void StartGameRes();
@@ -93,11 +94,12 @@ public class SocketNetworkManager : MonoBehaviour
                     case "new player":
                         newPly np = JsonUtility.FromJson<newPly>(msgo.content);
                         if (NewPlayerHandle != null)
-                            NewPlayerHandle(np.theirid, np.cl);
+                            NewPlayerHandle(np.theirid, np.cl, np.theirnum);
                         break;
                     case "create lobby":
                         creLobby crel = JsonUtility.FromJson<creLobby>(msgo.content);
                         lobbyid = crel.lobbyid;
+                        playernum = crel.playernum;
                         Debug.Log("created lobby");
                         if (CreateLobbyHandle != null)
                             CreateLobbyHandle(crel.lobbyid);
@@ -107,6 +109,7 @@ public class SocketNetworkManager : MonoBehaviour
                         joinLobby jnl = JsonUtility.FromJson<joinLobby>(msgo.content);
                         Debug.Log("joined lobby");
                         isHost = false;
+                        playernum = jnl.playernum;
                         if (JoinLobbyHandle != null)
                             JoinLobbyHandle(jnl.ret);
                         break;
@@ -158,6 +161,7 @@ public class newCon
 [Serializable]
 public class newPly
 {
+    public int theirnum;
     public string theirid;
     public int cl;
 }
@@ -165,12 +169,14 @@ public class newPly
 [Serializable]
 public class creLobby
 {
+    public int playernum;
     public int lobbyid;
 }
 
 [Serializable]
 public class joinLobby
 {
+    public int playernum;
     public string ret;
 }
 
