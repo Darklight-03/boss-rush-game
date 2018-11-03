@@ -16,6 +16,7 @@ public class playerController : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        snm = GetComponent<SocketNetworkManager>();
         animation = this.GetComponent<Animation>();
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
@@ -61,7 +62,7 @@ public class playerController : MonoBehaviour {
 
         if (Vector2.Distance(prevPos, rb.position) > 0.1f)
         {
-            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + 0.ToString() + ", \"ry\": " + 0.ToString() + " }");
+            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + "0" + ", \"ry\": " + "0" + " }");
             prevPos = rb.position;
         }
     }
