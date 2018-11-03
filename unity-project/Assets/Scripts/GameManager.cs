@@ -21,9 +21,9 @@ public class GameManager : MonoBehaviour {
         t = GetComponent<Transform>();
         SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
         SocketNetworkManager.StartGameHandle += StartGameHandle;
-        playerInitPos[0] = new Vector2(2, -2);
-        playerInitPos[1] = new Vector2(0, -2);
-        playerInitPos[2] = new Vector2(-2, -2);
+        playerInitPos.Add(new Vector2(2, -2));
+        playerInitPos.Add(new Vector2(0, -2));
+        playerInitPos.Add(new Vector2(-2, -2));
     }
 
     private void OnDestroy()
