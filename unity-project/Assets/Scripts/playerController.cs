@@ -6,6 +6,7 @@ public class playerController : MonoBehaviour {
   private Rigidbody2D rb;
     Collider2D swordcol;
     Animator myanmitor;
+    SpriteRenderer render;
     Health health;
     public float speed;
     public Animation animation;
@@ -14,6 +15,7 @@ public class playerController : MonoBehaviour {
       animation = this.GetComponent<Animation>();
       rb = GetComponent<Rigidbody2D>();
       health = GetComponent<Health>();
+      render = GetComponent<SpriteRenderer>();
     }
 
   // called in fixed interval
@@ -37,14 +39,21 @@ public class playerController : MonoBehaviour {
             animation.Play("huijian");
         }
 	}
-    void OnCollisionEnter2D(Collision2D collision){
-      if(collision.gameObject.tag == "projectile"){
-        Debug.Log(health.getCurrentHP());
-        if(health.TakeDamage(10)){
-        }else{
-          Destroy(this);
-        }
-           // do stuff only for the circle collider
+
+    public void TakeDamage(float i){
+      if(health.TakeDamage(i)){
+        StartCoroutine(damageAnimation());
+      }
+      else{
+        Destroy(this);
+      }
+    }
+
+    IEnumerator damageAnimation(){
+      for(int i = 10;i>0;i--){
+        Color lerp = Color.Lerp(Color.white,Color.red,(float)i/10);
+        render.color = lerp;
+        yield return null;
       }
     }
 
