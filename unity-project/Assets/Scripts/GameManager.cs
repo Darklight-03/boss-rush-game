@@ -12,8 +12,8 @@ public class GameManager : MonoBehaviour {
     GameObject boss;
     GameObject obstacle1;
     private bool gameStarted = false;
-    private int[] waitPlayers = new int[0];
-    private string[] waitPlayerIds = new string[0];
+    private int[] waitPlayers = new int[2];
+    private string[] waitPlayerIds = new string[2];
 
     // Use this for initialization
     void Start () {
