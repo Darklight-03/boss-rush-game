@@ -37,13 +37,10 @@ public class SocketNetworkManager : MonoBehaviour
         if (!started)
         {
             started = true;
-            Debug.Log(serverurl);
             w = new WebSocket(new Uri("ws://168.61.48.136:3000/"));
             yield return StartCoroutine(w.Connect());
-            //Debug.Log(w.Connect());
             contli = true;
             StartCoroutine(listener());
-            Debug.Log(w.error);
             yield return null;
         }
     }

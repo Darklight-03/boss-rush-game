@@ -107,7 +107,6 @@ public class WebSocket
 
 	public IEnumerator Connect()
 	{
-        Debug.Log(mUrl.ToString());
 		m_Socket = new WebSocketSharp.WebSocket(mUrl.ToString());
 		m_Socket.OnMessage += (sender, e) => m_Messages.Enqueue (e.RawData);
 		m_Socket.OnOpen += stuffonopen;
