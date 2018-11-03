@@ -13,7 +13,7 @@ public class SocketNetworkManager : MonoBehaviour
     public string serverurl = "ws://168.61.48.136:3000/";
 
     // events
-    public delegate void OtherPlayerPos(string id, float x, float y);
+    public delegate void OtherPlayerPos(string id, float x, float y, float rx, float ry);
     public static event OtherPlayerPos UpdateOtherPlayerPos;
 
     public delegate void CreateLobbyRes(string id, int lobbyid);
@@ -101,7 +101,7 @@ public class SocketNetworkManager : MonoBehaviour
                             case "pp":
                                 playerPos pp = JsonUtility.FromJson<playerPos>(gms.content);
                                 if (UpdateOtherPlayerPos != null)
-                                    UpdateOtherPlayerPos(gms.sender, pp.x, pp.y);
+                                    UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry);
                                 break;
                             default:
                                 Debug.Log("unknown general message type");
@@ -154,4 +154,6 @@ public class playerPos
 {
     public float x;
     public float y;
+    public float rx;
+    public float ry;
 }

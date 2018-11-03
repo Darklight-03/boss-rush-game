@@ -39,13 +39,13 @@ public class archerController : MonoBehaviour {
             SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
         }
         rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         bow = gameObject.transform.GetChild(0).gameObject;
         bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
         render = GetComponent<SpriteRenderer>();
         health = GetComponent<Health>();
         if (isPlayer)
         {
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
             forces = new List<Vector2>();
             healthbar = GameObject.FindWithTag("Health-bar");
             healthbarback = GameObject.FindWithTag("Health-bar-background");
@@ -113,14 +113,6 @@ public class archerController : MonoBehaviour {
             realvelocity = rb.velocity + inputvelocity;
 
             forces.Clear();
-
-            if (prevPosX != rb.position.x || prevPosY != rb.position.y)
-            {
-                snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + " }");
-            }
-
-            prevPosX = rb.position.x;
-            prevPosY = rb.position.y;
         }
   }
 	
@@ -183,6 +175,14 @@ public class archerController : MonoBehaviour {
             {
                 hbarupdatetime--;
             }
+
+            if (prevPosX != rb.position.x || prevPosY != rb.position.y)
+            {
+                snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.x.ToString() + ", \"ry\": " + direction.y.ToString() + " }");
+            }
+
+            prevPosX = rb.position.x;
+            prevPosY = rb.position.y;
         }
 	}
 
@@ -235,7 +235,7 @@ public class archerController : MonoBehaviour {
         }
   }
 
-    void UpdateOtherPlayerPos(string id, float x, float y)
+    void UpdateOtherPlayerPos(string id, float x, float y, float rx, float ry)
     {
         if (SocketNetworkManager.id != id)
         {
