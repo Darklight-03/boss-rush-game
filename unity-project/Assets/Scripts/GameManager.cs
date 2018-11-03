@@ -70,12 +70,12 @@ public class GameManager : MonoBehaviour {
         // argument will specify class later
         if (player2 == null)
         {
-            player2 = Instantiate(Resources.Load<GameObject>("ArcherOP"), new Vector2(1.5f, -1.5f), Quaternion.identity);
+            player2 = Instantiate(Resources.Load<GameObject>("ArcherOP"), new Vector2(0f, -2f), Quaternion.identity);
             player2.GetComponent<archerControllerOP>().id = id;
         }
         else if (player3 == null)
         {
-            player3 = Instantiate(Resources.Load<GameObject>("ArcherOP"), new Vector2(1.5f, -1.5f), Quaternion.identity);
+            player3 = Instantiate(Resources.Load<GameObject>("ArcherOP"), new Vector2(-2f, -2f), Quaternion.identity);
             player3.GetComponent<archerControllerOP>().id = id;
         }
     }
