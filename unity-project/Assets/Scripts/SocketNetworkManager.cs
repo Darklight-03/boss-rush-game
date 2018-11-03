@@ -24,7 +24,7 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate void JoinLobbyRes(string ret);
     public static event JoinLobbyRes JoinLobbyHandle;
 
-    public delegate void NewPlayerRes(string id, int cl, int num);
+    public delegate IEnumerator NewPlayerRes(string id, int cl, int num);
     public static event NewPlayerRes NewPlayerHandle;
 
     public delegate void StartGameRes();
