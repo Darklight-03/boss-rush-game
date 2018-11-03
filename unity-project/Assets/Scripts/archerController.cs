@@ -188,7 +188,7 @@ public class archerController : MonoBehaviour {
     // simply adds a force to the list to be applied next update.
     void applyForce(Vector2 force)
     {
-    forces.Add(force);
+        forces.Add(force);
     }
 
     void OnMouseDown()
@@ -200,6 +200,8 @@ public class archerController : MonoBehaviour {
     {
         //if (isPlayer)
         //{
+        //Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.name != "ArcherOP(Clone")
             rb.velocity = rb.velocity * -0.5f;
         //}
     }
