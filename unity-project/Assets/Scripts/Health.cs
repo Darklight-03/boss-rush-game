@@ -15,7 +15,6 @@ public class Health : MonoBehaviour {
 	}
 
   public bool TakeDamage(float dmg){
-    Debug.Log("boss damaged for " + dmg);
     hp -= dmg;
     if(hp<=0){
       return false;

@@ -95,18 +95,16 @@ public class playerController : MonoBehaviour {
     {
         if (collider.gameObject.name == "arrowOP(Clone)")
         {
-            Debug.Log("collision with other players arrow");
             Destroy(collider.gameObject);
             return;
         }
         if (collider.gameObject.tag == "projectile")
         {
             Destroy(collider.gameObject);
-            Debug.Log("collision with arrow");
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
             if (health.TakeDamage(10))
             {
-
+                damageAnimation();
             }
             else
             {
