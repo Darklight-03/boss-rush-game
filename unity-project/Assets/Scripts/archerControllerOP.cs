@@ -49,6 +49,7 @@ public class archerControllerOP : MonoBehaviour {
         bowrender = bow.GetComponent<SpriteRenderer>();
         healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
         interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
+        healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
         interfaceplayertext.text = "Player " + healthbar_id;
         healthbarsize = healthbar.transform.localScale;
         hbarupdatetime = 0;
@@ -79,8 +80,17 @@ public class archerControllerOP : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-
-	}
+        /* HEALTH BAR */
+        if (hbarupdatetime == 0)
+        {
+            healthbarback.transform.localScale = healthbar.transform.localScale;
+            hbarupdatetime = 100;
+        }
+        else
+        {
+            hbarupdatetime--;
+        }
+    }
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
