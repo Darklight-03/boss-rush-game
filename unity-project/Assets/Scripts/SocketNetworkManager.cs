@@ -12,7 +12,7 @@ public class SocketNetworkManager : MonoBehaviour
     public static string id;
     public static bool isHost = true;
     public static int playernum;
-    public static string serverurl = "ws://168.61.48.136:3000/";
+    public static string serverurl = "ws://teamproject1.ddns.net:3000/";
 
     // events
     public delegate void OtherPlayerPos(string id, float x, float y, float rx, float ry);
