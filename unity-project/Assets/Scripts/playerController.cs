@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class playerController : MonoBehaviour {
@@ -12,6 +13,12 @@ public class playerController : MonoBehaviour {
     public float speed;
     public Animation animation;
     Vector2 prevPos;
+    private GameObject healthbar;
+    private GameObject healthbarbg;
+    private Text bossname;
+    int hit;
+    int hbarupdatetime;
+    Vector3 healthbarsize;
 
 
     // Use this for initialization
@@ -22,6 +29,12 @@ public class playerController : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
         render = GetComponent<SpriteRenderer>();
+        bossname = GameObject.FindWithTag("Boss-name").GetComponent<Text>();
+        healthbar = GameObject.FindWithTag("Boss-health");
+        healthbarbg = GameObject.FindWithTag("Boss-healthbh");
+        hit = 0;
+        healthbarsize = healthbar.transform.localScale;
+
     }
 
     private void OnEnable()
@@ -80,7 +93,18 @@ public class playerController : MonoBehaviour {
             snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + "0" + ", \"ry\": " + "0" + " }");
             prevPos = rb.position;
         }
-	}
+
+        /* HEALTH BAR */
+        if (hbarupdatetime == 0)
+        {
+            healthbarbg.transform.localScale = healthbar.transform.localScale;
+            hbarupdatetime = 100;
+        }
+        else
+        {
+            hbarupdatetime--;
+        }
+    }
 
     IEnumerator damageAnimation()
     {
@@ -90,6 +114,26 @@ public class playerController : MonoBehaviour {
         yield return null;
       }
     }
+
+    void TakeDamage(float dmg)
+    {
+
+        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        healthbar.transform.localScale = hsize;
+        hit = 25;
+        hbarupdatetime = 20;
+
+        if (health.TakeDamage(10))
+            {
+                damageAnimation();
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+            // do stuff only for the circle collider
+       }
+ 
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -101,15 +145,9 @@ public class playerController : MonoBehaviour {
         if (collider.gameObject.tag == "projectile")
         {
             Destroy(collider.gameObject);
+            TakeDamage(10);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-            if (health.TakeDamage(10))
-            {
-                damageAnimation();
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
+            
             // do stuff only for the circle collider
         }
     }

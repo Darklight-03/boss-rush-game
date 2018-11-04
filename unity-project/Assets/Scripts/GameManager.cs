@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
         snm = GetComponent<SocketNetworkManager>();
         t = GetComponent<Transform>();
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
+        //boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
         SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
         SocketNetworkManager.StartGameHandle += StartGameHandle;
         playerInitPos.Add(new Vector2(2, -2));
