@@ -26,7 +26,7 @@ public class archerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
     rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+    rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
     bow = gameObject.transform.GetChild(0).gameObject;
     bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
     render = GetComponent<SpriteRenderer>();
@@ -98,27 +98,23 @@ public class archerController : MonoBehaviour {
     }
 	}
 
-  // makes player invisible and unresponsive so that they could potentially be
-  // revived
-  void Dead(){
-    render.enabled = false;
-    enabled = false;
-  }
-
+    // makes player invisible and unresponsive so that they could potentially be
+    // revived
+    void Dead()
+    {
+        render.enabled = false;
+        enabled = false;
+    }
 
     // simply adds a force to the list to be applied next update.
     void applyForce(Vector2 force){
     forces.Add(force);
   }
 
-  void OnCollisionEnter2D(Collision2D collision){
-    Debug.Log("coll");
-    rb.velocity = rb.velocity*-1;
-  }
 
-  // reduces player health, if its 0 then call Dead(), if not then apply
-  // a knockback force given by dir
-  public void TakeDamage(float dmg, Vector2 dir){
+    // reduces player health, if its 0 then call Dead(), if not then apply
+    // a knockback force given by dir
+    public void TakeDamage(float dmg, Vector2 dir){
     var hsize = new Vector3((health.getCurrentHP()/health.getMaxHP())*healthbarsize.x,healthbarsize.y,healthbarsize.z);
     healthbar.transform.localScale = hsize; 
     hbarupdatetime=20;
