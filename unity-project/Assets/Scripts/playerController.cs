@@ -8,7 +8,7 @@ public class playerController : MonoBehaviour {
     Collider2D swordcol;
     Animator myanmitor;
     SpriteRenderer render;
-    Health health;
+    public Health health;
     public float speed;
     public Animation animation;
     Vector2 prevPos;
