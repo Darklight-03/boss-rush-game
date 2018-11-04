@@ -64,8 +64,9 @@ public class archerController : MonoBehaviour {
     void OnDisable()
     {
 
-    }
-
+    forces.Clear(); 
+  }
+	
     // called in fixed interval
     void FixedUpdate()
     {
@@ -117,6 +118,17 @@ public class archerController : MonoBehaviour {
         bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, Vector3.forward);
         bow.transform.position = pos + -1 * direction.normalized * bowdistance;
 
+        if(Input.GetKey("q")){
+          addArrow();
+        }
+        if(Input.GetKey("e")){
+          poisonArrow();
+        }
+        if(Input.GetKey(KeyCode.LeftShift)){
+          dash();
+        }
+
+
         /* ARROW */
         if (Input.GetMouseButton(0))
         {
@@ -153,15 +165,24 @@ public class archerController : MonoBehaviour {
         }
 	}
 
-    // makes player invisible and unresponsive so that they could potentially be
-    // revived
-    void Dead()
-    {
-        bowrender.enabled = false;
-        health.enabled = false;
-        render.enabled = false;
-        enabled = false;
-    }
+  void addArrow(){
+    // adds an arrow to player inventory if they don't have one.
+  }
+  void poisonArrow(){
+    // 
+  }
+  void dash(){
+
+  }
+
+  // makes player invisible and unresponsive so that they could potentially be
+  // revived
+  void Dead(){
+    bowrender.enabled = false;
+    health.enabled = false;
+    render.enabled = false;
+    enabled = false;
+  }
 
 
     // simply adds a force to the list to be applied next update.
