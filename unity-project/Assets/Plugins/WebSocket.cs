@@ -126,7 +126,6 @@ public class WebSocket
     void stuffonerror(object sender, WebSocketSharp.ErrorEventArgs e)
     {
         m_Error = e.Message;
-        Debug.Log(e.Message);
     }
 
     void stuffonclose(object sender, WebSocketSharp.CloseEventArgs e)
