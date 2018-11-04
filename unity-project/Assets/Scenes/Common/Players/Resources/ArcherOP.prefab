@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MOVEMENT_SPEED: 0
-  ARROW_SPEED: 0
+  ARROW_SPEED: 10
   id: 
   playernum: 0
 --- !u!114 &114927458386824952
