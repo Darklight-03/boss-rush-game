@@ -91,6 +91,7 @@ public class playerController : MonoBehaviour {
     {
         if (collision.gameObject.name == "arrowOP")
         {
+            Debug.Log("collision with other players arrow");
             Destroy(collision.gameObject);
             return;
         }
