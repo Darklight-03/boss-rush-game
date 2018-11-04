@@ -159,9 +159,11 @@ public class archerController : MonoBehaviour {
             if(!clicked){
               clicked = true;
               bowrender.sprite = f2;
+              
             }
           }else if(clicked){ 
             bowrender.sprite = f1;
+                snm.sendMessage("sp", "{ \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.normalized.x + ", \"ry\": " + direction.normalized.y + " }");
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;
@@ -241,11 +243,6 @@ public class archerController : MonoBehaviour {
     void applyForce(Vector2 force)
     {
         forces.Add(force);
-    }
-
-    void OnMouseDown()
-    {
-
     }
 
     void OnCollisionEnter2D(Collision2D collision)

@@ -36,6 +36,7 @@ public class playerController : MonoBehaviour {
 
     void DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
+        // dir could be used for knockback or something like that.
         // display health, if dead, etc
         if (health.TakeDamage(dmg))
         {
@@ -67,6 +68,7 @@ public class playerController : MonoBehaviour {
         Vector2 v2 = player.transform.position;
         if ((v1-v2).magnitude < 3)
         {
+            snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
             animation.Play("huijian");
         }
 

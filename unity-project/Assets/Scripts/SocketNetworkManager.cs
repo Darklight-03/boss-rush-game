@@ -38,7 +38,16 @@ public class SocketNetworkManager : MonoBehaviour
 
     public delegate void BossPositionRes(float x, float y, float rx, float ry);
     public static event BossPositionRes UpdateBossPositionHandle;
+
+    public delegate void PlayerAnimRes(string sender, string name);
+    public static event PlayerAnimRes PlayerAnimHandle;
     
+    public delegate void BossAnimRes(string name);
+    public static event BossAnimRes BossAnimHandle;
+
+    public delegate void SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir);
+    public static event SpawnProjRes SpawnProjHandle;
+
 
 
     // Use this for initialization
@@ -168,7 +177,7 @@ public class SocketNetworkManager : MonoBehaviour
                             case "sp": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
                                 if (SpawnProjHandle != null)
-                                    SpawnProjHandle(sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
+                                    SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
                                 break;
 
                             default:

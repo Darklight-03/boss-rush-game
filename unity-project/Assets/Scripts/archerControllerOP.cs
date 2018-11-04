@@ -51,12 +51,16 @@ public class archerControllerOP : MonoBehaviour {
     {
         SocketNetworkManager.TakeDamageHandle += TakeDamageHandle;
         SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
+        SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandle;
+        SocketNetworkManager.SpawnProjHandle += SpawnProjHandle;
     }
 
     void OnDisable()
     {
         SocketNetworkManager.TakeDamageHandle -= TakeDamageHandle;
         SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPos;
+        SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandle;
+        SocketNetworkManager.SpawnProjHandle -= SpawnProjHandle;
     }
 
   // called in fixed interval
@@ -128,5 +132,32 @@ public class archerControllerOP : MonoBehaviour {
             bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
             bow.transform.position = pos + -1 * dir.normalized * bowdistance;
         }
+    }
+
+    void PlayerAnimHandle(string sender, string name)
+    {
+        if (id == sender)
+        {
+            // handle the weird way the bow works
+            if (name == "drawbow")
+            {
+                bowrender.sprite = f1;
+            }
+            else if (name == "relebow")
+            {
+                bowrender.sprite = f2;
+            }
+            // handle actual animations
+            else
+            {
+                // animation.Play(name)
+            }
+        }
+    }
+
+    void SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
+    { 
+        GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"), pos, new Quaternion(dir.x, dir.y, 0, 1), GetComponent<Transform>());
+        arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
     }
 }

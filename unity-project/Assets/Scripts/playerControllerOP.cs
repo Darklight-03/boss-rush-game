@@ -24,11 +24,13 @@ public class playerControllerOP : MonoBehaviour {
     private void OnEnable()
     {
         SocketNetworkManager.UpdateBossPositionHandle += UpdateBossPositionHandle;
+        SocketNetworkManager.BossAnimHandle += BossAnimHandle;
     }
 
     private void OnDisable()
     {
         SocketNetworkManager.UpdateBossPositionHandle -= UpdateBossPositionHandle;
+        SocketNetworkManager.BossAnimHandle -= BossAnimHandle;
     }
 
     void UpdateBossPositionHandle(float x, float y, float rx, float ry)
@@ -40,7 +42,12 @@ public class playerControllerOP : MonoBehaviour {
 
         Vector2 dir = new Vector2(rx, ry);
 
-        // use angle to do something
+        // use angle to do something probably with the sword
+    }
+
+    void BossAnimHandle(string name)
+    {
+        animation.Play(name);
     }
 
     // called in fixed interval
@@ -64,18 +71,5 @@ public class playerControllerOP : MonoBehaviour {
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + (objPos.x - collPoint.x) + ", \"diry\": " + (objPos.y - collPoint.y) + " }");
             Destroy(collision.gameObject);
         }
-        //if (collision.gameObject.tag == "projectile")
-        //{
-        //    Debug.Log(health.getCurrentHP());
-        //    if (health.TakeDamage(10))
-        //    {
-
-        //    }
-        //    else
-        //    {
-        //        Destroy(this);
-        //    }
-        //    // do stuff only for the circle collider
-        //}
     }
 }
