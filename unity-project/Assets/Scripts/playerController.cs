@@ -53,7 +53,6 @@ public class playerController : MonoBehaviour {
         {
             // dir could be used for knockback or something like that.
             // display health, if dead, etc
-            Debug.Log("recieved damage message");
             TakeDamage(dmg);
         }
         yield break;

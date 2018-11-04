@@ -66,12 +66,6 @@ public class SocketNetworkManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        contli = false;
-        w.Close();
-    }
-
     public void createLobby()
     {
         w.SendString("{ \"msgtype\":\"create lobby\" }");

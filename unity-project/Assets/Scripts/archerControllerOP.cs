@@ -28,6 +28,7 @@ public class archerControllerOP : MonoBehaviour {
     private Vector2 prevPos;
     private Vector2 prevRot;
     public string id;
+    public int healthbar_id;
     public int playernum;
     int hit;
 
@@ -46,7 +47,12 @@ public class archerControllerOP : MonoBehaviour {
         f2 = Resources.Load<Sprite>("bow2");
         f1 = Resources.Load<Sprite>("bow");
         bowrender = bow.GetComponent<SpriteRenderer>();
-	}
+        healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
+        interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
+        interfaceplayertext.text = "Player " + healthbar_id;
+        healthbarsize = healthbar.transform.localScale;
+        hbarupdatetime = 0;
+    }
 
     void OnEnable()
     {

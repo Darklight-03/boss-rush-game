@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour {
             //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player2.GetComponent<archerControllerOP>().playernum = num;
             player2.GetComponent<archerControllerOP>().id = id;
+            player2.GetComponent<archerControllerOP>().healthbar_id = 1;
         }
         else if (player3 == null)
         {
@@ -88,6 +89,7 @@ public class GameManager : MonoBehaviour {
             //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;
+            player2.GetComponent<archerControllerOP>().healthbar_id = 2;
         }
     }
 
