@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class playerControllerOP : MonoBehaviour {
@@ -11,6 +12,12 @@ public class playerControllerOP : MonoBehaviour {
     Health health;
     public float speed;
     public Animation animation;
+    private GameObject healthbar;
+    private GameObject healthbarbg;
+    private Text bossname;
+    int hit;
+    int hbarupdatetime;
+    Vector3 healthbarsize;
 
 
     // Use this for initialization
@@ -21,6 +28,11 @@ public class playerControllerOP : MonoBehaviour {
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
         render = GetComponent<SpriteRenderer>();
+        bossname = GameObject.FindWithTag("Boss-name").GetComponent<Text>();
+        healthbar = GameObject.FindWithTag("Boss-health");
+        healthbarbg = GameObject.FindWithTag("Boss-healthbh");
+        hit = 0;
+        healthbarsize = healthbar.transform.localScale;
     }
 
     private void OnEnable()
@@ -37,7 +49,38 @@ public class playerControllerOP : MonoBehaviour {
         SocketNetworkManager.DealDamageHandle -= DealDamageHandle;
     }
 
+    void Update()
+    {
+        /* HEALTH BAR */
+        if (hbarupdatetime == 0)
+        {
+            healthbarbg.transform.localScale = healthbar.transform.localScale;
+            hbarupdatetime = 100;
+        }
+        else
+        {
+            hbarupdatetime--;
+        }
+    }
 
+    void TakeDamage(float dmg)
+    {
+
+        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        healthbar.transform.localScale = hsize;
+        hit = 25;
+        hbarupdatetime = 20;
+
+        if (health.TakeDamage(10))
+        {
+            damageAnimation();
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+        // do stuff only for the circle collider
+    }
 
     IEnumerator UpdateBossPositionHandle(float x, float y, float rx, float ry)
     {
@@ -62,14 +105,7 @@ public class playerControllerOP : MonoBehaviour {
     {
         // dir could be used for knockback or something like that.
         // display health, if dead, etc
-        if (health.TakeDamage(dmg))
-        {
-            StartCoroutine(damageAnimation());
-        }
-        else
-        {
-            Destroy(this.gameObject); 
-        }
+        TakeDamage(dmg);
         yield break;
     }
 
@@ -94,14 +130,7 @@ public class playerControllerOP : MonoBehaviour {
         {
             Destroy(collider.gameObject);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-            if (health.TakeDamage(10))
-            {
-                StartCoroutine(damageAnimation());
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
+            TakeDamage(10);
             // do stuff only for the circle collider
         }
     }
