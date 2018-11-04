@@ -52,7 +52,6 @@ public class playerController : MonoBehaviour {
     // called in fixed interval
     void FixedUpdate()
     {
-
         GameObject player = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
         Vector2 v2 = player.transform.position;

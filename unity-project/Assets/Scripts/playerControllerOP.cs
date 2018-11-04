@@ -25,13 +25,17 @@ public class playerControllerOP : MonoBehaviour {
     {
         SocketNetworkManager.UpdateBossPositionHandle += UpdateBossPositionHandle;
         SocketNetworkManager.BossAnimHandle += BossAnimHandle;
+        SocketNetworkManager.DealDamageHandle += DealDamageHandle;
     }
 
     private void OnDisable()
     {
         SocketNetworkManager.UpdateBossPositionHandle -= UpdateBossPositionHandle;
         SocketNetworkManager.BossAnimHandle -= BossAnimHandle;
+        SocketNetworkManager.DealDamageHandle -= DealDamageHandle;
     }
+
+
 
     IEnumerator UpdateBossPositionHandle(float x, float y, float rx, float ry)
     {
@@ -49,6 +53,21 @@ public class playerControllerOP : MonoBehaviour {
     IEnumerator BossAnimHandle(string name)
     {
         animation.Play(name);
+        yield break;
+    }
+
+    IEnumerator DealDamageHandle(string sender, float dmg, Vector2 dir)
+    {
+        // dir could be used for knockback or something like that.
+        // display health, if dead, etc
+        if (health.TakeDamage(dmg))
+        {
+
+        }
+        else
+        {
+
+        }
         yield break;
     }
 

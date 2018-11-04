@@ -48,6 +48,8 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir);
     public static event SpawnProjRes SpawnProjHandle;
 
+    public delegate IEnumerator BossDeadRes();
+    public static event BossDeadRes BossDeadHandle;
 
 
     // Use this for initialization
@@ -178,6 +180,9 @@ public class SocketNetworkManager : MonoBehaviour
                                 if (SpawnProjHandle != null)
                                     StartCoroutine(SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry)));
                                 break;
+
+                            case "bd": // boss dead
+
 
                             default:
                                 Debug.Log("unknown general message type");
