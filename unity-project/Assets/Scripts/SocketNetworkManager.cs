@@ -122,7 +122,6 @@ public class SocketNetworkManager : MonoBehaviour
 
                     case "join lobby":
                         joinLobby jnl = JsonUtility.FromJson<joinLobby>(msgo.content);
-                        Debug.Log("joined lobby");
                         isHost = false;
                         playernum = jnl.playernum;
                         if (JoinLobbyHandle != null)
@@ -176,7 +175,6 @@ public class SocketNetworkManager : MonoBehaviour
 
                             case "sp": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
-                                Debug.Log(sp.name + " " + sp.x + " " + sp.y);
                                 if (SpawnProjHandle != null)
                                     StartCoroutine(SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry)));
                                 break;

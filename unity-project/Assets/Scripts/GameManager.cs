@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour {
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;
         }
-        yield break;
+        yield return null;
     }
 
     IEnumerator NewPlayerHandle(string id, int cl, int num)
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator StartGameHandle()
     {
         StartGame();
-        yield break;
+        yield return null;
     }
 }
 
