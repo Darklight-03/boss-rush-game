@@ -56,8 +56,7 @@ public class playerController : MonoBehaviour {
         Vector2 v1 = transform.position;
         Vector2 v2 = player.transform.position;
 
-        rb.velocity = v2 - v1;
-
+        //rb.velocity = v2 - v1;
     }
 
     // Update is called once per frame
