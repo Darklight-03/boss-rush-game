@@ -36,16 +36,19 @@ public class playerController : MonoBehaviour {
 
     IEnumerator DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
-        // dir could be used for knockback or something like that.
-        // display health, if dead, etc
-        Debug.Log("recieved damage message");
-        if (health.TakeDamage(dmg))
+        if (sender != SocketNetworkManager.id)
         {
+            // dir could be used for knockback or something like that.
+            // display health, if dead, etc
+            Debug.Log("recieved damage message");
+            if (health.TakeDamage(dmg))
+            {
 
-        }
-        else
-        {
-            Destroy(GetComponent<Transform>().parent);
+            }
+            else
+            {
+                Destroy(GetComponent<Transform>().parent);
+            }
         }
         yield break;
     }
@@ -100,6 +103,7 @@ public class playerController : MonoBehaviour {
         {
             Destroy(collider.gameObject);
             Debug.Log("collision with arrow");
+            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
             if (health.TakeDamage(10))
             {
 
