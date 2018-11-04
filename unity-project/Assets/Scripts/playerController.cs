@@ -44,7 +44,7 @@ public class playerController : MonoBehaviour {
         }
         else
         {
-            Destroy(this);
+            Destroy(GetComponent<Transform>().parent);
         }
         yield break;
     }
