@@ -153,6 +153,24 @@ public class SocketNetworkManager : MonoBehaviour
                                     UpdateBossPositionHandle(bp.x, bp.y, bp.rx, bp.ry);
                                 break;
 
+                            case "pa": // player animation
+                                playerAnim pa = JsonUtility.FromJson<playerAnim>(gms.content);
+                                if (PlayerAnimHandle != null)
+                                    PlayerAnimHandle(gms.sender, pa.name);
+                                break;
+
+                            case "ba": // boss animation
+                                bossAnim ba = JsonUtility.FromJson<bossAnim>(gms.content);
+                                if (BossAnimHandle != null)
+                                    BossAnimHandle(ba.name);
+                                break;
+
+                            case "sp": // spawn projectile
+                                spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
+                                if (SpawnProjHandle != null)
+                                    SpawnProjHandle(sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
+                                break;
+
                             default:
                                 Debug.Log("unknown general message type");
                                 break;
@@ -240,6 +258,28 @@ public class opDealDam
 [Serializable]
 public class bossPos
 {
+    public float x;
+    public float y;
+    public float rx;
+    public float ry;
+}
+
+[Serializable]
+public class playerAnim
+{
+    public string name;
+}
+
+[Serializable]
+public class bossAnim
+{
+    public string name;
+}
+
+[Serializable]
+public class spawnProj
+{
+    public string name;
     public float x;
     public float y;
     public float rx;
