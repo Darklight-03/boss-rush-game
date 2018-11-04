@@ -12,6 +12,7 @@ public class SocketNetworkManager : MonoBehaviour
     public static string id;
     public static bool isHost = true;
     public static int playernum;
+    private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
 
     // events
@@ -55,6 +56,7 @@ public class SocketNetworkManager : MonoBehaviour
     // Use this for initialization
     IEnumerator Start()
     {
+        instances++;
         if (!started)
         {
             started = true;
@@ -64,6 +66,12 @@ public class SocketNetworkManager : MonoBehaviour
             StartCoroutine(listener());
             yield return null;
         }
+    }
+
+    void OnApplicationQuit()
+    {
+        contli = false;
+        w.Close();
     }
 
     public void createLobby()
