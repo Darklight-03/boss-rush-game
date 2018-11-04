@@ -159,11 +159,12 @@ public class archerController : MonoBehaviour {
             if(!clicked){
               clicked = true;
               bowrender.sprite = f2;
-              
+              snm.sendMessage("pa", "{ \"name\": \"" + "relebow" + "\" }");
             }
           }else if(clicked){ 
             bowrender.sprite = f1;
-                snm.sendMessage("sp", "{ \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.normalized.x + ", \"ry\": " + direction.normalized.y + " }");
+            snm.sendMessage("pa", "{ \"name\": \"" + "drawbow" + "\" }");
+            snm.sendMessage("sp", "{ \"name\": \"" + "arrow" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.normalized.x + ", \"ry\": " + direction.normalized.y + " }");
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;

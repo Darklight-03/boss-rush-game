@@ -164,6 +164,7 @@ public class SocketNetworkManager : MonoBehaviour
 
                             case "pa": // player animation
                                 playerAnim pa = JsonUtility.FromJson<playerAnim>(gms.content);
+                                Debug.Log("player animation msg");
                                 if (PlayerAnimHandle != null)
                                     PlayerAnimHandle(gms.sender, pa.name);
                                 break;
@@ -176,6 +177,7 @@ public class SocketNetworkManager : MonoBehaviour
 
                             case "sp": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
+                                Debug.Log("spawn projectile msg");
                                 if (SpawnProjHandle != null)
                                     SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
                                 break;

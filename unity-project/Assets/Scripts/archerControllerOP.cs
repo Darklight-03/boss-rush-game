@@ -136,8 +136,10 @@ public class archerControllerOP : MonoBehaviour {
 
     void PlayerAnimHandle(string sender, string name)
     {
+        Debug.Log(id + " == " + sender);
         if (id == sender)
         {
+            Debug.Log("anim handle");
             // handle the weird way the bow works
             if (name == "drawbow")
             {
@@ -157,7 +159,11 @@ public class archerControllerOP : MonoBehaviour {
 
     void SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
     { 
-        GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"), pos, new Quaternion(dir.x, dir.y, 0, 1), GetComponent<Transform>());
-        arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
+        if (id == sender)
+        {
+            // for now just do arrows, name could specify the projectile
+            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"), pos, new Quaternion(dir.x, dir.y, 0, 1), GetComponent<Transform>());
+            arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
+        }
     }
 }
