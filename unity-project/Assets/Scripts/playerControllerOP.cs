@@ -65,7 +65,7 @@ public class playerControllerOP : MonoBehaviour {
         Debug.Log("recieved damage message");
         if (health.TakeDamage(dmg))
         {
-
+            StartCoroutine(damageAnimation());
         }
         else
         {
@@ -109,7 +109,7 @@ public class playerControllerOP : MonoBehaviour {
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
             if (health.TakeDamage(10))
             {
-                damageAnimation();
+                StartCoroutine(damageAnimation());
             }
             else
             {
