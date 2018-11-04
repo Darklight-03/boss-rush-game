@@ -12,20 +12,38 @@ public class BossHandle : MonoBehaviour
     public GameObject daoguang;
     public RectTransform image;
     public bool state;
+    public GameObject player;
+    public GameObject[] gameObjects;
     // Use this for initialization
     void Start()
     {
         state = true;
         animation = this.GetComponent<Animation>();
         rb = GetComponent<Rigidbody2D>();
-        swordcol = GameObject.Find("short-sword").GetComponent<Collider2D>();
+        //swordcol = GameObject.Find("short-sword").GetComponent<Collider2D>();
+        
+        gameObjects = GameObject.FindGameObjectsWithTag("Player");
+        Debug.Log(gameObjects.Length);
+        player = GameObject.FindWithTag("Player");//delete after merge
     }
 
     // called in fixed interval
     void FixedUpdate()
     {
-        GameObject player = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
+        float temp = float.MaxValue - 1000;
+        foreach (GameObject g in gameObjects)
+        {
+            Vector2 vg1 = g.transform.position;
+            float max1 = (v1 - vg1).magnitude;
+            if(max1 < temp)
+            {
+                temp = max1;
+                player = g;
+            }
+        }
+
+       
         Vector2 v2 = player.transform.position;
         rb.velocity = v2 - v1;
 
@@ -66,7 +84,7 @@ public class BossHandle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject player = GameObject.FindWithTag("Player");
+        //player = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
         Vector2 v2 = player.transform.position;
         if ((v1 - v2).magnitude < 3 && state)
