@@ -60,6 +60,7 @@ public class playerControllerOP : MonoBehaviour {
     {
         // dir could be used for knockback or something like that.
         // display health, if dead, etc
+        Debug.Log("1. boss damaged for " + dmg);
         if (health.TakeDamage(dmg))
         {
 
@@ -94,6 +95,8 @@ public class playerControllerOP : MonoBehaviour {
         {
             Vector2 collPoint = collision.GetContact(0).point;
             Vector2 objPos = collision.GetContact(0).otherRigidbody.position;
+            health.TakeDamage(10);
+            Debug.Log("2. boss damaged for " + 10);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + (objPos.x - collPoint.x) + ", \"diry\": " + (objPos.y - collPoint.y) + " }");
             Destroy(collision.gameObject);
         }

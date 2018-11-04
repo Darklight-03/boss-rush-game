@@ -38,6 +38,7 @@ public class playerController : MonoBehaviour {
     {
         // dir could be used for knockback or something like that.
         // display health, if dead, etc
+        Debug.Log("1. boss damaged for " + dmg);
         if (health.TakeDamage(dmg))
         {
 
@@ -96,6 +97,7 @@ public class playerController : MonoBehaviour {
         if (collision.gameObject.tag == "projectile")
         {
             Destroy(collision.gameObject);
+            Debug.Log("2. boss damaged for " + 10);
             if (health.TakeDamage(10))
             {
 

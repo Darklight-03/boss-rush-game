@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
     void StartGame()
     {
         gameStarted = true;
-        Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
+        //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
             boss = Instantiate(Resources.Load<GameObject>("boss"), new Vector2(-2, 2), Quaternion.identity, t);
@@ -55,18 +55,18 @@ public class GameManager : MonoBehaviour {
 
         if (lDown && SocketNetworkManager.isHost)
         {
-            Debug.Log("l Pressed");
+            //Debug.Log("l Pressed");
             snm.sendMessage("sg", "{ }");
             StartGame();
         }
         if (oDown)
         {
-            Debug.Log("o Pressed");
+            //Debug.Log("o Pressed");
             snm.createLobby();
         }
         if (pDown)
         {
-            Debug.Log("p Pressed");
+            //Debug.Log("p Pressed");
             snm.joinLobby(0);
         }
     }
@@ -77,14 +77,14 @@ public class GameManager : MonoBehaviour {
         if (player2 == null)
         {
             player2 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
+            //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player2.GetComponent<archerControllerOP>().playernum = num;
             player2.GetComponent<archerControllerOP>().id = id;
         }
         else if (player3 == null)
         {
             player3 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
+            //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;
         }
