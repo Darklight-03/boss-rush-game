@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void StartPlayer(string id, int cl, int num)
+    IEnumerator StartPlayer(string id, int cl, int num)
     {
         // argument will specify class later
         if (player2 == null)
@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour {
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;
         }
+        yield break;
     }
 
     IEnumerator NewPlayerHandle(string id, int cl, int num)
@@ -97,9 +98,10 @@ public class GameManager : MonoBehaviour {
         StartPlayer(id, cl, num);
     }
 
-    void StartGameHandle()
+    IEnumerator StartGameHandle()
     {
         StartGame();
+        yield break;
     }
 }
 

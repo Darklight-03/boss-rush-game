@@ -109,15 +109,16 @@ public class archerControllerOP : MonoBehaviour {
 
     }
 
-    void TakeDamageHandle(string sender, float dmg)
+    IEnumerator TakeDamageHandle(string sender, float dmg)
     {
         if (id == sender)
         {
             // display health, if dead, etc (knockback is handled on the other players client
         }
+        yield break;
     }
 
-    void UpdateOtherPlayerPos(string sender, float x, float y, float rx, float ry)
+    IEnumerator UpdateOtherPlayerPos(string sender, float x, float y, float rx, float ry)
     {
         if (id == sender)
         {
@@ -132,9 +133,10 @@ public class archerControllerOP : MonoBehaviour {
             bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
             bow.transform.position = pos + -1 * dir.normalized * bowdistance;
         }
+        yield break;
     }
 
-    void PlayerAnimHandle(string sender, string name)
+    IEnumerator PlayerAnimHandle(string sender, string name)
     {
         if (id == sender)
         {
@@ -154,16 +156,18 @@ public class archerControllerOP : MonoBehaviour {
                 // animation.Play(name)
             }
         }
+        yield break;
     }
 
-    void SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
+    IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
     {
         Debug.Log(id + " == " + sender);
         if (id == sender)
         {
             // for now just do arrows, name could specify the projectile
-            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"), pos, bow.transform.rotation, GetComponent<Transform>());
+            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, bow.transform.rotation, GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
         }
+        yield break;
     }
 }

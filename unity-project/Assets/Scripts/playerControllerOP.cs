@@ -33,7 +33,7 @@ public class playerControllerOP : MonoBehaviour {
         SocketNetworkManager.BossAnimHandle -= BossAnimHandle;
     }
 
-    void UpdateBossPositionHandle(float x, float y, float rx, float ry)
+    IEnumerator UpdateBossPositionHandle(float x, float y, float rx, float ry)
     {
         Vector2 pos = transform.position;
         pos.x = x;
@@ -43,11 +43,13 @@ public class playerControllerOP : MonoBehaviour {
         Vector2 dir = new Vector2(rx, ry);
 
         // use angle to do something probably with the sword
+        yield break;
     }
 
-    void BossAnimHandle(string name)
+    IEnumerator BossAnimHandle(string name)
     {
         animation.Play(name);
+        yield break;
     }
 
     // called in fixed interval
@@ -64,6 +66,11 @@ public class playerControllerOP : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.name != "arrowOP")
+        {
+            Destroy(collision.gameObject);
+            return;
+        }
         if (collision.gameObject.tag == "projectile")
         {
             Vector2 collPoint = collision.GetContact(0).point;

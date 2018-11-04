@@ -34,7 +34,7 @@ public class playerController : MonoBehaviour {
         SocketNetworkManager.DealDamageHandle -= DealDamageHandle;
     }
 
-    void DealDamageHandle(string sender, float dmg, Vector2 dir)
+    IEnumerator DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
         // dir could be used for knockback or something like that.
         // display health, if dead, etc
@@ -46,6 +46,7 @@ public class playerController : MonoBehaviour {
         {
             Destroy(this);
         }
+        yield break;
     }
 
     // called in fixed interval
@@ -98,6 +99,11 @@ public class playerController : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.name != "arrowOP")
+        {
+            Destroy(collision.gameObject);
+            return;
+        }
         if (collision.gameObject.tag == "projectile")
         {
             Destroy(collision.gameObject);
