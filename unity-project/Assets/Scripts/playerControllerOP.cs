@@ -86,6 +86,7 @@ public class playerControllerOP : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider)
     {
+        Debug.Log("collided");
         if (collider.gameObject.name == "arrowOP(Clone)")
         {
             Debug.Log("collision with other players arrow");
@@ -94,8 +95,8 @@ public class playerControllerOP : MonoBehaviour {
         }
         if (collider.gameObject.tag == "projectile")
         {
-            Destroy(collider.gameObject);
             Debug.Log("collision with arrow");
+            Destroy(collider.gameObject);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
             if (health.TakeDamage(10))
             {
