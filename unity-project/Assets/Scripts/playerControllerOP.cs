@@ -86,7 +86,7 @@ public class playerControllerOP : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name == "arrowOP")
+        if (collider.gameObject.name == "arrowOP(Clone)")
         {
             Debug.Log("collision with other players arrow");
             Destroy(collider.gameObject);
@@ -94,10 +94,18 @@ public class playerControllerOP : MonoBehaviour {
         }
         if (collider.gameObject.tag == "projectile")
         {
-            health.TakeDamage(10);
+            Destroy(collider.gameObject);
             Debug.Log("collision with arrow");
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-            Destroy(collider.gameObject);
+            if (health.TakeDamage(10))
+            {
+
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+            // do stuff only for the circle collider
         }
     }
 }
