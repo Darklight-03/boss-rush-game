@@ -47,7 +47,7 @@ public class playerController : MonoBehaviour {
             }
             else
             {
-                Destroy(GetComponent<Transform>().parent);
+                Destroy(this.gameObject);
             }
         }
         yield break;
@@ -100,8 +100,9 @@ public class playerController : MonoBehaviour {
         }
         if (collider.gameObject.tag == "projectile")
         {
-            Destroy(collider.gameObject);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
+
+            Destroy(collider.gameObject);
             if (health.TakeDamage(10))
             {
                 StartCoroutine(damageAnimation());
@@ -110,7 +111,6 @@ public class playerController : MonoBehaviour {
             {
                 Destroy(this.gameObject);
             }
-            // do stuff only for the circle collider
         }
     }
 }

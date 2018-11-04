@@ -29,6 +29,7 @@ public class archerControllerOP : MonoBehaviour {
     private Vector2 prevRot;
     public string id;
     public int playernum;
+    int hit;
 
 
 
@@ -106,7 +107,19 @@ public class archerControllerOP : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
-
+        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        healthbar.transform.localScale = hsize;
+        hit = 25;
+        hbarupdatetime = 20;
+        if (!health.TakeDamage(dmg))
+        {
+            Dead();
+        }
+        else
+        {
+            applyForce(dir);
+            knocked = 20;
+        }
     }
 
     IEnumerator TakeDamageHandle(string sender, float dmg)
@@ -114,6 +127,7 @@ public class archerControllerOP : MonoBehaviour {
         if (id == sender)
         {
             // display health, if dead, etc (knockback is handled on the other players client
+            TakeDamage(dmg, Vector2.zero);
         }
         yield break;
     }
@@ -165,7 +179,6 @@ public class archerControllerOP : MonoBehaviour {
             // for now just do arrows, name could specify the projectile
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, bow.transform.rotation, GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
-            Debug.Log(arrow.name);
         }
         yield break;
     }

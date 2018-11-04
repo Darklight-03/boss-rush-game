@@ -62,7 +62,6 @@ public class playerControllerOP : MonoBehaviour {
     {
         // dir could be used for knockback or something like that.
         // display health, if dead, etc
-        Debug.Log("recieved damage message");
         if (health.TakeDamage(dmg))
         {
             StartCoroutine(damageAnimation());
@@ -73,18 +72,6 @@ public class playerControllerOP : MonoBehaviour {
         }
         yield break;
     }
-
-    // called in fixed interval
-    void FixedUpdate()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update ()
-    {
-
-	}
 
     IEnumerator damageAnimation()
     {
