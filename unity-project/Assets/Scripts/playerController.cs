@@ -78,15 +78,6 @@ public class playerController : MonoBehaviour {
         }
 	}
 
-    public void TakeDamage(float i){
-      if(health.TakeDamage(i)){
-        StartCoroutine(damageAnimation());
-      }
-      else{
-        Destroy(this);
-      }
-    }
-
     IEnumerator damageAnimation(){
       for(int i = 10;i>0;i--){
         Color lerp = Color.Lerp(Color.white,Color.red,(float)i/10);
@@ -111,7 +102,7 @@ public class playerController : MonoBehaviour {
             }
             else
             {
-                Destroy(this);
+                Destroy(this.gameObject);
             }
             // do stuff only for the circle collider
         }

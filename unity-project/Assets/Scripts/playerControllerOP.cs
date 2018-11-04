@@ -66,7 +66,7 @@ public class playerControllerOP : MonoBehaviour {
         }
         else
         {
-            Destroy(GetComponent<Transform>().parent); 
+            Destroy(this.gameObject); 
         }
         yield break;
     }
