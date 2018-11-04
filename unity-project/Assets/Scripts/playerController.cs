@@ -79,7 +79,8 @@ public class playerController : MonoBehaviour {
         }
 	}
 
-    IEnumerator damageAnimation(){
+    IEnumerator damageAnimation()
+    {
       for(int i = 10;i>0;i--){
         Color lerp = Color.Lerp(Color.white,Color.red,(float)i/10);
         render.color = lerp;
@@ -87,17 +88,17 @@ public class playerController : MonoBehaviour {
       }
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.name == "arrowOP")
+        if (collider.gameObject.name == "arrowOP(Clone)")
         {
             Debug.Log("collision with other players arrow");
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
             return;
         }
-        if (collision.gameObject.tag == "projectile")
+        if (collider.gameObject.tag == "projectile")
         {
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
             Debug.Log("collision with arrow");
             if (health.TakeDamage(10))
             {

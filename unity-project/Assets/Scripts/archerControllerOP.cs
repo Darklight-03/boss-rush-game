@@ -165,6 +165,7 @@ public class archerControllerOP : MonoBehaviour {
             // for now just do arrows, name could specify the projectile
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, bow.transform.rotation, GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
+            Debug.Log(arrow.name);
         }
         yield break;
     }

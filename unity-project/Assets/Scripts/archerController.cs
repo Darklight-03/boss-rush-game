@@ -165,6 +165,7 @@ public class archerController : MonoBehaviour {
             bowrender.sprite = f1;
             snm.sendMessage("pa", "{ \"name\": \"" + "drawbow" + "\" }");
             snm.sendMessage("sp", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
+                Debug.Log("spawned arrow");
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;

@@ -84,22 +84,20 @@ public class playerControllerOP : MonoBehaviour {
 
 	}
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.name == "arrowOP")
+        if (collider.gameObject.name == "arrowOP")
         {
             Debug.Log("collision with other players arrow");
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
             return;
         }
-        if (collision.gameObject.tag == "projectile")
+        if (collider.gameObject.tag == "projectile")
         {
-            Vector2 collPoint = collision.GetContact(0).point;
-            Vector2 objPos = collision.GetContact(0).otherRigidbody.position;
-            //health.TakeDamage(10);
+            health.TakeDamage(10);
             Debug.Log("collision with arrow");
-            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + (objPos.x - collPoint.x) + ", \"diry\": " + (objPos.y - collPoint.y) + " }");
-            Destroy(collision.gameObject);
+            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
+            Destroy(collider.gameObject);
         }
     }
 }

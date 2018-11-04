@@ -15,8 +15,8 @@ public class BossHitbox : MonoBehaviour {
 		
 	}
   void OnCollisionEnter2D(Collision2D collision){
-    if(collision.gameObject.tag == "projectile"){
-      t.parent.gameObject.GetComponent<playerController>().health.TakeDamage(10);
-    }
+    //if(collision.gameObject.tag == "projectile"){
+    //  t.parent.gameObject.GetComponent<playerController>().health.TakeDamage(10);
+    //}
   } 
 }
