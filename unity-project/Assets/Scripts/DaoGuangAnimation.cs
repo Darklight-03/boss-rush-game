@@ -39,7 +39,7 @@ public class DaoGuangAnimation : MonoBehaviour {
 
             isDrawing = true;
 
-            Debug.Log("开始绘图");
+            Debug.Log("start painting");
         }
 
         if (!state)
@@ -47,7 +47,7 @@ public class DaoGuangAnimation : MonoBehaviour {
             isDrawing = false;
             pointLists.Clear();
 
-            Debug.Log("绘图结束");
+            Debug.Log("end painting");
         }
 
         if (isDrawing)
@@ -57,7 +57,7 @@ public class DaoGuangAnimation : MonoBehaviour {
             renderer.positionCount = pointLists.Count;
             renderer.SetPositions(pointLists.ToArray());
 
-            Debug.Log("正在绘图");
+            Debug.Log("painting");
         }
     }
 
