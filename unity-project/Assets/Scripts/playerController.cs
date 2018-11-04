@@ -7,6 +7,7 @@ public class playerController : MonoBehaviour {
     private Rigidbody2D rb;
     Collider2D swordcol;
     Animator myanmitor;
+    SpriteRenderer render;
     Health health;
     public float speed;
     public Animation animation;
@@ -20,6 +21,7 @@ public class playerController : MonoBehaviour {
         animation = this.GetComponent<Animation>();
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
+        render = GetComponent<SpriteRenderer>();
     }
 
     private void OnEnable()
@@ -73,6 +75,23 @@ public class playerController : MonoBehaviour {
             snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + "0" + ", \"ry\": " + "0" + " }");
             prevPos = rb.position;
         }
+	}
+
+    public void TakeDamage(float i){
+      if(health.TakeDamage(i)){
+        StartCoroutine(damageAnimation());
+      }
+      else{
+        Destroy(this);
+      }
+    }
+
+    IEnumerator damageAnimation(){
+      for(int i = 10;i>0;i--){
+        Color lerp = Color.Lerp(Color.white,Color.red,(float)i/10);
+        render.color = lerp;
+        yield return null;
+      }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
