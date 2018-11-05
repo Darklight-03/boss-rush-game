@@ -57,18 +57,18 @@ public class archerControllerOP : MonoBehaviour {
 
     void OnEnable()
     {
-        SocketNetworkManager.TakeDamageHandle += TakeDamageHandle;
-        SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
-        SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandle;
-        SocketNetworkManager.SpawnProjHandle += SpawnProjHandle;
+        SocketNetworkManager.TakeDamageHandle += TakeDamageHandleH;
+        SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPosH;
+        SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandleH;
+        SocketNetworkManager.SpawnProjHandle += SpawnProjHandleH;
     }
 
     void OnDisable()
     {
-        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandle;
-        SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPos;
-        SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandle;
-        SocketNetworkManager.SpawnProjHandle -= SpawnProjHandle;
+        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandleH;
+        SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPosH;
+        SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandleH;
+        SocketNetworkManager.SpawnProjHandle -= SpawnProjHandleH;
     }
 
   // called in fixed interval
@@ -147,6 +147,10 @@ public class archerControllerOP : MonoBehaviour {
         }
     }
 
+    void TakeDamageHandleH(string sender, float dmg)
+    {
+        StartCoroutine(TakeDamageHandle(sender, dmg));
+    }
     IEnumerator TakeDamageHandle(string sender, float dmg)
     {
         if (id == sender)
@@ -157,6 +161,10 @@ public class archerControllerOP : MonoBehaviour {
         yield break;
     }
 
+    void UpdateOtherPlayerPosH(string sender, float x, float y, float rx, float ry)
+    {
+        StartCoroutine(UpdateOtherPlayerPos(sender, x, y, rx, ry));
+    }
     IEnumerator UpdateOtherPlayerPos(string sender, float x, float y, float rx, float ry)
     {
         if (id == sender)
@@ -175,6 +183,10 @@ public class archerControllerOP : MonoBehaviour {
         yield break;
     }
 
+    void PlayerAnimHandleH(string sender, string name)
+    {
+        StartCoroutine(PlayerAnimHandle(sender, name));
+    }
     IEnumerator PlayerAnimHandle(string sender, string name)
     {
         if (id == sender)
@@ -201,6 +213,10 @@ public class archerControllerOP : MonoBehaviour {
         yield break;
     }
 
+    void SpawnProjHandleH(string sender, string name, Vector2 pos, Vector2 dir)
+    {
+        StartCoroutine(SpawnProjHandle(sender, name, pos, dir));
+    }
     IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
     {
         if (id == sender)

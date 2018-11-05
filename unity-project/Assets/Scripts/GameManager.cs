@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour {
         if (player2 == null)
         {
             player2 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
+            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
             player2.GetComponent<archerControllerOP>().playernum = num;
             player2.GetComponent<archerControllerOP>().id = id;
             player2.GetComponent<archerControllerOP>().healthbar_id = 1;
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour {
         else if (player3 == null)
         {
             player3 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
+            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;
             player3.GetComponent<archerControllerOP>().healthbar_id = 2;

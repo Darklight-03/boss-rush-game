@@ -39,14 +39,18 @@ public class playerController : MonoBehaviour {
 
     private void OnEnable()
     {
-        SocketNetworkManager.DealDamageHandle += DealDamageHandle;
+        SocketNetworkManager.DealDamageHandle += DealDamageHandleH;
     }
 
     private void OnDisable()
     {
-        SocketNetworkManager.DealDamageHandle -= DealDamageHandle;
+        SocketNetworkManager.DealDamageHandle -= DealDamageHandleH;
     }
 
+    void DealDamageHandleH(string sender, float dmg, Vector2 dir)
+    {
+        StartCoroutine(DealDamageHandle(sender, dmg, dir));
+    }
     IEnumerator DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
         if (sender != SocketNetworkManager.id)

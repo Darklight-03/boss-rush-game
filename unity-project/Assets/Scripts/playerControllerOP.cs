@@ -39,14 +39,14 @@ public class playerControllerOP : MonoBehaviour {
     {
         SocketNetworkManager.UpdateBossPositionHandle += UpdateBossPositionHandle;
         SocketNetworkManager.BossAnimHandle += BossAnimHandle;
-        SocketNetworkManager.DealDamageHandle += DealDamageHandle;
+        SocketNetworkManager.DealDamageHandle += DealDamageHandleH;
     }
 
     private void OnDisable()
     {
         SocketNetworkManager.UpdateBossPositionHandle -= UpdateBossPositionHandle;
         SocketNetworkManager.BossAnimHandle -= BossAnimHandle;
-        SocketNetworkManager.DealDamageHandle -= DealDamageHandle;
+        SocketNetworkManager.DealDamageHandle -= DealDamageHandleH;
     }
 
     void Update()
@@ -101,6 +101,10 @@ public class playerControllerOP : MonoBehaviour {
         yield break;
     }
 
+    void DealDamageHandleH(string sender, float dmg, Vector2 dir)
+    {
+        StartCoroutine(DealDamageHandle(sender, dmg, dir));
+    }
     IEnumerator DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
         // dir could be used for knockback or something like that.
