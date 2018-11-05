@@ -36,10 +36,10 @@ To build web server:
 
 ## Structure
 
-unity project is in `unity-project/`
-website is in `website/`
-code is in `unity-project/Assets/Scripts`
-resources are in `unity-project/Assets/Scenes` in various subfolders.
+unity project is in `unity-project/`  
+website is in `website/`  
+code is in `unity-project/Assets/Scripts`  
+resources are in `unity-project/Assets/Scenes` in various subfolders.  
 
 
 ## Authors
