@@ -80,8 +80,7 @@ public class playerController : MonoBehaviour {
         Vector2 v2 = player.transform.position;
         if ((v1-v2).magnitude < 3)
         {
-            snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
-            animation.Play("huijian");
+            playAnimation("huijian");
         }
 
         if (Vector2.Distance(prevPos, rb.position) > 0.1f)
@@ -100,6 +99,12 @@ public class playerController : MonoBehaviour {
         {
             hbarupdatetime--;
         }
+    }
+
+    void playAnimation(string name)
+    {
+        snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
+        animation.Play(name);
     }
 
     IEnumerator damageAnimation()
@@ -128,7 +133,7 @@ public class playerController : MonoBehaviour {
                 Destroy(this.gameObject);
             }
             // do stuff only for the circle collider
-       }
+    }
  
 
     void OnTriggerEnter2D(Collider2D collider)
