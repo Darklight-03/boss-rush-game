@@ -90,8 +90,6 @@ public class playerControllerOP : MonoBehaviour {
         pos.y = y;
         transform.position = pos;
 
-        Vector2 dir = new Vector2(rx, ry);
-
         image.localEulerAngles = new Vector3(0, ry, rz);
         this.transform.localEulerAngles = new Vector3(0, ty, tz);
         yield break;
