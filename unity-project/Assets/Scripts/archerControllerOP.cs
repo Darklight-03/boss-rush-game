@@ -180,6 +180,10 @@ public class archerControllerOP : MonoBehaviour {
             {
                 bowrender.sprite = f2;
             }
+            else if (name == "dashanim")
+            {
+                StartCoroutine(dashAnim(rb.position));
+            }
             // handle actual animations
             else
             {
@@ -198,5 +202,16 @@ public class archerControllerOP : MonoBehaviour {
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
         }
         yield break;
+    }
+
+    IEnumerator dashAnim(Vector3 opos)
+    {
+        for (int i = -10; i <= 10; i++)
+        {
+            Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i) - 10) / 10);
+            render.color = c;
+            Debug.Log(Mathf.Abs(Mathf.Abs(i) - 15));
+            yield return null;
+        }
     }
 }

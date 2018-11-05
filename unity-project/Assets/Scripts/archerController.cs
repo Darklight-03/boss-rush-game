@@ -208,6 +208,7 @@ public class archerController : MonoBehaviour {
     // 
   }
   void dash(Vector2 direction){
+    snm.sendMessage("pa", "{ \"name\": \"" + "dashanim" + "\" }");
     float m = direction.magnitude;
     var v = direction.normalized;
     if(m>MAX_DASH){ 
