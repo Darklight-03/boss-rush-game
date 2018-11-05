@@ -1,11 +1,17 @@
 {
-  "name": "team-boss-battle",
-  "version": "0.0.0",
+  "name": "website",
+  "version": "1.0.0",
   "description": "",
+  "main": "app.js",
   "dependencies": {
-    "express": "^4.15.2",
-    "socket.io": "^1.7.3",
-    "websocket": "^1.0.28",
+    "compression": "^1.7.3",
+    "express": "^4.16.4",
     "ws": "^6.1.0"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }
