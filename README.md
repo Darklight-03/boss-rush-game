@@ -2,6 +2,16 @@
 
 web address: teamproject1.ddns.net:3000
 
+## Instructions
+
+to play the game, there are 3 commands to start:  
+o creates a lobby. **Only press this once**  
+p joins the first lobby created. **press this only on clients that did not create the lobby, and only join with up to 2 additional clients**  
+l starts the game **press this on the host of the lobby**  
+
+
+all of this functionality will later be added to menus.
+
 ## Requirements
 
 To play the game, all that you need is a browser capable of running a unity game. This should work on all major browsers.  
