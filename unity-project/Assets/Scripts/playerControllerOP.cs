@@ -34,6 +34,7 @@ public class playerControllerOP : MonoBehaviour {
         healthbarbg = GameObject.FindWithTag("Boss-healthbh");
         hit = 0;
         healthbarsize = healthbar.transform.localScale;
+        image = this.GetComponentInChildren<RectTransform>();
     }
 
     private void OnEnable()
