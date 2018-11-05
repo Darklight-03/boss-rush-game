@@ -73,7 +73,7 @@ public class playerControllerOP : MonoBehaviour {
 
         if (health.TakeDamage(10))
         {
-            damageAnimation();
+            StartCoroutine(damageAnimation());
         }
         else
         {
