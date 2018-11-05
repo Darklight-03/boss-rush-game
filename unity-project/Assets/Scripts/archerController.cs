@@ -273,7 +273,7 @@ public class archerController : MonoBehaviour {
         }
         else
         {
-            applyForce(dir);
+            //applyForce(dir);
             knocked = 20;
         }
     }

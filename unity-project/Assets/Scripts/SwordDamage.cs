@@ -17,7 +17,7 @@ public class SwordDamage : MonoBehaviour {
 		
 	}
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
 
         //Vector3 playerpos = collision.gameObject.transform.position;

@@ -18,6 +18,7 @@ public class playerControllerOP : MonoBehaviour {
     int hit;
     int hbarupdatetime;
     Vector3 healthbarsize;
+    public RectTransform image;
 
 
     // Use this for initialization
@@ -91,7 +92,7 @@ public class playerControllerOP : MonoBehaviour {
 
         Vector2 dir = new Vector2(rx, ry);
 
-        // use angle to do something probably with the sword
+        image.localEulerAngles = new Vector3(0, rx, ry);
         yield break;
     }
 
