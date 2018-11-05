@@ -80,6 +80,14 @@ public class archerControllerOP : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        /* ON HIT */
+        if (hit >= 0)
+        {
+            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit) / Mathf.Sqrt(25));
+            render.color = lerpedColor;
+            hit--;
+        }
+
         /* HEALTH BAR */
         if (hbarupdatetime == 0)
         {
