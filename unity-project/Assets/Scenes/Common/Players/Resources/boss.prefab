@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 50578355768348686}
   - component: {fileID: 111741763795143002}
   - component: {fileID: 95493185914961178}
-  - component: {fileID: 114212873678889704}
+  - component: {fileID: 114712193049470102}
   - component: {fileID: 222568995934486676}
   - component: {fileID: 61543414943797930}
   m_Layer: 0
@@ -188,7 +188,7 @@ Animator:
   m_GameObject: {fileID: 1195046542922234}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 30b07dff40275e843a81d717c2236f70, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4abaefc5b859f9a4a9a8a2140250da1b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -205,9 +205,10 @@ Animation:
   m_GameObject: {fileID: 1970877398914394}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: c3893b8248fc6ce4681fff779256f124, type: 2}
+  m_Animation: {fileID: 7400000, guid: 5fddd6c0d9cab834b9534e134402e302, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: c3893b8248fc6ce4681fff779256f124, type: 2}
+  - {fileID: 7400000, guid: 5fddd6c0d9cab834b9534e134402e302, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -254,22 +255,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114212873678889704
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1114016565528454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da0885883256e43d7b10ba41b2c5967d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
-  animation: {fileID: 111741763795143002}
-  daoguang: {fileID: 1195046542922234}
-  image: {fileID: 224278485768651726}
-  state: 0
 --- !u!114 &114276238431391046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -324,6 +309,24 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114712193049470102
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1114016565528454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0170c48e9f3ecfc46ba5a0aff0b7c649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  animation: {fileID: 111741763795143002}
+  daoguang: {fileID: 1195046542922234}
+  image: {fileID: 224278485768651726}
+  state: 0
+  player: {fileID: 0}
+  gameObjects: []
 --- !u!212 &212155540397415954
 SpriteRenderer:
   m_ObjectHideFlags: 1

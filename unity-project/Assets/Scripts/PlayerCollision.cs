@@ -9,6 +9,7 @@ public class PlayerCollision : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
+        knockback = 1;
 	}
 	
 	// Update is called once per frame
@@ -23,10 +24,21 @@ public class PlayerCollision : MonoBehaviour {
         Vector3 dir = (playerpos - spikepos).normalized * knockback;
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<archerController>().TakeDamage(10, dir);
+            if (collision.gameObject.name == "Archer(Clone)")
+            {
+                collision.gameObject.GetComponent<archerController>().TakeDamage(10, dir);
+            }
+            else if (collision.gameObject.name == "knight(Clone)")
+            {
+                collision.gameObject.GetComponent<knightController>().TakeDamage(10, dir);
+            }
+            //else if (collision.gameObject.name == "Priest")
+            //{
+            //    //collision.gameObject.GetComponent<priestController>().TakeDamage(10, dir);
+            //}
+            
         }
 
 
-        Debug.Log(collision.gameObject.name);
     }
 }

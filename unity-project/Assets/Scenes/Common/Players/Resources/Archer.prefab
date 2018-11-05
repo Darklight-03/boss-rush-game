@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114873816907695274}
   - component: {fileID: 114927458386824952}
   - component: {fileID: 61509826198589080}
+  - component: {fileID: 114981697246486582}
   m_Layer: 0
   m_Name: Archer
   m_TagString: Player
@@ -67,8 +68,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1584083698432862}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.06, y: -1.64, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -4.0005, y: -2.1672, z: 0}
+  m_LocalScale: {x: 0.50350004, y: 0.47414175, z: 1}
   m_Children:
   - {fileID: 4204804454972164}
   m_Father: {fileID: 0}
@@ -130,7 +131,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f1fca901d1734e4e944c5e681f7652e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MOVEMENT_SPEED: 0.15
+  MOVEMENT_SPEED: 0.08
+  ARROW_SPEED: 10
+  isPlayer: 1
+  MAX_DASH: 2
+  DASH_CD: 500
+  GLOBAL_CD: 20
 --- !u!114 &114927458386824952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -144,6 +150,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   max_hp: 100
+--- !u!114 &114981697246486582
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1584083698432862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1093a77b6b1ef48937572982a739ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serverurl: ws://168.61.48.136:3000/
 --- !u!212 &212423562171437862
 SpriteRenderer:
   m_ObjectHideFlags: 1
