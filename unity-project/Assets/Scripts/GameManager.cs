@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour {
             //Debug.Log("instantiate " + num + " at " + playerInitPos[num].ToString());
             player3.GetComponent<archerControllerOP>().playernum = num;
             player3.GetComponent<archerControllerOP>().id = id;
-            player2.GetComponent<archerControllerOP>().healthbar_id = 2;
+            player3.GetComponent<archerControllerOP>().healthbar_id = 2;
         }
     }
 
