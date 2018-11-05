@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class archerController : MonoBehaviour {
+
     private SocketNetworkManager snm;
     private Rigidbody2D rb;
     private GameObject bow;
@@ -37,7 +38,9 @@ public class archerController : MonoBehaviour {
 
 
 
+
 	// Use this for initialization
+
 	void Start ()
   {
         snm = GetComponent<SocketNetworkManager>();
@@ -62,6 +65,7 @@ public class archerController : MonoBehaviour {
         bowrender = bow.GetComponent<SpriteRenderer>();
         hit = 0;
         numarrows = 0;
+
 	}
 
     void OnEnable()
@@ -230,6 +234,7 @@ public class archerController : MonoBehaviour {
     }
   }
 
+
   // makes player invisible and unresponsive so that they could potentially be
   // revived
   void Dead(){
@@ -271,4 +276,6 @@ public class archerController : MonoBehaviour {
             knocked = 20;
         }
     }
+
 }
+

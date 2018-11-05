@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 
 public class GameManager : MonoBehaviour {
+
     private Transform t;
     private SocketNetworkManager snm;
     GameObject player;
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour {
         else
             boss = Instantiate(Resources.Load<GameObject>("bossOP"), new Vector2(-2, 2), Quaternion.identity, t);
     }
+
 	
 	// Update is called once per frame
 	void Update () {
