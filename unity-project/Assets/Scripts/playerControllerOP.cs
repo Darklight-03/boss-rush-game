@@ -83,7 +83,7 @@ public class playerControllerOP : MonoBehaviour {
         // do stuff only for the circle collider
     }
 
-    IEnumerator UpdateBossPositionHandle(float x, float y, float rx, float ry)
+    IEnumerator UpdateBossPositionHandle(float x, float y, float ry, float rz, float ty, float tz)
     {
         Vector2 pos = transform.position;
         pos.x = x;
@@ -92,7 +92,8 @@ public class playerControllerOP : MonoBehaviour {
 
         Vector2 dir = new Vector2(rx, ry);
 
-        image.localEulerAngles = new Vector3(0, rx, ry);
+        image.localEulerAngles = new Vector3(0, ry, rz);
+        this.transform.localEulerAngles = new Vector3(0, ty, tz);
         yield break;
     }
 

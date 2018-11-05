@@ -41,6 +41,7 @@ public class playerController : MonoBehaviour {
         gameObjects = GameObject.FindGameObjectsWithTag("Player");
         StartCoroutine(playSwordSwing());
         Debug.Log(GetComponentInParent<Component>().name);
+        image = this.GetComponentInChildren<RectTransform>();
     }
 
     private void OnEnable()
@@ -115,7 +116,7 @@ public class playerController : MonoBehaviour {
             else
             {
                 this.transform.localEulerAngles = new Vector3(0, 0, -90f);
-                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
                 image.localEulerAngles = new Vector3(0, 0, 90);
             }
         }
@@ -126,7 +127,7 @@ public class playerController : MonoBehaviour {
     {
         if (Vector2.Distance(prevPos, rb.position) > 0.1f)
         {
-            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + image.localEulerAngles.y + ", \"ry\": " + image.localEulerAngles.z + " }");
+            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"ry\": " + image.localEulerAngles.y + ", \"rz\": " + image.localEulerAngles.z + ", \"ty\": " + this.transform.localEulerAngles.y + ", \"tz\": " + this.transform.localEulerAngles.z + " }");
             prevPos = rb.position;
         }
 

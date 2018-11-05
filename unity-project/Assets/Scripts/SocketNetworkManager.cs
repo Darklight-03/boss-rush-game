@@ -37,7 +37,7 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate void DealDamageRes(string sender, float dmg, Vector2 dir);
     public static event DealDamageRes DealDamageHandle;
 
-    public delegate IEnumerator BossPositionRes(float x, float y, float rx, float ry);
+    public delegate IEnumerator BossPositionRes(float x, float y, float ry, float rz, float ty, float tz);
     public static event BossPositionRes UpdateBossPositionHandle;
 
     public delegate void PlayerAnimRes(string sender, string name);
@@ -162,7 +162,7 @@ public class SocketNetworkManager : MonoBehaviour
                             case "bp": // boss position
                                 bossPos bp = JsonUtility.FromJson<bossPos>(gms.content);
                                 if (UpdateBossPositionHandle != null)
-                                    StartCoroutine(UpdateBossPositionHandle(bp.x, bp.y, bp.rx, bp.ry));
+                                    StartCoroutine(UpdateBossPositionHandle(bp.x, bp.y, bp.ry, bp.rz, bp.ty, bp.tz));
                                 break;
 
                             case "pa": // player animation
@@ -182,9 +182,6 @@ public class SocketNetworkManager : MonoBehaviour
                                 if (SpawnProjHandle != null)
                                     SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
                                 break;
-
-                            case "bd": // boss dead
-
 
                             default:
                                 Debug.Log("unknown general message type");
@@ -275,8 +272,10 @@ public class bossPos
 {
     public float x;
     public float y;
-    public float rx;
     public float ry;
+    public float rz;
+    public float ty;
+    public float tz;
 }
 
 [Serializable]
