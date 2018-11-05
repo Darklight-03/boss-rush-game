@@ -9,6 +9,15 @@ TagManager:
   - Player-text
   - boundary
   - projectile
+  - Boss-health
+  - Boss-name
+  - Boss-healthbh
+  - P1-name
+  - P1-health
+  - P1-healthbg
+  - P2-name
+  - P2-health
+  - P2-healthbg
   layers:
   - Default
   - TransparentFX

@@ -2,24 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class projectile : MonoBehaviour {
+public class BossHitbox : MonoBehaviour {
 
-  SpriteRenderer render;
+  private Transform t;
 	// Use this for initialization
 	void Start () {
-    render = GetComponent<SpriteRenderer>();
-		
+	  t = GetComponent<Transform>();	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-
   void OnCollisionEnter2D(Collision2D collision){
-    if(collision.gameObject.tag != "Player")
-    {
-      Destroy(this.gameObject);
-    }
-  }
+
+  } 
 }
