@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class Menu_buttons : MonoBehaviour { 
@@ -39,6 +40,11 @@ public class Menu_buttons : MonoBehaviour {
         MenuPanel.SetActive(false);
         LobbySelectPanel.SetActive(false);
         LobbyCreatePanel.SetActive(true);
+    }
+
+    public void GoToNewLobby()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 
 
