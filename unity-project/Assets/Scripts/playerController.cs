@@ -111,13 +111,13 @@ public class playerController : MonoBehaviour {
             {
                 this.transform.localEulerAngles = new Vector3(0, 0, 90f);
                 //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                image.localEulerAngles = new Vector3(0, 0, -90);
+                image.localEulerAngles = new Vector3(0, 0, 90);
             }
             else
             {
                 this.transform.localEulerAngles = new Vector3(0, 0, -90f);
                 //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                image.localEulerAngles = new Vector3(0, 0, 90);
+                image.localEulerAngles = new Vector3(0, 0, -90);
             }
         }
     }
