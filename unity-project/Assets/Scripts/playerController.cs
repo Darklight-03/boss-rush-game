@@ -34,7 +34,7 @@ public class playerController : MonoBehaviour {
         healthbarbg = GameObject.FindWithTag("Boss-healthbh");
         hit = 0;
         healthbarsize = healthbar.transform.localScale;
-
+        StartCoroutine(playSwordSwing());
     }
 
     private void OnEnable()
@@ -75,14 +75,6 @@ public class playerController : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        Vector2 v1 = transform.position;
-        Vector2 v2 = player.transform.position;
-        if ((v1-v2).magnitude < 3)
-        {
-            playAnimation("huijian");
-        }
-
         if (Vector2.Distance(prevPos, rb.position) > 0.1f)
         {
             snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + "0" + ", \"ry\": " + "0" + " }");
@@ -101,10 +93,21 @@ public class playerController : MonoBehaviour {
         }
     }
 
-    void playAnimation(string name)
+    IEnumerator playSwordSwing()
     {
-        snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
-        animation.Play(name);
+        while (true)
+        {
+            if (animation.IsPlaying("huijian"))
+            {
+                Debug.Log("waiting for anim to finish");
+                yield return new WaitForSeconds(0.2f);
+            }
+            yield return new WaitUntil(() => (transform.position - GameObject.FindWithTag("Player").transform.position).magnitude < 3);
+            Debug.Log("sending");
+            snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
+            animation.Play("huijian");
+            yield return new WaitForEndOfFrame();
+        }
     }
 
     IEnumerator damageAnimation()
