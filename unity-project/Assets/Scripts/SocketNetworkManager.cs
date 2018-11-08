@@ -71,7 +71,7 @@ public class SocketNetworkManager : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    void OnApplicationQuit()
     {
         contli = false;
         w.Close();
