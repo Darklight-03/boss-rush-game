@@ -6,7 +6,7 @@ using System;
 public class SocketNetworkManager : MonoBehaviour
 {
     static WebSocket w;
-    static int lobbyid = -1;
+    public static int lobbyid = -1;
     static bool contli;
     static bool started = false;
     public static string id;
@@ -18,11 +18,14 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator OtherPlayerPos(string id, float x, float y, float rx, float ry);
     public static event OtherPlayerPos UpdateOtherPlayerPos;
 
-    public delegate IEnumerator CreateLobbyRes(int lobbyid);
+    public delegate IEnumerator CreateLobbyRes(int lobbyid, int playernum);
     public static event CreateLobbyRes CreateLobbyHandle;
 
     public delegate IEnumerator JoinLobbyRes(string ret);
     public static event JoinLobbyRes JoinLobbyHandle;
+
+    public delegate IEnumerator GetLobbiesRes(lobbyInfo[] list); 
+    public static event GetLobbiesRes GetLobbiesHandle;
 
     public delegate IEnumerator NewPlayerRes(string id, int cl, int num);
     public static event NewPlayerRes NewPlayerHandle;
@@ -50,6 +53,8 @@ public class SocketNetworkManager : MonoBehaviour
 
     public delegate IEnumerator BossDeadRes();
     public static event BossDeadRes BossDeadHandle;
+
+
 
 
     // Use this for initialization
@@ -91,6 +96,11 @@ public class SocketNetworkManager : MonoBehaviour
         }
     }
 
+    public void getLobbies()
+    {
+        w.SendString("{ \"msgtype\":\"get lobbies\" }");
+    }
+
     IEnumerator listener()
     {
         string msg;
@@ -116,10 +126,8 @@ public class SocketNetworkManager : MonoBehaviour
                         break;
                     case "create lobby":
                         creLobby crel = JsonUtility.FromJson<creLobby>(msgo.content);
-                        lobbyid = crel.lobbyid;
-                        playernum = crel.playernum;
                         if (CreateLobbyHandle != null)
-                            CreateLobbyHandle(crel.lobbyid);
+                            StartCoroutine(CreateLobbyHandle(crel.lobbyid, crel.playernum));
                         break;
 
                     case "join lobby":
@@ -128,6 +136,14 @@ public class SocketNetworkManager : MonoBehaviour
                         playernum = jnl.playernum;
                         if (JoinLobbyHandle != null)
                             JoinLobbyHandle(jnl.ret);
+                        break;
+
+                    case "get lobbies":
+                        lobbyList ll = JsonUtility.FromJson<lobbyList>(msgo.content);
+                        if (GetLobbiesHandle != null)
+                        {
+                            StartCoroutine(GetLobbiesHandle(ll.lobbiesInfo));
+                        }
                         break;
 
                     case "general message":
@@ -243,6 +259,18 @@ public class genMess
     public string sender;
     public string ct;
     public string content;
+}
+
+[Serializable]
+public class lobbyInfo
+{
+    public int players;
+}
+
+[Serializable]
+public class lobbyList
+{
+    public lobbyInfo[] lobbiesInfo;
 }
 
 [Serializable]
