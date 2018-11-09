@@ -21,7 +21,7 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator CreateLobbyRes(int lobbyid, int playernum);
     public static event CreateLobbyRes CreateLobbyHandle;
 
-    public delegate IEnumerator JoinLobbyRes(string ret);
+    public delegate IEnumerator JoinLobbyRes(int lobbyid, int playernum, string ret);
     public static event JoinLobbyRes JoinLobbyHandle;
 
     public delegate IEnumerator GetLobbiesRes(lobbyInfo[] list); 
@@ -132,10 +132,8 @@ public class SocketNetworkManager : MonoBehaviour
 
                     case "join lobby":
                         joinLobby jnl = JsonUtility.FromJson<joinLobby>(msgo.content);
-                        isHost = false;
-                        playernum = jnl.playernum;
                         if (JoinLobbyHandle != null)
-                            JoinLobbyHandle(jnl.ret);
+                            StartCoroutine(JoinLobbyHandle(jnl.lobbyid, jnl.playernum, jnl.ret));
                         break;
 
                     case "get lobbies":
@@ -249,6 +247,7 @@ public class creLobby
 [Serializable]
 public class joinLobby
 {
+    public int lobbyid;
     public int playernum;
     public string ret;
 }
