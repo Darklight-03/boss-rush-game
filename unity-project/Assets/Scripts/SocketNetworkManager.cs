@@ -13,6 +13,7 @@ public class SocketNetworkManager : MonoBehaviour
     public static bool isHost = true;
     public static int playernum;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
+    private PlayerLog eventLog;
 
     // events
     public delegate IEnumerator OtherPlayerPos(string id, float x, float y, float rx, float ry);
@@ -99,6 +100,16 @@ public class SocketNetworkManager : MonoBehaviour
     public void getLobbies()
     {
         w.SendString("{ \"msgtype\":\"get lobbies\" }");
+    }
+
+    public void logText(string text)
+    {
+        if (eventLog == null)
+        {
+            eventLog = GameObject.Find("PlayerLog").GetComponent<PlayerLog>();
+        }
+        Debug.Log(text);
+        eventLog.AddEvent(text);
     }
 
     IEnumerator listener()

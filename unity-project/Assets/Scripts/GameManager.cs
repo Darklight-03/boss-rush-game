@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     private bool gameStarted = false;
     private List<Vector2> playerInitPos = new List<Vector2>(3);
     private List<string> playerClasses = new List<string>();
+    private int numberofplayers = 0;
 
     // Use this for initialization
     void Start () {
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour {
         playerClasses.Add("ArcherOP");
         playerClasses.Add("KnightOP");
         playerClasses.Add("PriestOP");
+        numberofplayers++;
     }
 
     private void OnDestroy()
@@ -94,6 +96,12 @@ public class GameManager : MonoBehaviour {
     IEnumerator NewPlayerHandle(string id, int cl, int num)
     {
         Debug.Log("new player joined lobby");
+        snm.logText("New player (" + numberofplayers + "/3)");
+        numberofplayers++;
+        if (numberofplayers == 3)
+        {
+            snm.logText("Ready to start");
+        }
         yield return new WaitUntil(() => gameStarted);
         StartPlayer(id, cl, num);
         yield return null;
