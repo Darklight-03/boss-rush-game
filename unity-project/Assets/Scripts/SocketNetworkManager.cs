@@ -12,11 +12,12 @@ public class SocketNetworkManager : MonoBehaviour
     public static string id;
     public static bool isHost = true;
     public static int playernum;
+    private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
     private PlayerLog eventLog;
 
     // events
-    public delegate IEnumerator OtherPlayerPos(string id, float x, float y, float rx, float ry);
+    public delegate void OtherPlayerPos(string sender, float x, float y, float rx, float ry);
     public static event OtherPlayerPos UpdateOtherPlayerPos;
 
     public delegate IEnumerator CreateLobbyRes(int lobbyid, int playernum);
@@ -34,22 +35,22 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator StartGameRes();
     public static event StartGameRes StartGameHandle;
 
-    public delegate IEnumerator TakeDamageRes(string sender, float dmg);
+    public delegate void TakeDamageRes(string sender, float dmg);
     public static event TakeDamageRes TakeDamageHandle;
 
-    public delegate IEnumerator DealDamageRes(string sender, float dmg, Vector2 dir);
+    public delegate void DealDamageRes(string sender, float dmg, Vector2 dir);
     public static event DealDamageRes DealDamageHandle;
 
-    public delegate IEnumerator BossPositionRes(float x, float y, float rx, float ry);
+    public delegate IEnumerator BossPositionRes(float x, float y, float ry, float rz, float ty, float tz);
     public static event BossPositionRes UpdateBossPositionHandle;
 
-    public delegate IEnumerator PlayerAnimRes(string sender, string name);
+    public delegate void PlayerAnimRes(string sender, string name);
     public static event PlayerAnimRes PlayerAnimHandle;
     
     public delegate IEnumerator BossAnimRes(string name);
     public static event BossAnimRes BossAnimHandle;
 
-    public delegate IEnumerator SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir);
+    public delegate void SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir);
     public static event SpawnProjRes SpawnProjHandle;
 
     public delegate IEnumerator BossDeadRes();
@@ -61,6 +62,7 @@ public class SocketNetworkManager : MonoBehaviour
     // Use this for initialization
     IEnumerator Start()
     {
+        instances++;
         if (!started)
         {
             started = true;
@@ -162,7 +164,7 @@ public class SocketNetworkManager : MonoBehaviour
                             case "pp": // player position
                                 playerPos pp = JsonUtility.FromJson<playerPos>(gms.content);
                                 if (UpdateOtherPlayerPos != null)
-                                    StartCoroutine(UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry));
+                                    UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry);
                                 break;
 
                             case "sg": // start game
@@ -173,25 +175,25 @@ public class SocketNetworkManager : MonoBehaviour
                             case "td": // take damage (from boss)
                                 opTakeDam otd = JsonUtility.FromJson<opTakeDam>(gms.content);
                                 if (TakeDamageHandle != null)
-                                    StartCoroutine(TakeDamageHandle(gms.sender, otd.dmg));
+                                    TakeDamageHandle(gms.sender, otd.dmg);
                                 break;
 
                             case "dd": // deal damage (to boss)
                                 opDealDam odd = JsonUtility.FromJson<opDealDam>(gms.content);
                                 if (DealDamageHandle != null)
-                                    StartCoroutine(DealDamageHandle(gms.sender, odd.dmg, new Vector2(odd.dirx, odd.diry)));
+                                    DealDamageHandle(gms.sender, odd.dmg, new Vector2(odd.dirx, odd.diry));
                                 break;
 
                             case "bp": // boss position
                                 bossPos bp = JsonUtility.FromJson<bossPos>(gms.content);
                                 if (UpdateBossPositionHandle != null)
-                                    StartCoroutine(UpdateBossPositionHandle(bp.x, bp.y, bp.rx, bp.ry));
+                                    StartCoroutine(UpdateBossPositionHandle(bp.x, bp.y, bp.ry, bp.rz, bp.ty, bp.tz));
                                 break;
 
                             case "pa": // player animation
                                 playerAnim pa = JsonUtility.FromJson<playerAnim>(gms.content);
                                 if (PlayerAnimHandle != null)
-                                    StartCoroutine(PlayerAnimHandle(gms.sender, pa.name));
+                                    PlayerAnimHandle(gms.sender, pa.name);
                                 break;
 
                             case "ba": // boss animation
@@ -203,11 +205,8 @@ public class SocketNetworkManager : MonoBehaviour
                             case "sp": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
                                 if (SpawnProjHandle != null)
-                                    StartCoroutine(SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry)));
+                                    SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
                                 break;
-
-                            case "bd": // boss dead
-
 
                             default:
                                 Debug.Log("unknown general message type");
@@ -311,8 +310,10 @@ public class bossPos
 {
     public float x;
     public float y;
-    public float rx;
     public float ry;
+    public float rz;
+    public float ty;
+    public float tz;
 }
 
 [Serializable]

@@ -28,7 +28,9 @@ public class archerControllerOP : MonoBehaviour {
     private Vector2 prevPos;
     private Vector2 prevRot;
     public string id;
+    public int healthbar_id;
     public int playernum;
+    int hit;
 
 
 
@@ -45,22 +47,28 @@ public class archerControllerOP : MonoBehaviour {
         f2 = Resources.Load<Sprite>("bow2");
         f1 = Resources.Load<Sprite>("bow");
         bowrender = bow.GetComponent<SpriteRenderer>();
-	}
+        healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
+        interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
+        healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
+        interfaceplayertext.text = "Player " + healthbar_id;
+        healthbarsize = healthbar.transform.localScale;
+        hbarupdatetime = 0;
+    }
 
     void OnEnable()
     {
-        SocketNetworkManager.TakeDamageHandle += TakeDamageHandle;
-        SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPos;
-        SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandle;
-        SocketNetworkManager.SpawnProjHandle += SpawnProjHandle;
+        SocketNetworkManager.TakeDamageHandle += TakeDamageHandleH;
+        SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPosH;
+        SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandleH;
+        SocketNetworkManager.SpawnProjHandle += SpawnProjHandleH;
     }
 
     void OnDisable()
     {
-        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandle;
-        SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPos;
-        SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandle;
-        SocketNetworkManager.SpawnProjHandle -= SpawnProjHandle;
+        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandleH;
+        SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPosH;
+        SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandleH;
+        SocketNetworkManager.SpawnProjHandle -= SpawnProjHandleH;
     }
 
   // called in fixed interval
@@ -72,8 +80,25 @@ public class archerControllerOP : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        /* ON HIT */
+        if (hit >= 0)
+        {
+            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit) / Mathf.Sqrt(25));
+            render.color = lerpedColor;
+            hit--;
+        }
 
-	}
+        /* HEALTH BAR */
+        if (hbarupdatetime == 0)
+        {
+            healthbarback.transform.localScale = healthbar.transform.localScale;
+            hbarupdatetime = 100;
+        }
+        else
+        {
+            hbarupdatetime--;
+        }
+    }
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
@@ -106,18 +131,40 @@ public class archerControllerOP : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
-
+        Debug.Log("took " + dmg + " damage");
+        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        healthbar.transform.localScale = hsize;
+        hit = 25;
+        hbarupdatetime = 20;
+        if (!health.TakeDamage(dmg))
+        {
+            Dead();
+        }
+        else
+        {
+            //applyForce(dir);
+            knocked = 20;
+        }
     }
 
+    void TakeDamageHandleH(string sender, float dmg)
+    {
+        StartCoroutine(TakeDamageHandle(sender, dmg));
+    }
     IEnumerator TakeDamageHandle(string sender, float dmg)
     {
         if (id == sender)
         {
             // display health, if dead, etc (knockback is handled on the other players client
+            TakeDamage(dmg, Vector2.zero);
         }
         yield break;
     }
 
+    void UpdateOtherPlayerPosH(string sender, float x, float y, float rx, float ry)
+    {
+        StartCoroutine(UpdateOtherPlayerPos(sender, x, y, rx, ry));
+    }
     IEnumerator UpdateOtherPlayerPos(string sender, float x, float y, float rx, float ry)
     {
         if (id == sender)
@@ -136,6 +183,10 @@ public class archerControllerOP : MonoBehaviour {
         yield break;
     }
 
+    void PlayerAnimHandleH(string sender, string name)
+    {
+        StartCoroutine(PlayerAnimHandle(sender, name));
+    }
     IEnumerator PlayerAnimHandle(string sender, string name)
     {
         if (id == sender)
@@ -149,6 +200,10 @@ public class archerControllerOP : MonoBehaviour {
             {
                 bowrender.sprite = f2;
             }
+            else if (name == "dashanim")
+            {
+                StartCoroutine(dashAnim(rb.position));
+            }
             // handle actual animations
             else
             {
@@ -158,6 +213,10 @@ public class archerControllerOP : MonoBehaviour {
         yield break;
     }
 
+    void SpawnProjHandleH(string sender, string name, Vector2 pos, Vector2 dir)
+    {
+        StartCoroutine(SpawnProjHandle(sender, name, pos, dir));
+    }
     IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
     {
         if (id == sender)
@@ -165,8 +224,18 @@ public class archerControllerOP : MonoBehaviour {
             // for now just do arrows, name could specify the projectile
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, bow.transform.rotation, GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
-            Debug.Log(arrow.name);
         }
         yield break;
+    }
+
+    IEnumerator dashAnim(Vector3 opos)
+    {
+        for (int i = -10; i <= 10; i++)
+        {
+            Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i) - 10) / 10);
+            render.color = c;
+            Debug.Log(Mathf.Abs(Mathf.Abs(i) - 15));
+            yield return null;
+        }
     }
 }

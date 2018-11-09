@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine;
 
 public class archerController : MonoBehaviour {
+
     private SocketNetworkManager snm;
     private Rigidbody2D rb;
     private GameObject bow;
@@ -37,7 +38,9 @@ public class archerController : MonoBehaviour {
 
 
 
+
 	// Use this for initialization
+
 	void Start ()
   {
         snm = GetComponent<SocketNetworkManager>();
@@ -62,6 +65,7 @@ public class archerController : MonoBehaviour {
         bowrender = bow.GetComponent<SpriteRenderer>();
         hit = 0;
         numarrows = 0;
+
 	}
 
     void OnEnable()
@@ -165,7 +169,6 @@ public class archerController : MonoBehaviour {
             bowrender.sprite = f1;
             snm.sendMessage("pa", "{ \"name\": \"" + "drawbow" + "\" }");
             snm.sendMessage("sp", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
-                Debug.Log("spawned arrow");
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;
@@ -209,6 +212,7 @@ public class archerController : MonoBehaviour {
     // 
   }
   void dash(Vector2 direction){
+    snm.sendMessage("pa", "{ \"name\": \"" + "dashanim" + "\" }");
     float m = direction.magnitude;
     var v = direction.normalized;
     if(m>MAX_DASH){ 
@@ -230,6 +234,7 @@ public class archerController : MonoBehaviour {
       yield return null;
     }
   }
+
 
   // makes player invisible and unresponsive so that they could potentially be
   // revived
@@ -256,6 +261,7 @@ public class archerController : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
+        Debug.Log("took " + dmg + " damage");
         snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
         var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
@@ -267,8 +273,10 @@ public class archerController : MonoBehaviour {
         }
         else
         {
-            applyForce(dir);
+            //applyForce(dir);
             knocked = 20;
         }
     }
+
 }
+
