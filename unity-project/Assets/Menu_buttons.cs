@@ -10,8 +10,10 @@ public class Menu_buttons : MonoBehaviour {
     public GameObject LobbyCreatePanel;
     public GameObject dropdown;
     public GameObject LobbySelectErrorText;
+    public GameObject LobbyCreateErrorText;
     public GameObject DropdownLabel;
     Dropdown droplist;
+    int droplistprev = 55;
     SocketNetworkManager snm;
 
     // Use this for initialization
@@ -22,7 +24,6 @@ public class Menu_buttons : MonoBehaviour {
         LobbySelectPanel.SetActive(false);
         LobbyCreatePanel.SetActive(false);
         droplist = dropdown.GetComponent<Dropdown>();
-        droplist.onValueChanged.AddListener(droplistValueChanged);
     }
 
     private void OnEnable()
@@ -40,11 +41,22 @@ public class Menu_buttons : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update()
+    {
+        dropdownchk();
+    }
 
-    
+    public void dropdownchk()
+    {
+
+        if (droplist.value != droplistprev)
+        {
+            droplistprev = droplist.value;
+            selectvalue(droplist.value);
+        }
+    }
+
+
 
     public void ShowLobbyPanel()
     {
@@ -73,6 +85,7 @@ public class Menu_buttons : MonoBehaviour {
             int diff = droplist.options.Count - listoflobbies.Length;
             droplist.options.RemoveRange(listoflobbies.Length, diff);
         }
+        selectvalue(0);
         yield break;
     }
 
@@ -92,13 +105,14 @@ public class Menu_buttons : MonoBehaviour {
         yield break;
     }
 
-    void droplistValueChanged(int invalue)
+    void selectvalue(int newvalue)
     {
+        if (droplist.options.Count <= newvalue)
+        {
+            return;
+        }
         Text labeltext = DropdownLabel.GetComponent<Text>();
-        Debug.Log(labeltext);
-        Debug.Log(droplist.options[invalue].text);
-        Debug.Log(invalue);
-        labeltext.text = droplist.options[invalue].text;
+        labeltext.text = droplist.options[newvalue].text;
     }
 
 
@@ -121,11 +135,24 @@ public class Menu_buttons : MonoBehaviour {
         snm.createLobby();
     }
 
+    public void GoToSelectedLobby()
+    {
+        snm.joinLobby(droplist.value);
+    }
+
     IEnumerator CreateLobbyHandle(int lobbyid, int playernum)
     {
-        SocketNetworkManager.lobbyid = lobbyid;
-        SocketNetworkManager.playernum = playernum;
-        SceneManager.LoadScene("SampleScene");
+        if (lobbyid == -1)
+        {
+            Text lcre = LobbyCreateErrorText.GetComponent<Text>();
+            lcre.text = "Failed to create lobby";
+        }
+        else
+        {
+            SocketNetworkManager.lobbyid = lobbyid;
+            SocketNetworkManager.playernum = playernum;
+            SceneManager.LoadScene("SampleScene");
+        }
         yield break;
     }
 
