@@ -100,6 +100,7 @@ public class Menu_buttons : MonoBehaviour {
         {
             SocketNetworkManager.lobbyid = lobbyid;
             SocketNetworkManager.playernum = playernum;
+            SocketNetworkManager.isHost = false;
             SceneManager.LoadScene("SampleScene");
         }
         yield break;
