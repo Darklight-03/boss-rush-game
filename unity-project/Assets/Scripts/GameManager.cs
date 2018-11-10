@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     GameObject player3;
     GameObject boss;
     GameObject obstacle1;
+    public GameObject StartGameButton;
     private bool gameStarted = false;
     private List<Vector2> playerInitPos = new List<Vector2>(3);
     private List<string> playerClasses = new List<string>();
@@ -29,7 +30,8 @@ public class GameManager : MonoBehaviour {
         playerClasses.Add("ArcherOP");
         playerClasses.Add("KnightOP");
         playerClasses.Add("PriestOP");
-
+        if (SocketNetworkManager.isHost)
+            StartGameButton.SetActive(true);
     }
 
     private void OnEnable()
@@ -61,16 +63,6 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        bool lDown = Input.GetKeyDown(KeyCode.L);
-        bool oDown = Input.GetKeyDown(KeyCode.O);
-        bool pDown = Input.GetKeyDown(KeyCode.P);
-
-        if (lDown && SocketNetworkManager.isHost)
-        {
-            //Debug.Log("l Pressed");
-            snm.sendMessage("sg", "{ }");
-            StartGame();
-        }
     }
 
     void StartPlayer(string id, int cl, int num)
@@ -99,6 +91,13 @@ public class GameManager : MonoBehaviour {
     {
         StartGame();
         yield return null;
+    }
+
+    public void OnStartButtonPress()
+    {
+        StartGameButton.SetActive(false);
+        snm.sendMessage("sg", "{ }");
+        StartGame();
     }
 }
 
