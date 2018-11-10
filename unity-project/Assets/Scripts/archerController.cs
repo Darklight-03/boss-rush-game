@@ -75,9 +75,8 @@ public class archerController : MonoBehaviour {
 
     void OnDisable()
     {
-
-    forces.Clear(); 
-  }
+        forces.Clear(); 
+    }
 	
     // called in fixed interval
     void FixedUpdate()
@@ -116,7 +115,7 @@ public class archerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update ()
-  {
+    {
         /* ON HIT */
         if (hit >= 0){
           Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit)/Mathf.Sqrt(25));
@@ -261,7 +260,6 @@ public class archerController : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
-        Debug.Log("took " + dmg + " damage");
         snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
         var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;

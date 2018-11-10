@@ -12,20 +12,29 @@ public class SwordDamage : MonoBehaviour {
 	    
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-
-        //Vector3 playerpos = collision.gameObject.transform.position;
-        //Vector3 spikepos = rb.transform.position;
-        //Vector3 dir = (playerpos - spikepos).normalized * knockback;
         if (collision.gameObject.tag == "Player" && !collision.gameObject.name.Contains("OP"))
         {
-          collision.gameObject.GetComponent<archerController>().TakeDamage(10, Vector2.zero);
+            GameObject player = collision.gameObject;
+            if (player.name == "Archer(Clone)")
+            {
+                player.GetComponent<archerController>().TakeDamage(10, Vector2.zero);
+            }
+            else if (player.name == "Knight(Clone)")
+            {
+                player.GetComponent<knightController>().TakeDamage(10, Vector2.zero);
+            }
+            else if (player.name == "Priest(Clone)")
+            {
+                Debug.Log("Come uncomment this");
+                //player.GetComponent<priestController>().TakeDamage(10, Vector2.zero);
+            }
+            else
+            {
+                Debug.Log("Unknown sword collision HELP");
+            }
         }
         
 
