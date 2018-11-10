@@ -37,12 +37,11 @@ GameObject:
   - component: {fileID: 4663671624715990}
   - component: {fileID: 212423562171437862}
   - component: {fileID: 50626725684891156}
-  - component: {fileID: 114873816907695274}
+  - component: {fileID: 114159364265363728}
   - component: {fileID: 114927458386824952}
-  - component: {fileID: 61509826198589080}
   - component: {fileID: 114981697246486582}
   m_Layer: 0
-  m_Name: Archer
+  m_Name: ArcherOP
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,32 +94,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &61509826198589080
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1584083698432862}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0046024323, y: -0.00000011920929}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.696249, y: 0.87106776}
-  m_EdgeRadius: 0
---- !u!114 &114873816907695274
+--- !u!114 &114159364265363728
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,15 +102,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1584083698432862}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f1fca901d1734e4e944c5e681f7652e, type: 3}
+  m_Script: {fileID: 11500000, guid: 2faa2670c185e364eb06c1bd019a9e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MOVEMENT_SPEED: 0.08
+  MOVEMENT_SPEED: 0
   ARROW_SPEED: 10
-  isPlayer: 1
-  MAX_DASH: 2
-  DASH_CD: 500
-  GLOBAL_CD: 20
+  id: 
+  playernum: 0
 --- !u!114 &114927458386824952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -161,7 +133,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1093a77b6b1ef48937572982a739ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverurl: ws://168.61.48.136:3000/
 --- !u!212 &212423562171437862
 SpriteRenderer:
   m_ObjectHideFlags: 1
