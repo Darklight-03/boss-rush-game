@@ -107,6 +107,11 @@ public class SocketNetworkManager : MonoBehaviour
         w.SendString("{ \"msgtype\":\"get lobbies\" }");
     }
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     public void logText(string text)
     {
         if (eventLog == null)
@@ -141,7 +146,7 @@ public class SocketNetworkManager : MonoBehaviour
             {
                 //Debug.Log("raw: " + msg);
                 mess msgo = JsonUtility.FromJson<mess>(msg);
-                //Debug.Log("content " + msgo.content);
+                Debug.Log("content: " + msgo.content);
                 switch (msgo.msgtype)
                 {
                     case "new connection":
