@@ -66,16 +66,6 @@ public class GameManager : MonoBehaviour {
             snm.sendMessage("sg", "{ }");
             StartGame();
         }
-        if (oDown)
-        {
-            //Debug.Log("o Pressed");
-            snm.createLobby();
-        }
-        if (pDown)
-        {
-            //Debug.Log("p Pressed");
-            snm.joinLobby(0);
-        }
     }
 
     void StartPlayer(string id, int cl, int num)
