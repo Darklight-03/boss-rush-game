@@ -14,7 +14,10 @@ public class SocketNetworkManager : MonoBehaviour
     public static int playernum;
     private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
-    private PlayerLog eventLog;
+    public static Queue<newPly> newplayers = new Queue<newPly>();
+    public static int numberofplayers = 0;
+    private static Queue<string> logqueue = new Queue<string>();
+    private static PlayerLog eventLog;
 
     // events
     public delegate void OtherPlayerPos(string sender, float x, float y, float rx, float ry);
@@ -29,7 +32,7 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator GetLobbiesRes(lobbyInfo[] list); 
     public static event GetLobbiesRes GetLobbiesHandle;
 
-    public delegate IEnumerator NewPlayerRes(string id, int cl, int num);
+    public delegate IEnumerator NewPlayerRes(newPly newplayer);
     public static event NewPlayerRes NewPlayerHandle;
 
     public delegate IEnumerator StartGameRes();
@@ -108,10 +111,24 @@ public class SocketNetworkManager : MonoBehaviour
     {
         if (eventLog == null)
         {
-            eventLog = GameObject.Find("PlayerLog").GetComponent<PlayerLog>();
+            GameObject log = GameObject.Find("PlayerLog");
+            if (log != null)
+            {
+                eventLog = log.GetComponent<PlayerLog>();
+            }
         }
-        Debug.Log(text);
-        eventLog.AddEvent(text);
+        if (eventLog == null)
+        {
+            logqueue.Enqueue(text);
+        }
+        else
+        {
+            while (logqueue.Count > 0)
+            {
+                eventLog.AddEvent(logqueue.Dequeue());
+            }
+            eventLog.AddEvent(text);
+        }
     }
 
     IEnumerator listener()
@@ -134,8 +151,11 @@ public class SocketNetworkManager : MonoBehaviour
 
                     case "new player":
                         newPly np = JsonUtility.FromJson<newPly>(msgo.content);
+                        Debug.Log(msgo.content);
+                        newplayers.Enqueue(np);
+                        numberofplayers++;
                         if (NewPlayerHandle != null)
-                            StartCoroutine(NewPlayerHandle(np.theirid, np.cl, np.theirnum));
+                            StartCoroutine(NewPlayerHandle(np));
                         break;
                     case "create lobby":
                         creLobby crel = JsonUtility.FromJson<creLobby>(msgo.content);

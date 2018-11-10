@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour {
     private bool gameStarted = false;
     private List<Vector2> playerInitPos = new List<Vector2>(3);
     private List<string> playerClasses = new List<string>();
-    private int numberofplayers = 0;
 
     // Use this for initialization
     void Start () {
@@ -23,20 +22,23 @@ public class GameManager : MonoBehaviour {
         t = GetComponent<Transform>();
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
         //boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
-        SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
-        SocketNetworkManager.StartGameHandle += StartGameHandle;
+
         playerInitPos.Add(new Vector2(2, -2));
         playerInitPos.Add(new Vector2(0, -2));
         playerInitPos.Add(new Vector2(-2, -2));
         playerClasses.Add("ArcherOP");
         playerClasses.Add("KnightOP");
         playerClasses.Add("PriestOP");
-        numberofplayers++;
+
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        SocketNetworkManager.NewPlayerHandle -= NewPlayerHandle;
+        SocketNetworkManager.StartGameHandle += StartGameHandle;
+    }
+
+    private void OnDisable()
+    {
         SocketNetworkManager.StartGameHandle -= StartGameHandle;
     }
 
@@ -97,22 +99,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    IEnumerator NewPlayerHandle(string id, int cl, int num)
-    {
-        Debug.Log("new player joined lobby");
-        snm.logText("New player (" + numberofplayers + "/3)");
-        numberofplayers++;
-        if (numberofplayers == 3)
-        {
-            snm.logText("Ready to start");
-        }
-        yield return new WaitUntil(() => gameStarted);
-        StartPlayer(id, cl, num);
-        yield return null;
-    }
 
     IEnumerator StartGameHandle()
     {
+        for (int i = 0; i < SocketNetworkManager.newplayers.Count; i++)
+        {
+            newPly t = SocketNetworkManager.newplayers.Dequeue();
+            StartPlayer(t.theirid, t.cl, t.theirnum);
+        }
         StartGame();
         yield return null;
     }

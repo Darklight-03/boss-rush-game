@@ -25,6 +25,38 @@ public class PlayerLog : MonoBehaviour
             snm.logText("You are host");
             snm.logText("Waiting for more players (1/3)");
         }
+        else
+        {
+            snm.logText("Waiting for more players (" + (SocketNetworkManager.numberofplayers + 1) + "/3)");
+            if (SocketNetworkManager.numberofplayers == 3)
+            {
+                snm.logText("Ready to start");
+            }
+        }
+    }
+
+    IEnumerator NewPlayerHandle(newPly newplayer)
+    {
+        
+        if (SocketNetworkManager.numberofplayers == 3)
+        {
+            snm.logText("Ready to start (3/3)");
+        }
+        else
+        {
+            snm.logText("Waiting for more players (" + (SocketNetworkManager.numberofplayers + 1) + "/3)");
+        }
+        yield break;
+    }
+
+    private void OnEnable()
+    {
+        SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
+    }
+
+    private void OnDisable()
+    {
+        SocketNetworkManager.NewPlayerHandle -= NewPlayerHandle;
     }
 
     public void AddEvent(string eventString)

@@ -71,7 +71,7 @@ public class Menu_buttons : MonoBehaviour {
         //Debug.Log("get lobby handling");
         for (int i = 0; i < listoflobbies.Length; i++)
         {
-            Debug.Log(listoflobbies[i].players);
+            //Debug.Log(listoflobbies[i].players);
             if (droplist.options.Count == i)
             {
                 droplist.options.Add(new Dropdown.OptionData());
