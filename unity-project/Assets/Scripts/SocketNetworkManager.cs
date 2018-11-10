@@ -156,7 +156,6 @@ public class SocketNetworkManager : MonoBehaviour
 
                     case "new player":
                         newPly np = JsonUtility.FromJson<newPly>(msgo.content);
-                        Debug.Log(msgo.content);
                         newplayers.Enqueue(np);
                         numberofplayers++;
                         if (NewPlayerHandle != null)

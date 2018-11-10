@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour {
     void StartGame()
     {
         gameStarted = true;
+        for (int i = 0; i < SocketNetworkManager.newplayers.Count; i++)
+        {
+            newPly t = SocketNetworkManager.newplayers.Dequeue();
+            StartPlayer(t.theirid, t.cl, t.theirnum);
+        }
         //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
@@ -92,11 +97,6 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator StartGameHandle()
     {
-        for (int i = 0; i < SocketNetworkManager.newplayers.Count; i++)
-        {
-            newPly t = SocketNetworkManager.newplayers.Dequeue();
-            StartPlayer(t.theirid, t.cl, t.theirnum);
-        }
         StartGame();
         yield return null;
     }
