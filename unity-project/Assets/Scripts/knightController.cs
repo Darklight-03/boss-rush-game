@@ -212,10 +212,10 @@ public class knightController : MonoBehaviour {
             hbarupdatetime--;
         }
 
-        if (Vector2.Distance(prevPos, rb.position) > 0.1f || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.1f), Vector2.right))
+        if (Vector2.Distance(prevPos, pos) > 0.1f || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.1f), Vector2.right))
         {
-            snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
-            prevPos = rb.position;
+            snm.sendMessage("pp", "{ \"x\": " + pos.x + " , \"y\": " + pos.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
+            prevPos = pos;
             prevRot = direction;
         }
 

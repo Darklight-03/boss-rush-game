@@ -136,7 +136,11 @@ public class playerControllerOP : MonoBehaviour {
             Destroy(collider.gameObject);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
             TakeDamage(10);
-            // do stuff only for the circle collider
+        }
+        if (collider.gameObject.tag == "knightsword")
+        {
+            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
+            TakeDamage(10);
         }
     }
 }
