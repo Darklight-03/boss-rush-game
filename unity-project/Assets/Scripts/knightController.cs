@@ -127,9 +127,10 @@ public class knightController : MonoBehaviour {
         sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
         sword.transform.position = pos + -0.5f * (new Vector2(direction.normalized.y, direction.normalized.x));
         /* ABILITIES */
+        //double check how this works
         while (gcd < 0)
         {
-
+            //shield
             if (Input.GetKey("q"))
             {
                 gcd = GLOBAL_CD;
