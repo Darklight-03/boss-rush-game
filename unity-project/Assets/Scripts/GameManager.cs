@@ -91,15 +91,15 @@ public class GameManager : MonoBehaviour {
             Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
             if (cl == 0)
             {
-                player2.GetComponent<archerControllerOP>().playernum = num;
-                player2.GetComponent<archerControllerOP>().id = id;
-                player2.GetComponent<archerControllerOP>().healthbar_id = 2;
+                player3.GetComponent<archerControllerOP>().playernum = num;
+                player3.GetComponent<archerControllerOP>().id = id;
+                player3.GetComponent<archerControllerOP>().healthbar_id = 2;
             }
             else if (cl == 1)
             {
-                player2.GetComponent<knightControllerOP>().playernum = num;
-                player2.GetComponent<knightControllerOP>().id = id;
-                player2.GetComponent<knightControllerOP>().healthbar_id = 2;
+                player3.GetComponent<knightControllerOP>().playernum = num;
+                player3.GetComponent<knightControllerOP>().id = id;
+                player3.GetComponent<knightControllerOP>().healthbar_id = 2;
             }
         }
     }
