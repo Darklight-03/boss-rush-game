@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -43,7 +44,7 @@ public class cooldown{
         nextavailable = Time.time + cd;
     }
     public float getRatio(){
-        return ((nextavailable-Time.time)/cd)*0.75f + 0.25f;
+        return ((nextavailable-Time.time)/cd)*0.9f + 0.1f;
     }
 }
 
@@ -113,6 +114,8 @@ public class archerController : MonoBehaviour {
 
         /* ABILITIES */
         GameObject[] icons = GameObject.FindGameObjectsWithTag("ability-icons");
+        Array.Sort(icons,CompareIcons);
+
         List<cooldown> cds = new List<cooldown>();
         glcd = new cooldown("auto",GLOBAL_CD,"LMB",icons[0]);
         cds.Add(glcd);
@@ -131,6 +134,10 @@ public class archerController : MonoBehaviour {
         StartCoroutine(cdUpdater(cds));
 
 	}
+
+  int CompareIcons(GameObject x, GameObject y){
+    return x.name.CompareTo(y.name);
+  }
 
     IEnumerator cdUpdater(List<cooldown> l){
       while(true){
