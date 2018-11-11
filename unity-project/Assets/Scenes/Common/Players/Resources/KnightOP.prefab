@@ -21,10 +21,9 @@ GameObject:
   - component: {fileID: 4775751159327292}
   - component: {fileID: 212584493080544744}
   - component: {fileID: 50226718093708548}
-  - component: {fileID: 61969804903465430}
-  - component: {fileID: 114430786573788228}
   - component: {fileID: 114112117213763744}
   - component: {fileID: 114741836890129008}
+  - component: {fileID: 114964921150166186}
   m_Layer: 0
   m_Name: KnightOP
   m_TagString: Player
@@ -42,8 +41,6 @@ GameObject:
   - component: {fileID: 4336741683215578}
   - component: {fileID: 212785636052028206}
   - component: {fileID: 50412677672975166}
-  - component: {fileID: 114148499655774774}
-  - component: {fileID: 68778649865256614}
   m_Layer: 0
   m_Name: KnightSword
   m_TagString: Untagged
@@ -169,48 +166,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!61 &61969804903465430
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1929934516375674}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0053932667, y: -0.0053961277}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.83820045, y: 0.9460387}
-  m_EdgeRadius: 0
---- !u!68 &68778649865256614
-EdgeCollider2D:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1942831326507676}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0
-  m_Points:
-  - {x: -0.9, y: -0.00000017881393}
-  - {x: 0.9, y: -0.00000017881393}
 --- !u!114 &114112117213763744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -224,31 +179,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   max_hp: 100
---- !u!114 &114148499655774774
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1942831326507676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15ee3c5730753a0458a3d50e5cc7278e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114430786573788228
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1929934516375674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88a89457e1959b4189ca5d31732547b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MOVEMENT_SPEED: 0.08
-  GLOBAL_CD: 20
-  stabbing: 0
 --- !u!114 &114741836890129008
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -260,6 +190,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1093a77b6b1ef48937572982a739ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114964921150166186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1929934516375674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb9421618218dbd4aaa069bda8c41b20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MOVEMENT_SPEED: 0.1
+  GLOBAL_CD: 20
+  stabbing: 0
+  id: 
+  healthbar_id: 0
+  playernum: 0
 --- !u!212 &212584493080544744
 SpriteRenderer:
   m_ObjectHideFlags: 1
