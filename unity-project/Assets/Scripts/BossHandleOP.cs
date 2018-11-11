@@ -195,6 +195,16 @@ public class BossHandleOP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /* HEALTH BAR */
+        if (hbarupdatetime == 0)
+        {
+            healthbarbg.transform.localScale = healthbar.transform.localScale;
+            hbarupdatetime = 100;
+        }
+        else
+        {
+            hbarupdatetime--;
+        }
     }
 
 
