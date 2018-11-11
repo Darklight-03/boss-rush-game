@@ -377,21 +377,22 @@ public class archerController : MonoBehaviour {
       Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i)-10)/10);
       render.color = c;
       Vector3 curpos = Vector3.Lerp(opos,mpos,(float)i/10);
-      Debug.Log(Mathf.Abs(Mathf.Abs(i)-15));
       rb.position = curpos;
       yield return null;
     }
   }
 
 
-  // makes player invisible and unresponsive so that they could potentially be
-  // revived
-  void Dead(){
-    bowrender.enabled = false;
-    health.enabled = false;
-    render.enabled = false;
-    enabled = false;
-  }
+    // makes player invisible and unresponsive so that they could potentially be
+    // revived
+    void Dead()
+    {
+        healthbarback.transform.localScale = healthbar.transform.localScale;
+        bowrender.enabled = false;
+        health.enabled = false;
+        render.enabled = false;
+        enabled = false;
+    }
 
 
     // simply adds a force to the list to be applied next update.
@@ -409,9 +410,8 @@ public class archerController : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
-        Debug.Log("took " + dmg + " damage");
         snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
-        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
         hbarupdatetime = 20;

@@ -55,9 +55,13 @@ public class GameManager : MonoBehaviour {
         //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
-            boss = Instantiate(Resources.Load<GameObject>("boss"), new Vector2(-2, 2), Quaternion.identity, t);
+        {
+            boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
+        }
         else
+        {
             boss = Instantiate(Resources.Load<GameObject>("bossOP"), new Vector2(-2, 2), Quaternion.identity, t);
+        }
     }
 
 	

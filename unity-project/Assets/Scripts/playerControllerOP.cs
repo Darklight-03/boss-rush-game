@@ -84,15 +84,16 @@ public class playerControllerOP : MonoBehaviour {
         // do stuff only for the circle collider
     }
 
-    IEnumerator UpdateBossPositionHandle(float x, float y, float ry, float rz, float ty, float tz)
+    IEnumerator UpdateBossPositionHandle(float x, float y, float rx, float ry)
     {
         Vector2 pos = transform.position;
         pos.x = x;
         pos.y = y;
         transform.position = pos;
 
-        image.localEulerAngles = new Vector3(0, ry, rz);
-        this.transform.localEulerAngles = new Vector3(0, ty, tz);
+        Vector2 dir = new Vector2(rx, ry);
+
+        // use angle to do something probably with the sword
         yield break;
     }
 
