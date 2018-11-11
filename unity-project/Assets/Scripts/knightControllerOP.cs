@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class knightController : MonoBehaviour {
+public class knightControllerOP : MonoBehaviour
+{
     private SocketNetworkManager snm;
     private Rigidbody2D rb;
     private GameObject shield;
@@ -33,9 +34,12 @@ public class knightController : MonoBehaviour {
     private Vector2 prevRot = new Vector2(0, 0);
     string weapon;
     public bool stabbing = false;
+    public string id;
+    public int healthbar_id;
+    public int playernum;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         snm = GetComponent<SocketNetworkManager>();
         rb = GetComponent<Rigidbody2D>();
@@ -46,10 +50,10 @@ public class knightController : MonoBehaviour {
         sworddistance = (sword.transform.position - (Vector3)rb.position).magnitude;
         health = GetComponent<Health>();
         render = GetComponent<SpriteRenderer>();
-        healthbar = GameObject.FindWithTag("Health-bar");
-        healthbarback = GameObject.FindWithTag("Health-bar-background");
-        interfaceplayertext = GameObject.FindWithTag("Player-text").GetComponent<Text>();
-        interfaceplayertext.text = "You: Knight";
+        healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
+        interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
+        healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
+        interfaceplayertext.text = "Player " + healthbar_id;
         hbarupdatetime = 0;
         knocked = 0;
         forces = new List<Vector2>();
@@ -65,84 +69,73 @@ public class knightController : MonoBehaviour {
 
     void OnEnable()
     {
-
+        SocketNetworkManager.TakeDamageHandle += TakeDamageHandleH;
+        SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPosH;
+        SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandleH;
+        SocketNetworkManager.SpawnProjHandle += SpawnProjHandleH;
     }
 
     void OnDisable()
     {
-        forces.Clear();
+        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandleH;
+        SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPosH;
+        SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandleH;
+        SocketNetworkManager.SpawnProjHandle -= SpawnProjHandleH;
     }
 
-    void FixedUpdate()
+    void TakeDamageHandleH(string sender, float dmg)
     {
-        /* MOVEMENT */
-        // input x and y
-        float ix = Input.GetAxis("Horizontal");
-        float iy = Input.GetAxis("Vertical");
-
-        // get velocity input
-        var inputvelocity = new Vector2(ix, iy);
-
-        // later can add velocity vectors together for knockback and stuff
-        if (knocked == 0)
+        StartCoroutine(TakeDamageHandle(sender, dmg));
+    }
+    IEnumerator TakeDamageHandle(string sender, float dmg)
+    {
+        if (id == sender)
         {
-            rb.position = rb.position + inputvelocity * MOVEMENT_SPEED;
-            //rb.velocity = (inputvelocity*MOVEMENT_SPEED);
+            // display health, if dead, etc (knockback is handled on the other players client
+            TakeDamage(dmg, Vector2.zero);
         }
-        else
-        {
-            knocked--;
-        }
-
-        var forcesSum = new Vector2(0, 0);
-        foreach (Vector2 v in forces)
-        {
-            forcesSum += v;
-        }
-
-        rb.AddForce(forcesSum);
-        realvelocity = rb.velocity + inputvelocity;
-
-        forces.Clear();
+        yield break;
     }
 
-    // Update is called once per frame
-    void Update ()
+    void UpdateOtherPlayerPosH(string sender, float x, float y, float rx, float ry)
     {
-        /* ON HIT */
-        if (hit >= 0)
+        StartCoroutine(UpdateOtherPlayerPos(sender, x, y, rx, ry));
+    }
+    IEnumerator UpdateOtherPlayerPos(string sender, float x, float y, float rx, float ry)
+    {
+        if (id == sender)
         {
-            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit) / Mathf.Sqrt(25));
-            render.color = lerpedColor;
-            hit--;
+            Vector2 pos = transform.position;
+            pos.x = x;
+            pos.y = y;
+            transform.position = pos;
+
+            Vector2 direction = new Vector2(rx, ry);
+            float angle = Mathf.Atan2(direction.y, direction.x);
+
+            // use angle to rotate bow
+            shield.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
+            shield.transform.position = pos + -1 * direction.normalized * bowdistance;
+            sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
+            sword.transform.position = pos + -1 * direction.normalized * sworddistance;
         }
+        yield break;
+    }
 
-        /* ROTATION */
-        // get position of main sprite and mouse
-        Vector2 pos = rb.position;
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        // get directional vector and convert to angle
-        Vector2 direction = pos - mouse;
-        float angle = Mathf.Atan2(direction.y, direction.x);
-
-        // use angle to rotate sword, shield
-        shield.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
-        shield.transform.position = pos + -1 * direction.normalized * bowdistance;
-        sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
-        sword.transform.position = pos + -1 * direction.normalized * sworddistance;
-        
-        /* ABILITIES */
-        //double check how this works
-        while (gcd < 0)
+    void PlayerAnimHandleH(string sender, string name)
+    {
+        StartCoroutine(PlayerAnimHandle(sender, name));
+    }
+    IEnumerator PlayerAnimHandle(string sender, string name)
+    {
+        if (id == sender)
         {
-            //swap weapons
-            if (Input.GetKeyDown("q"))
+            // handle the weird way the bow works
+            if (name == "switch")
             {
-                snm.sendMessage("pa", "{ \"name\": \"" + "switch" + "\" }");
                 if (weapon == "shield")
                 {
-                    
+
                     weapon = "sword";
                     shield.GetComponent<SpriteRenderer>().enabled = false;
                     //shield.SetActive(false);
@@ -165,40 +158,47 @@ public class knightController : MonoBehaviour {
                     //    shield.transform.GetChild(i).gameObject.SetActive(true);
                 }
                 gcd = GLOBAL_CD;
-                break;
             }
-            if (Input.GetKey("e"))
+            else if (name == "stab")
             {
-                gcd = GLOBAL_CD;
-                break;
-            }
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                if (0 < 0)
-                {
-
-                }
-                gcd = GLOBAL_CD;
-                break;
-            }
-
-            /* ARROW */
-            if (Input.GetMouseButton(0))
-            {
-                if (!clicked)
-                {
-                    clicked = true;
-                }
-            }
-            else if (clicked)
-            {
-                snm.sendMessage("pa", "{ \"name\": \"" + "stab" + "\" }");
                 StartCoroutine(stabAnimation(10));
-                clicked = false;
-                gcd = GLOBAL_CD;
-                break;
             }
-            break;
+            // handle actual animations
+            else
+            {
+                // animation.Play(name)
+            }
+        }
+        yield break;
+    }
+
+    void SpawnProjHandleH(string sender, string name, Vector2 pos, Vector2 dir)
+    {
+        StartCoroutine(SpawnProjHandle(sender, name, pos, dir));
+    }
+    IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
+    {
+        if (id == sender)
+        {
+
+        }
+        yield break;
+    }
+
+    void FixedUpdate()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        /* ON HIT */
+        if (hit >= 0)
+        {
+            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit) / Mathf.Sqrt(25));
+            render.color = lerpedColor;
+            hit--;
         }
 
         /* HEALTH BAR */
@@ -210,13 +210,6 @@ public class knightController : MonoBehaviour {
         else
         {
             hbarupdatetime--;
-        }
-
-        if (Vector2.Distance(prevPos, rb.position) > 0.1f || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.1f), Vector2.right))
-        {
-            snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
-            prevPos = rb.position;
-            prevRot = direction;
         }
 
         gcd--;
@@ -266,7 +259,6 @@ public class knightController : MonoBehaviour {
         {
             dmg = dmg / 2;
         }
-        snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;

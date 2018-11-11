@@ -131,7 +131,6 @@ public class archerControllerOP : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
-        Debug.Log("took " + dmg + " damage");
         var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;

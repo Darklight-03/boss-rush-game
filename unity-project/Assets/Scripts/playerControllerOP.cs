@@ -65,7 +65,7 @@ public class playerControllerOP : MonoBehaviour {
         }
     }
 
-    void TakeDamage(float dmg)
+    public void TakeDamage(float dmg)
     {
         snm.logText("The boss took " + dmg + " damage");
         var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);

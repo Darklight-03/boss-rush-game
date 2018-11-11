@@ -26,7 +26,5 @@ public class shieldController : MonoBehaviour {
         {
             Physics2D.IgnoreCollision((Collider2D)shield, (Collider2D)collision.gameObject.GetComponent<BoxCollider2D>());
         }
-
-
     }
 }
