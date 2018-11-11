@@ -114,10 +114,18 @@ public class archerController : MonoBehaviour {
         /* ABILITIES */
         GameObject[] icons = GameObject.FindGameObjectsWithTag("ability-icons");
         List<cooldown> cds = new List<cooldown>();
-        glcd = new cooldown("auto",GLOBAL_CD,"LMouse",icons[0]);
+        glcd = new cooldown("auto",GLOBAL_CD,"LMB",icons[0]);
         cds.Add(glcd);
-        dashcd = new cooldown("dash",DASH_CD,"RShift",icons[1]);
+        dashcd = new cooldown("dash",DASH_CD,"LShift",icons[1]);
         cds.Add(dashcd);
+
+        /* SET CD TEXT */
+        cds.ForEach(delegate(cooldown c){
+            Text t = c.go.GetComponentInChildren(typeof(Text)) as Text;
+            t.text = c.key;
+        });
+
+        /* GLOBAL CD */
         globalcd = new cooldown(GLOBAL_CD,icons);
         cds.Add(globalcd);
         StartCoroutine(cdUpdater(cds));

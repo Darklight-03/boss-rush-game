@@ -18,6 +18,7 @@ TagManager:
   - P2-name
   - P2-health
   - P2-healthbg
+  - ability-icons
   layers:
   - Default
   - TransparentFX
