@@ -48,7 +48,9 @@ public class GameManager : MonoBehaviour {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
         }
         else
+        {
             boss = Instantiate(Resources.Load<GameObject>("bossOP"), new Vector2(-2, 2), Quaternion.identity, t);
+        }
     }
 
 	
