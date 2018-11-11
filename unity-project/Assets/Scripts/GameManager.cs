@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour {
             }
             else if (cl == 1)
             {
+                Debug.Log(num);
                 player2.GetComponent<knightControllerOP>().playernum = num;
                 player2.GetComponent<knightControllerOP>().id = id;
                 player2.GetComponent<knightControllerOP>().healthbar_id = 1;
@@ -97,6 +98,7 @@ public class GameManager : MonoBehaviour {
             }
             else if (cl == 1)
             {
+                Debug.Log(num);
                 player3.GetComponent<knightControllerOP>().playernum = num;
                 player3.GetComponent<knightControllerOP>().id = id;
                 player3.GetComponent<knightControllerOP>().healthbar_id = 2;
