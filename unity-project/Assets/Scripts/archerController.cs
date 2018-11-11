@@ -43,7 +43,7 @@ public class cooldown{
         nextavailable = Time.time + cd;
     }
     public float getRatio(){
-        return (nextavailable-Time.time)/cd;
+        return ((nextavailable-Time.time)/cd)*0.75f + 0.25f;
     }
 }
 
