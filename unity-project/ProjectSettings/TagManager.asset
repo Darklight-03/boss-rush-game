@@ -19,6 +19,7 @@ TagManager:
   - P2-health
   - P2-healthbg
   - Boss
+  - knightsword
   layers:
   - Default
   - TransparentFX
