@@ -48,7 +48,6 @@ public class Menu_buttons : MonoBehaviour {
 
     public void dropdownchk()
     {
-
         if (droplist.value != droplistprev)
         {
             droplistprev = droplist.value;
