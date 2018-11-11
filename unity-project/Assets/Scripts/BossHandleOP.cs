@@ -39,6 +39,7 @@ public class BossHandleOP : MonoBehaviour
         render = GetComponent<SpriteRenderer>();
         imageO = gameObject.transform.GetChild(2).gameObject;
         image = (RectTransform)gameObject.transform.GetChild(2);
+        daoguang = gameObject.transform.GetChild(0).gameObject;
         bossname = GameObject.FindWithTag("Boss-name").GetComponent<Text>();
         healthbar = GameObject.FindWithTag("Boss-health");
         healthbarbg = GameObject.FindWithTag("Boss-healthbh");
