@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     GameObject player3;
     GameObject boss;
     GameObject obstacle1;
+    public GameObject StartGameButton;
     private bool gameStarted = false;
     private List<Vector2> playerInitPos = new List<Vector2>(3);
     private List<string> playerClasses = new List<string>();
@@ -22,25 +23,35 @@ public class GameManager : MonoBehaviour {
         t = GetComponent<Transform>();
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
         //boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
-        SocketNetworkManager.NewPlayerHandle += NewPlayerHandle;
-        SocketNetworkManager.StartGameHandle += StartGameHandle;
+
         playerInitPos.Add(new Vector2(2, -2));
         playerInitPos.Add(new Vector2(0, -2));
         playerInitPos.Add(new Vector2(-2, -2));
         playerClasses.Add("ArcherOP");
         playerClasses.Add("KnightOP");
         playerClasses.Add("PriestOP");
+        if (SocketNetworkManager.isHost)
+            StartGameButton.SetActive(true);
     }
 
-    private void OnDestroy()
+    private void OnEnable()
     {
-        SocketNetworkManager.NewPlayerHandle -= NewPlayerHandle;
+        SocketNetworkManager.StartGameHandle += StartGameHandle;
+    }
+
+    private void OnDisable()
+    {
         SocketNetworkManager.StartGameHandle -= StartGameHandle;
     }
 
     void StartGame()
     {
         gameStarted = true;
+        for (int i = 0; i < SocketNetworkManager.newplayers.Count; i++)
+        {
+            newPly t = SocketNetworkManager.newplayers.Dequeue();
+            StartPlayer(t.theirid, t.cl, t.theirnum);
+        }
         //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
@@ -56,26 +67,6 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        bool lDown = Input.GetKeyDown(KeyCode.L);
-        bool oDown = Input.GetKeyDown(KeyCode.O);
-        bool pDown = Input.GetKeyDown(KeyCode.P);
-
-        if (lDown && SocketNetworkManager.isHost)
-        {
-            //Debug.Log("l Pressed");
-            snm.sendMessage("sg", "{ }");
-            StartGame();
-        }
-        if (oDown)
-        {
-            //Debug.Log("o Pressed");
-            snm.createLobby();
-        }
-        if (pDown)
-        {
-            //Debug.Log("p Pressed");
-            snm.joinLobby(0);
-        }
     }
 
     void StartPlayer(string id, int cl, int num)
@@ -99,18 +90,18 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    IEnumerator NewPlayerHandle(string id, int cl, int num)
-    {
-        Debug.Log("new player joined lobby");
-        yield return new WaitUntil(() => gameStarted);
-        StartPlayer(id, cl, num);
-        yield return null;
-    }
 
     IEnumerator StartGameHandle()
     {
         StartGame();
         yield return null;
+    }
+
+    public void OnStartButtonPress()
+    {
+        StartGameButton.SetActive(false);
+        snm.sendMessage("sg", "{ }");
+        StartGame();
     }
 }
 

@@ -114,11 +114,9 @@ public class playerController : MonoBehaviour {
         {
             if (animation.IsPlaying("huijian"))
             {
-                Debug.Log("waiting for anim to finish");
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(0.7f);
             }
             yield return new WaitUntil(() => (transform.position - GameObject.FindWithTag("Player").transform.position).magnitude < 3);
-            Debug.Log("sending");
             snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
             animation.Play("huijian");
             yield return new WaitForEndOfFrame();
@@ -136,7 +134,7 @@ public class playerController : MonoBehaviour {
 
     void TakeDamage(float dmg)
     {
-
+        snm.logText("The boss took " + dmg + " damage");
         var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
