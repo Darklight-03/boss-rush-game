@@ -171,7 +171,6 @@ public class BossHandleOP : MonoBehaviour
         health.enabled = false;
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
-            Debug.Log(gameObject.transform.GetChild(i).gameObject.name);
             gameObject.transform.GetChild(i).gameObject.SetActive(false);
         }
         //render.enabled = false;

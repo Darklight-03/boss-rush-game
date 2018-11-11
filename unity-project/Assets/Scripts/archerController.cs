@@ -229,7 +229,6 @@ public class archerController : MonoBehaviour {
       Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i)-10)/10);
       render.color = c;
       Vector3 curpos = Vector3.Lerp(opos,mpos,(float)i/10);
-      Debug.Log(Mathf.Abs(Mathf.Abs(i)-15));
       rb.position = curpos;
       yield return null;
     }
