@@ -32,6 +32,7 @@ public class knightController : MonoBehaviour {
     int hit;
     private Vector2 prevPos = new Vector2(0, 0);
     private Vector2 prevRot = new Vector2(0, 0);
+    string weapon;
 
     // Use this for initialization
     void Start ()
@@ -56,6 +57,10 @@ public class knightController : MonoBehaviour {
         invincible = false;
         healthbarsize = healthbar.transform.localScale;
         hit = 0;
+        weapon = "shield";
+        //at start of game, knight has shield enabled by default
+        shield.GetComponent<SpriteRenderer>().enabled = true;
+        sword.GetComponent<SpriteRenderer>().enabled = false;
     }
 
     void OnEnable()
@@ -125,14 +130,28 @@ public class knightController : MonoBehaviour {
         shield.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
         shield.transform.position = pos + -1 * direction.normalized * bowdistance;
         sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
-        sword.transform.position = pos + -0.5f * (new Vector2(direction.normalized.y, direction.normalized.x));
+        sword.transform.position = pos + -1 * direction.normalized * sworddistance;
+        //sword.transform.position = pos + -0.5f * (new Vector2(direction.normalized.y, direction.normalized.x));
         /* ABILITIES */
         //double check how this works
         while (gcd < 0)
         {
-            //shield
+            //swap weapons
             if (Input.GetKey("q"))
             {
+                if (weapon == "shield")
+                {
+                    weapon = "sword";
+                    shield.GetComponent<SpriteRenderer>().enabled = false;
+                    sword.GetComponent<SpriteRenderer>().enabled = true;
+
+                }
+                else
+                {
+                    weapon = "shield";
+                    sword.GetComponent<SpriteRenderer>().enabled = false;
+                    shield.GetComponent<SpriteRenderer>().enabled = true;
+                }
                 gcd = GLOBAL_CD;
                 break;
             }
