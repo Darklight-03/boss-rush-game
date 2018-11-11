@@ -24,6 +24,7 @@ public class BossHandle : MonoBehaviour
     public Animation animation;
     public GameObject daoguang;
     public RectTransform image;
+    private GameObject imageO;
     public bool state;
     public GameObject player;
     public GameObject[] gameObjects;
@@ -38,6 +39,7 @@ public class BossHandle : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         health = GetComponent<Health>();
         render = GetComponent<SpriteRenderer>();
+        imageO = gameObject.transform.GetChild(2).gameObject;
         bossname = GameObject.FindWithTag("Boss-name").GetComponent<Text>();
         healthbar = GameObject.FindWithTag("Boss-health");
         healthbarbg = GameObject.FindWithTag("Boss-healthbh");
@@ -77,19 +79,18 @@ public class BossHandle : MonoBehaviour
 
     void TakeDamage(float dmg)
     {
-
-        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
         hbarupdatetime = 20;
 
         if (health.TakeDamage(10))
         {
-            damageAnimation();
+            StartCoroutine(damageAnimation());
         }
         else
         {
-            Destroy(this.gameObject);
+            Dead();
         }
         // do stuff only for the circle collider
     }
@@ -99,9 +100,22 @@ public class BossHandle : MonoBehaviour
         for (int i = 10; i > 0; i--)
         {
             Color lerp = Color.Lerp(Color.white, Color.red, (float)i / 10);
-            render.color = lerp;
+            imageO.GetComponent<Image>().color = lerp;
             yield return null;
         }
+    }
+
+    void Dead()
+    {
+        healthbarbg.transform.localScale = healthbar.transform.localScale;
+        health.enabled = false;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            Debug.Log(gameObject.transform.GetChild(i).gameObject.name);
+            gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        //render.enabled = false;
+        this.gameObject.SetActive(false);
     }
 
     // called in fixed interval
@@ -179,6 +193,16 @@ public class BossHandle : MonoBehaviour
             Invoke("ChangeStae", 1f);
         }
 
+        /* HEALTH BAR */
+        if (hbarupdatetime == 0)
+        {
+            healthbarbg.transform.localScale = healthbar.transform.localScale;
+            hbarupdatetime = 100;
+        }
+        else
+        {
+            hbarupdatetime--;
+        }
     }
     public void PlayGameeffects()
     {

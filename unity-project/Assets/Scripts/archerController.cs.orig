@@ -240,7 +240,7 @@ public class archerController : MonoBehaviour {
   // revived
   void Dead(){
     bowrender.enabled = false;
-    //health.enabled = false;
+    health.enabled = false;
     render.enabled = false;
     enabled = false;
   }
@@ -261,8 +261,9 @@ public class archerController : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
+        Debug.Log("took " + dmg + " damage");
         snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
-        var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
+        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
         hbarupdatetime = 20;
@@ -272,7 +273,11 @@ public class archerController : MonoBehaviour {
         }
         else
         {
+<<<<<<< HEAD
             applyForce(dir);
+=======
+            //applyForce(dir);
+>>>>>>> networking
             knocked = 20;
         }
     }
