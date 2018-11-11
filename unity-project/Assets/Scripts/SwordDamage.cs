@@ -24,6 +24,7 @@ public class SwordDamage : MonoBehaviour {
             }
             else if (player.name == "Knight(Clone)")
             {
+                Debug.Log("damaged knight");
                 player.GetComponent<knightController>().TakeDamage(10, Vector2.zero);
             }
             else if (player.name == "Priest(Clone)")
