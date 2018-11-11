@@ -18,6 +18,7 @@ public class playerControllerOP : MonoBehaviour {
     int hit;
     int hbarupdatetime;
     Vector3 healthbarsize;
+    public RectTransform image;
 
 
     // Use this for initialization
@@ -33,6 +34,7 @@ public class playerControllerOP : MonoBehaviour {
         healthbarbg = GameObject.FindWithTag("Boss-healthbh");
         hit = 0;
         healthbarsize = healthbar.transform.localScale;
+        image = this.GetComponentInChildren<RectTransform>();
     }
 
     private void OnEnable()
@@ -73,7 +75,7 @@ public class playerControllerOP : MonoBehaviour {
 
         if (health.TakeDamage(10))
         {
-            damageAnimation();
+            StartCoroutine(damageAnimation());
         }
         else
         {

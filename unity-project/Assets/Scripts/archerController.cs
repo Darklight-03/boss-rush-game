@@ -236,14 +236,16 @@ public class archerController : MonoBehaviour {
   }
 
 
-  // makes player invisible and unresponsive so that they could potentially be
-  // revived
-  void Dead(){
-    bowrender.enabled = false;
-    //health.enabled = false;
-    render.enabled = false;
-    enabled = false;
-  }
+    // makes player invisible and unresponsive so that they could potentially be
+    // revived
+    void Dead()
+    {
+        healthbarback.transform.localScale = healthbar.transform.localScale;
+        bowrender.enabled = false;
+        health.enabled = false;
+        render.enabled = false;
+        enabled = false;
+    }
 
 
     // simply adds a force to the list to be applied next update.
@@ -272,7 +274,7 @@ public class archerController : MonoBehaviour {
         }
         else
         {
-            applyForce(dir);
+            //applyForce(dir);
             knocked = 20;
         }
     }

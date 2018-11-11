@@ -19,6 +19,9 @@ public class playerController : MonoBehaviour {
     int hit;
     int hbarupdatetime;
     Vector3 healthbarsize;
+    Transform sword;
+    public GameObject[] gameObjects;
+    public RectTransform image;
 
 
     // Use this for initialization
@@ -67,6 +70,18 @@ public class playerController : MonoBehaviour {
     {
         GameObject player = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
+        float temp = float.MaxValue - 1000;
+        foreach (GameObject g in gameObjects)
+        {
+            Vector2 vg1 = g.transform.position;
+            float max1 = (v1 - vg1).magnitude;
+            if (max1 < temp)
+            {
+                temp = max1;
+                player = g;
+            }
+        }
+
         Vector2 v2 = player.transform.position;
 
         //rb.velocity = v2 - v1;

@@ -145,7 +145,11 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
   m_AnchoredPosition: {x: 13, y: 292}
+=======
+  m_AnchoredPosition: {x: 13, y: 277.69998}
+>>>>>>> master
   m_SizeDelta: {x: 197.7, y: 37.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &299900169
@@ -654,7 +658,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 998169653}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+<<<<<<< HEAD
   m_LocalPosition: {x: -78.50003, y: 262.30002, z: -3215.6}
+=======
+  m_LocalPosition: {x: -78.50003, y: 248, z: -3215.6}
+>>>>>>> master
   m_LocalScale: {x: 288.00043, y: 23.99993, z: 5.999879}
   m_Children: []
   m_Father: {fileID: 1564335459}
@@ -804,8 +812,13 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1140234300}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+<<<<<<< HEAD
   m_LocalPosition: {x: -438, y: 7.2, z: -2876.642}
   m_LocalScale: {x: 872.65826, y: 727.2152, z: 727.2152}
+=======
+  m_LocalPosition: {x: -867, y: 26, z: -2876.6}
+  m_LocalScale: {x: 2076.9265, y: 1730.7722, z: 1730.7722}
+>>>>>>> master
   m_Children: []
   m_Father: {fileID: 1564335459}
   m_RootOrder: 3
@@ -1256,7 +1269,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -1491,7 +1504,11 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1925482114}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+<<<<<<< HEAD
   m_LocalPosition: {x: -78.49999, y: 262.30002, z: -3215.6}
+=======
+  m_LocalPosition: {x: -78.49999, y: 248, z: -3215.6}
+>>>>>>> master
   m_LocalScale: {x: 288, y: 23.99993, z: 5.999879}
   m_Children: []
   m_Father: {fileID: 1564335459}

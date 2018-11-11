@@ -183,9 +183,6 @@ public class SocketNetworkManager : MonoBehaviour
                                     SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
                                 break;
 
-                            case "bd": // boss dead
-
-
                             default:
                                 Debug.Log("unknown general message type");
                                 break;
