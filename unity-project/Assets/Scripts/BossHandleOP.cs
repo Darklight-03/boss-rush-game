@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class BossHandle : MonoBehaviour
+public class BossHandleOP : MonoBehaviour
 {
     private SocketNetworkManager snm;
     private Rigidbody2D rb;
@@ -11,8 +11,6 @@ public class BossHandle : MonoBehaviour
     private GameObject healthbar;
     private GameObject healthbarbg;
     private Text bossname;
-    private Vector2 prevv1;
-    private Vector2 prevv2;
     SpriteRenderer render;
     public Health health;
     int hit;
@@ -43,8 +41,6 @@ public class BossHandle : MonoBehaviour
         healthbarbg = GameObject.FindWithTag("Boss-healthbh");
         hit = 0;
         healthbarsize = healthbar.transform.localScale;
-        gameObjects = GameObject.FindGameObjectsWithTag("Player");
-        player = GameObject.FindWithTag("Player");//delete after merge
         gameObject.transform.parent = canvas;
         gameObject.GetComponent<RectTransform>().localScale = new Vector3(25.0f, 25.0f, 25.0f);
         gameObject.GetComponent<RectTransform>().localPosition = Vector3.one;
@@ -52,12 +48,86 @@ public class BossHandle : MonoBehaviour
 
     private void OnEnable()
     {
+        SocketNetworkManager.UpdateBossPositionHandle += UpdateBossPositionHandle;
+        SocketNetworkManager.BossAnimHandle += BossAnimHandle;
         SocketNetworkManager.DealDamageHandle += DealDamageHandleH;
     }
 
     private void OnDisable()
     {
+        SocketNetworkManager.UpdateBossPositionHandle -= UpdateBossPositionHandle;
+        SocketNetworkManager.BossAnimHandle -= BossAnimHandle;
         SocketNetworkManager.DealDamageHandle -= DealDamageHandleH;
+    }
+
+    IEnumerator UpdateBossPositionHandle(float x, float y, float rx, float ry)
+    {
+        Vector2 v1 = new Vector2(x, y);
+        Vector2 v2 = new Vector2(rx, ry);
+        transform.position = v1;
+
+        if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
+        {
+            if (v2.x > v1.x)
+            {
+                this.transform.localEulerAngles = new Vector3(0, 0, 0);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
+                image.localEulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                this.transform.localEulerAngles = new Vector3(0, 180f, 0);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                image.localEulerAngles = new Vector3(0, 180, 0);
+            }
+        }
+        else
+        {
+            if (v2.y > v1.y)
+            {
+                this.transform.localEulerAngles = new Vector3(0, 0, 90f);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
+                image.localEulerAngles = new Vector3(0, 0, -90);
+            }
+            else
+            {
+                this.transform.localEulerAngles = new Vector3(0, 0, -90f);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                image.localEulerAngles = new Vector3(0, 0, 90);
+            }
+        }
+        yield break;
+    }
+
+    IEnumerator BossAnimHandle(string name)
+    {
+        if (name == "huijian")
+        {
+            animation.Play("huijian");
+
+            state = false;
+            Invoke("PlayGameeffects", 0.3f);
+            Invoke("ChangeState", 1f);
+        }
+        else
+        {
+            animation.Play(name);
+        }
+        yield break;
+    }
+
+    public void PlayGameeffects()
+    {
+        daoguang.SetActive(true);
+        Invoke("CloseGameeffects", 0.2f);
+    }
+    public void CloseGameeffects()
+    {
+        daoguang.SetActive(false);
+    }
+    public void ChangeState()
+    {
+        state = true;
     }
 
     void DealDamageHandleH(string sender, float dmg, Vector2 dir)
@@ -66,12 +136,9 @@ public class BossHandle : MonoBehaviour
     }
     IEnumerator DealDamageHandle(string sender, float dmg, Vector2 dir)
     {
-        if (sender != SocketNetworkManager.id)
-        {
-            // dir could be used for knockback or something like that.
-            // display health, if dead, etc
-            TakeDamage(dmg);
-        }
+        // dir could be used for knockback or something like that.
+        // display health, if dead, etc
+        TakeDamage(dmg);
         yield break;
     }
 
@@ -107,92 +174,13 @@ public class BossHandle : MonoBehaviour
     // called in fixed interval
     void FixedUpdate()
     {
-        Vector2 v1 = transform.position;
-        float temp = float.MaxValue - 1000;
-        foreach (GameObject g in gameObjects)
-        {
-            Vector2 vg1 = g.transform.position;
-            float max1 = (v1 - vg1).magnitude;
-            if(max1 < temp)
-            {
-                temp = max1;
-                player = g;
-            }
-        }
-
-       
-        Vector2 v2 = player.transform.position;
-        rb.velocity = v2 - v1;
-
-        if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
-        {
-            if (v2.x > v1.x)
-            {
-                this.transform.localEulerAngles = new Vector3(0, 0, 0);
-                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                image.localEulerAngles = new Vector3(0, 0, 0);
-            }
-            else
-            {
-                this.transform.localEulerAngles = new Vector3(0, 180f, 0);
-                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                image.localEulerAngles = new Vector3(0, 180, 0);
-            }
-        }
-        else
-        {
-            if (v2.y > v1.y)
-            {
-                this.transform.localEulerAngles = new Vector3(0, 0, 90f);
-                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                image.localEulerAngles = new Vector3(0, 0, -90);
-            }
-            else
-            {
-                this.transform.localEulerAngles = new Vector3(0, 0, -90f);
-                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                image.localEulerAngles = new Vector3(0, 0, 90);
-            }
-        }
-
-        if (Vector2.Distance(prevv1, v1) > 0.1f || Vector2.Distance(prevv2, v2) > 0.1f)
-        {
-            snm.sendMessage("bp", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
-            prevv1 = v1;
-            prevv2 = v2;
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //player = GameObject.FindWithTag("Player");
-        Vector2 v1 = transform.position;
-        Vector2 v2 = player.transform.position;
-        if ((v1 - v2).magnitude < 3 && state)
-        {
-            snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
-            animation.Play("huijian");
-            
-            state = false;
-            Invoke("PlayGameeffects", 0.3f);
-            Invoke("ChangeStae", 1f);
-        }
+    }
 
-    }
-    public void PlayGameeffects()
-    {
-        daoguang.SetActive(true);
-        Invoke("CloseGameeffects", 0.2f);
-    }
-    public void CloseGameeffects()
-    {
-        daoguang.SetActive(false);
-    }
-    public void ChangeStae()
-    {
-        state = true;
-    }
 
     void OnTriggerEnter2D(Collider2D collider)
     {

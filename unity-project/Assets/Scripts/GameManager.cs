@@ -6,7 +6,6 @@ using System;
 public class GameManager : MonoBehaviour {
 
     private Transform t;
-    private Transform canvas;
     private SocketNetworkManager snm;
     GameObject player;
     GameObject player2;
@@ -19,7 +18,6 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        canvas = GameObject.Find("Canvas").transform;
         snm = GetComponent<SocketNetworkManager>();
         t = GetComponent<Transform>();
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread"), t);
@@ -48,9 +46,6 @@ public class GameManager : MonoBehaviour {
         if (SocketNetworkManager.isHost)
         {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
-            boss.transform.parent = canvas;
-            boss.GetComponent<RectTransform>().localScale = new Vector3(32.0f, 32.0f, 32.0f);
-            boss.GetComponent<RectTransform>().localPosition = Vector3.one;
         }
         else
             boss = Instantiate(Resources.Load<GameObject>("bossOP"), new Vector2(-2, 2), Quaternion.identity, t);
