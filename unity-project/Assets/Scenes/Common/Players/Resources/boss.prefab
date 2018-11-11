@@ -84,7 +84,7 @@ GameObject:
   - component: {fileID: 114673884790363644}
   - component: {fileID: 61461019439035100}
   m_Layer: 0
-  m_Name: bossBackup
+  m_Name: boss
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
