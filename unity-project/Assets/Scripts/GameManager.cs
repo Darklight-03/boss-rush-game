@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour {
 
     void StartPlayer(string id, int cl, int num)
     {
+        cl = 1;
         // argument will specify class later
         if (player2 == null)
         {
