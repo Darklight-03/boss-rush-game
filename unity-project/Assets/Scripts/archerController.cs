@@ -320,7 +320,7 @@ public class archerController : MonoBehaviour {
           }else if(clicked){ 
             bowrender.sprite = f1;
             snm.sendMessage("playeranimation", "{ \"name\": \"" + "drawbow" + "\" }");
-            snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
+            snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + bow.transform.rotation.x + ", \"ry\": " + bow.transform.rotation.y + " }");
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;
