@@ -225,7 +225,7 @@ public class archerControllerOP : MonoBehaviour {
         if (id == sender)
         {
             // for now just do arrows, name could specify the projectile
-            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, rot, GetComponent<Transform>());
+            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, rot);
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
         }
         yield break;
