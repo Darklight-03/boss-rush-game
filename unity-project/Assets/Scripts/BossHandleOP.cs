@@ -219,7 +219,7 @@ public class BossHandleOP : MonoBehaviour
         {
             Destroy(collider.gameObject);
             TakeDamage(10);
-            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
+            snm.sendMessage("dealdamage", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
 
             // do stuff only for the circle collider
         }

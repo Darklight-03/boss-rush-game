@@ -76,7 +76,7 @@ public class Menu_buttons : MonoBehaviour {
                 droplist.options.Add(new Dropdown.OptionData());
             }
             string newtext = "";
-            newtext += (i + 1) + ". " + listoflobbies[i].players + "/3 players";
+            newtext += (i + 1) + ". " + listoflobbies[i].name + ": " + listoflobbies[i].players + "/3 players";
             droplist.options[i].text = newtext;
         }
         if (droplist.options.Count > listoflobbies.Length)

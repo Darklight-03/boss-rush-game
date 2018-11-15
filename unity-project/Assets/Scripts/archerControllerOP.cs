@@ -102,12 +102,16 @@ public class archerControllerOP : MonoBehaviour {
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
-    void Dead()
+     void Dead()
     {
-        bowrender.enabled = false;
+        healthbarbg.transform.localScale = healthbar.transform.localScale;
         health.enabled = false;
-        render.enabled = false;
-        enabled = false;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        //render.enabled = false;
+        this.gameObject.SetActive(false);
     }
 
 
@@ -233,7 +237,6 @@ public class archerControllerOP : MonoBehaviour {
         {
             Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i) - 10) / 10);
             render.color = c;
-            Debug.Log(Mathf.Abs(Mathf.Abs(i) - 15));
             yield return null;
         }
     }

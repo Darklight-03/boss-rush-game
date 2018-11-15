@@ -36,9 +36,6 @@ public class PlayerCollision : MonoBehaviour {
             //{
             //    //collision.gameObject.GetComponent<priestController>().TakeDamage(10, dir);
             //}
-            
         }
-
-
     }
 }

@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour {
     public void OnStartButtonPress()
     {
         StartGameButton.SetActive(false);
-        snm.sendMessage("sg", "{ }");
+        snm.sendMessage("startgame", "{ }");
         StartGame();
     }
 }

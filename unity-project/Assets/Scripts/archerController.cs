@@ -315,12 +315,12 @@ public class archerController : MonoBehaviour {
             if(!clicked){
               clicked = true;
               bowrender.sprite = f2;
-              snm.sendMessage("pa", "{ \"name\": \"" + "relebow" + "\" }");
+              snm.sendMessage("playeranimation", "{ \"name\": \"" + "relebow" + "\" }");
             }
           }else if(clicked){ 
             bowrender.sprite = f1;
-            snm.sendMessage("pa", "{ \"name\": \"" + "drawbow" + "\" }");
-            snm.sendMessage("sp", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
+            snm.sendMessage("playeranimation", "{ \"name\": \"" + "drawbow" + "\" }");
+            snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;
@@ -343,7 +343,7 @@ public class archerController : MonoBehaviour {
 
         if (Vector2.Distance(prevPos, rb.position) > 0.1f || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.1f), Vector2.right))
         {
-            snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
+            snm.sendMessage("playerposition", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
             prevPos = rb.position;
             prevRot = direction;
         }
@@ -361,7 +361,7 @@ public class archerController : MonoBehaviour {
     // 
   }
   void dash(Vector2 direction){
-    snm.sendMessage("pa", "{ \"name\": \"" + "dashanim" + "\" }");
+    snm.sendMessage("playeranimation", "{ \"name\": \"" + "dashanim" + "\" }");
     float m = direction.magnitude;
     var v = direction.normalized;
     if(m>MAX_DASH){ 
@@ -385,13 +385,16 @@ public class archerController : MonoBehaviour {
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
-    void Dead()
+     void Dead()
     {
-        healthbarback.transform.localScale = healthbar.transform.localScale;
-        bowrender.enabled = false;
+        healthbarbg.transform.localScale = healthbar.transform.localScale;
         health.enabled = false;
-        render.enabled = false;
-        enabled = false;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        //render.enabled = false;
+        this.gameObject.SetActive(false);
     }
 
 
@@ -410,7 +413,7 @@ public class archerController : MonoBehaviour {
     // a knockback force given by dir
     public void TakeDamage(float dmg, Vector2 dir)
     {
-        snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
+        snm.sendMessage("takedamage", "{ \"dmg\": " + dmg + " }");
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;

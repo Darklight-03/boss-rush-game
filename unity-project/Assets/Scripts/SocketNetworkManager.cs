@@ -15,7 +15,7 @@ public class SocketNetworkManager : MonoBehaviour
     private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
     public static Queue<newPly> newplayers = new Queue<newPly>();
-    public static int numberofplayers = 0;
+    public static int numberofplayers = 1;
     private static Queue<string> logqueue = new Queue<string>();
     private static PlayerLog eventLog;
 
@@ -184,48 +184,48 @@ public class SocketNetworkManager : MonoBehaviour
                         genMess gms = JsonUtility.FromJson<genMess>(msgo.content);
                         switch (gms.ct)
                         {
-                            case "pp": // player position
+                            case "playerposition": // player position
                                 playerPos pp = JsonUtility.FromJson<playerPos>(gms.content);
                                 if (UpdateOtherPlayerPos != null)
                                     UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry);
                                 break;
 
-                            case "sg": // start game
+                            case "startgame": // start game
                                 if (StartGameHandle != null)
                                     StartCoroutine(StartGameHandle());
                                 break;
 
-                            case "td": // take damage (from boss)
+                            case "takedamage": // (from boss)
                                 opTakeDam otd = JsonUtility.FromJson<opTakeDam>(gms.content);
                                 if (TakeDamageHandle != null)
                                     TakeDamageHandle(gms.sender, otd.dmg);
                                 break;
 
-                            case "dd": // deal damage (to boss)
+                            case "dealdamage": // (to boss)
                                 opDealDam odd = JsonUtility.FromJson<opDealDam>(gms.content);
                                 if (DealDamageHandle != null)
                                     DealDamageHandle(gms.sender, odd.dmg, new Vector2(odd.dirx, odd.diry));
                                 break;
 
-                            case "bp": // boss position
+                            case "bossposition": // boss position
                                 bossPos bp = JsonUtility.FromJson<bossPos>(gms.content);
                                 if (UpdateBossPositionHandle != null)
                                     StartCoroutine(UpdateBossPositionHandle(bp.x, bp.y, bp.rx, bp.ry));
                                 break;
 
-                            case "pa": // player animation
+                            case "playeranimation": // player animation
                                 playerAnim pa = JsonUtility.FromJson<playerAnim>(gms.content);
                                 if (PlayerAnimHandle != null)
                                     PlayerAnimHandle(gms.sender, pa.name);
                                 break;
 
-                            case "ba": // boss animation
+                            case "bossanimation": // boss animation
                                 bossAnim ba = JsonUtility.FromJson<bossAnim>(gms.content);
                                 if (BossAnimHandle != null)
                                     StartCoroutine(BossAnimHandle(ba.name));
                                 break;
 
-                            case "sp": // spawn projectile
+                            case "spawnprojectile": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
                                 if (SpawnProjHandle != null)
                                     SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
@@ -297,6 +297,7 @@ public class genMess
 public class lobbyInfo
 {
     public int players;
+		public string name;
 }
 
 [Serializable]
