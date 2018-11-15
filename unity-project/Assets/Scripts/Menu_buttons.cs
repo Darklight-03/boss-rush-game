@@ -136,7 +136,7 @@ public class Menu_buttons : MonoBehaviour {
 				if (lobbyname == "")
 				{
 						Text lcre = LobbyCreateErrorText.GetComponent<Text>();
-            lcre.text = "Please enter a lobby name";
+            lcre.text = "Please enter a name";
 				}
 				else
 				{
@@ -144,9 +144,9 @@ public class Menu_buttons : MonoBehaviour {
 				}
     }
 
-		public void OnEndEdit(string afteredit)
+		public void OnEndEdit(Text afteredit)
 		{
-				lobbyname = afteredit;
+				lobbyname = afteredit.text;
 		}
 
     public void GoToSelectedLobby()
