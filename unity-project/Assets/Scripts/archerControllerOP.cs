@@ -216,16 +216,16 @@ public class archerControllerOP : MonoBehaviour {
         yield break;
     }
 
-    void SpawnProjHandleH(string sender, string name, Vector2 pos, Vector2 dir)
+    void SpawnProjHandleH(string sender, string name, Vector2 pos, Vector2 dir, Quaternion rot)
     {
-        StartCoroutine(SpawnProjHandle(sender, name, pos, dir));
+        StartCoroutine(SpawnProjHandle(sender, name, pos, dir, rot));
     }
-    IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
+    IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir, Quaternion rot)
     {
         if (id == sender)
         {
             // for now just do arrows, name could specify the projectile
-            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, new Quaternion(dir.x, dir.y, 0, 0), GetComponent<Transform>());
+            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, rot, GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
         }
         yield break;

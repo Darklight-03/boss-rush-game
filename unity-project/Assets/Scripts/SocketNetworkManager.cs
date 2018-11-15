@@ -15,7 +15,7 @@ public class SocketNetworkManager : MonoBehaviour
     private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
     public static Queue<newPly> newplayers = new Queue<newPly>();
-    public static int numberofplayers = 1;
+    public static int numberofplayers = 0;
     private static Queue<string> logqueue = new Queue<string>();
     private static PlayerLog eventLog;
 
@@ -53,7 +53,7 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator BossAnimRes(string name);
     public static event BossAnimRes BossAnimHandle;
 
-    public delegate void SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir);
+    public delegate void SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir, Quaternion rot);
     public static event SpawnProjRes SpawnProjHandle;
 
     public delegate IEnumerator BossDeadRes();
@@ -228,7 +228,7 @@ public class SocketNetworkManager : MonoBehaviour
                             case "spawnprojectile": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
                                 if (SpawnProjHandle != null)
-                                    SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
+                                    SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.dx, sp.dy), new Quaternion(sp.rx, sp.ry, sp.rz, sp.rw));
                                 break;
 
                             default:
@@ -356,6 +356,10 @@ public class spawnProj
     public string name;
     public float x;
     public float y;
+	public float dx;
+	public float dy;
     public float rx;
     public float ry;
+	public float rz;
+	public float rw;
 }
