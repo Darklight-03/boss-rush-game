@@ -146,6 +146,11 @@ public class Menu_buttons : MonoBehaviour {
 
 		public void OnEndEdit(Text afteredit)
 		{
+				if (afteredit.text.Length > 10) {
+						Text lcre = LobbyCreateErrorText.GetComponent<Text>();
+            lcre.text = "Max length 10";
+						afteredit.text = afteredit.text.Remove(10);
+				}
 				lobbyname = afteredit.text;
 		}
 
