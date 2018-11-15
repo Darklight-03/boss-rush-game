@@ -15,6 +15,7 @@ public class Menu_buttons : MonoBehaviour {
     Dropdown droplist;
     int droplistprev = 55;
     SocketNetworkManager snm;
+		string lobbyname = "";
 
     // Use this for initialization
     void Start () 
@@ -132,8 +133,21 @@ public class Menu_buttons : MonoBehaviour {
 
     public void GoToNewLobby()
     {
-        snm.createLobby();
+				if (lobbyname == "")
+				{
+						Text lcre = LobbyCreateErrorText.GetComponent<Text>();
+            lcre.text = "Please enter a lobby name";
+				}
+				else
+				{
+        		snm.createLobby();
+				}
     }
+
+		public void OnEndEdit(string afteredit)
+		{
+				lobbyname = afteredit;
+		}
 
     public void GoToSelectedLobby()
     {

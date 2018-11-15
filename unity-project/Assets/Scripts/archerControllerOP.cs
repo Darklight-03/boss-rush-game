@@ -104,7 +104,7 @@ public class archerControllerOP : MonoBehaviour {
     // revived
      void Dead()
     {
-        healthbarbg.transform.localScale = healthbar.transform.localScale;
+        healthbarback.transform.localScale = healthbar.transform.localScale;
         health.enabled = false;
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
