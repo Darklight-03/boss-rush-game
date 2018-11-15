@@ -5,7 +5,7 @@ using System;
 
 public class SocketNetworkManager : MonoBehaviour
 {
-    static WebSocket w;
+    public static WebSocket w;
     public static int lobbyid = -1;
     static bool contli;
     static bool started = false;
