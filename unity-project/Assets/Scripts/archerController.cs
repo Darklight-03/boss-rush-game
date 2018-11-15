@@ -153,11 +153,8 @@ public class archerController : MonoBehaviour {
                     c.r.color = new Color(255,255,255,c.getRatio());
                   }
                   else{
-                  Debug.Log("a");
                     if(!c.p){
-                    Debug.Log("b");
                       for(int p = 0;p<c.goc.Length;p++){
-                      Debug.Log("c");
                         c.addR(Instantiate(Resources.Load<GameObject>("Square"),c.goc[p].GetComponent<Transform>().position,Quaternion.identity,canvas.transform).GetComponent<SpriteRenderer>());
                       }
                       c.p = true;
