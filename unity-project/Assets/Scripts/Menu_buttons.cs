@@ -140,7 +140,7 @@ public class Menu_buttons : MonoBehaviour {
 				}
 				else
 				{
-        		snm.createLobby();
+        		snm.createLobby(lobbyname);
 				}
     }
 

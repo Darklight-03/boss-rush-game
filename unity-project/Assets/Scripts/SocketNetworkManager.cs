@@ -83,9 +83,9 @@ public class SocketNetworkManager : MonoBehaviour
         w.Close();
     }
 
-    public void createLobby()
+    public void createLobby(string lobbyname)
     {
-        w.SendString("{ \"msgtype\":\"create lobby\" }");
+        w.SendString("{ \"msgtype\":\"create lobby\", \"name\": \"" + lobbyname + "\" }");
     }
 
     public void joinLobby(int lobbyid)
