@@ -138,6 +138,11 @@ public class Menu_buttons : MonoBehaviour {
 						Text lcre = LobbyCreateErrorText.GetComponent<Text>();
             lcre.text = "Please enter a name";
 				}
+				else if (lobbyname.Length > 10)
+				{
+						Text lcre = LobbyCreateErrorText.GetComponent<Text>();
+            lcre.text = "Max length 10";
+				}
 				else
 				{
         		snm.createLobby(lobbyname);
@@ -152,6 +157,15 @@ public class Menu_buttons : MonoBehaviour {
 						afteredit.text = afteredit.text.Remove(10);
 				}
 				lobbyname = afteredit.text;
+		}
+
+		public void OnValueChangeCreateName(Text afterchange)
+		{
+				if (afterchange.text.Length > 10) {
+						Text lcre = LobbyCreateErrorText.GetComponent<Text>();
+            lcre.text = "Max length 10";
+						afterchange.text = afterchange.text.Remove(10);
+				}
 		}
 
     public void GoToSelectedLobby()
