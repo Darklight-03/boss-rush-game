@@ -56,9 +56,9 @@ GameObject:
   - component: {fileID: 212483988806292344}
   - component: {fileID: 50692057502976508}
   - component: {fileID: 68592050615818116}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock2 (2)
-  m_TagString: Untagged
+  m_TagString: stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -74,9 +74,9 @@ GameObject:
   - component: {fileID: 212988727330570180}
   - component: {fileID: 50924676567116240}
   - component: {fileID: 68364504305355236}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock2
-  m_TagString: Untagged
+  m_TagString: stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,7 +145,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1283446311218990}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.42, y: -2.62, z: 0.02123535}
+  m_LocalPosition: {x: -4.42, y: -2.06, z: 0.02123535}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4525769352030916}
