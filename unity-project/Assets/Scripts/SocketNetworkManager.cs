@@ -94,6 +94,18 @@ public class SocketNetworkManager : MonoBehaviour
         w.SendString("{ \"msgtype\":\"join lobby\", \"lobbyid\": " + lobbyid.ToString() + " }");
     }
 
+    public void selectClass(string plclass)
+    {
+        if (lobbyid == -1)
+        {
+            Debug.LogError("selecting class in nonexistent lobby");
+        }
+        else
+        {
+            w.SendString("{ \"msgtype\":\"select class\", \"lobbyid\": " + lobbyid + ", \"plclass\": " + plclass + " }");
+        }
+    }
+
     public void sendMessage(string contenttype, string content)
     {
         if (lobbyid != -1)
@@ -362,4 +374,17 @@ public class spawnProj
     public float ry;
 	public float rz;
 	public float rw;
+}
+
+[Serializable]
+public class selClass
+{
+    public string ret;
+}
+
+[Serializable]
+public class updClass
+{
+    public string player;
+    public string plclass;
 }

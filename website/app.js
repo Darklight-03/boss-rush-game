@@ -32,10 +32,6 @@ function defaultRoute(req, response) {
   response.sendfile(unityFolder + '/index.html');
 }
 
-function extraStringify(inobj) {
-  return "\"" + JSON.stringify(inobj) + "\""; 
-}
-
 var lobbies = [];
 
 io.on('connection', function(socket){
@@ -72,7 +68,7 @@ io.on('connection', function(socket){
       case 'join lobby':
         var lobby = lobbies[msg['lobbyid']];
         if (lobby == undefined || lobby.members.length >= 3 || socket.inlobby) {
-          socket.send(JSON.stringify({ msgtype: 'join lobby', content: JSON.stringify({ lobbyid: -1, playernum: -1, ret:'fail' }) }));
+          socket.send(JSON.stringify({ msgtype: 'join lobby', content: JSON.stringify({ lobbyid: -1, playernum: -1, ret: 'fail' }) }));
         }
         else {
 			// send messages to each lobby member about the new member
@@ -93,6 +89,28 @@ io.on('connection', function(socket){
       case 'disband lobby':
         lobbies.splice(msg['lobbyid'], 1);
         socket.send(JSON.stringify({ msgtype: 'disband lobby', content: JSON.stringify({ ret: 'success' }) }));
+      break;
+
+      case 'select class':
+        var lobby = lobbies[msg['lobbyid']];
+        var good = true;
+        for (i = 0; i < lobby.members.length; i++) {
+          if (msg['plclass'] == lobby.members[i]['plclass']) {
+            socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'fail' }) }));
+            good = false;
+          }
+        }
+        if (good) {
+          for (i = 0; i < lobby.members.length; i++) {
+            if (lobby.members[i]['id'] == socket.id) {
+              lobby.members[i]['plclass'] = msg['plclass'];
+              socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'success' }) }));
+            }
+            else {
+              lobby.members[i].send(JSON.stringify({msgtype: 'update class', content: JSON.stringify({ player: socket.id, plclass: msg['plclass'] }) }))
+            }
+          }
+        }
       break;
 
       case 'general message':
