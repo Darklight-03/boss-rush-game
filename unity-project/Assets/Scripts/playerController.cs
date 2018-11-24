@@ -22,6 +22,7 @@ public class playerController : MonoBehaviour {
     Transform sword;
     public GameObject[] gameObjects;
     public RectTransform image;
+    private GameObject target;
 
 
     // Use this for initialization
@@ -39,6 +40,7 @@ public class playerController : MonoBehaviour {
         healthbarsize = healthbar.transform.localScale;
         sword = GetComponentInChildren<Transform>();
         gameObjects = GameObject.FindGameObjectsWithTag("Player");
+        target = gameObjects[0];
         StartCoroutine(playSwordSwing());
         Debug.Log(GetComponentInParent<Component>().name);
         image = this.GetComponentInChildren<RectTransform>();
@@ -72,7 +74,7 @@ public class playerController : MonoBehaviour {
     // called in fixed interval
     void FixedUpdate()
     {
-        GameObject player = GameObject.FindWithTag("Player");
+        target = GameObject.FindWithTag("Player");
         Vector2 v1 = transform.position;
         float temp = float.MaxValue - 1000;
         foreach (GameObject g in gameObjects)
@@ -82,11 +84,11 @@ public class playerController : MonoBehaviour {
             if (max1 < temp)
             {
                 temp = max1;
-                player = g;
+                target = g;
             }
         }
 
-        Vector2 v2 = player.transform.position;
+        Vector2 v2 = target.transform.position;
 
         rb.velocity = v2 - v1;
 
@@ -151,7 +153,7 @@ public class playerController : MonoBehaviour {
             {
                 yield return new WaitForSeconds(0.7f);
             }
-            yield return new WaitUntil(() => (transform.position - GameObject.FindWithTag("Player").transform.position).magnitude < 3);
+            yield return new WaitUntil(() => (transform.position - target.transform.position).magnitude < 3);
             snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
             animation.Play("huijian");
             yield return new WaitForEndOfFrame();
@@ -194,16 +196,11 @@ public class playerController : MonoBehaviour {
             Destroy(collider.gameObject);
             return;
         }
-        if (collider.gameObject.tag == "projectile")
+        if (collider.gameObject.name == "arrow(Clone)")
         {
             Destroy(collider.gameObject);
             TakeDamage(10);
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-        }
-        if (collider.gameObject.tag == "knightsword")
-        {
-            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-            TakeDamage(10);
         }
     }
 }

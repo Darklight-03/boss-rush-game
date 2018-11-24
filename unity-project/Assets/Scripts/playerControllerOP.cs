@@ -130,16 +130,11 @@ public class playerControllerOP : MonoBehaviour {
             Destroy(collider.gameObject);
             return;
         }
-        if (collider.gameObject.tag == "projectile")
+        if (collider.gameObject.name == "arrow(Clone)")
         {
             Destroy(collider.gameObject);
-            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
             TakeDamage(10);
-        }
-        if (collider.gameObject.tag == "knightsword")
-        {
             snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-            TakeDamage(10);
         }
     }
 }

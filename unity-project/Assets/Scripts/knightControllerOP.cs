@@ -105,15 +105,16 @@ public class knightControllerOP : MonoBehaviour
     {
         if (id == sender)
         {
-            Vector2 pos = transform.position;
+            Vector2 pos;
+            Vector2 direction;
+            float angle;
+            pos = transform.position;
             pos.x = x;
             pos.y = y;
             transform.position = pos;
 
-            Vector2 direction = new Vector2(rx, ry);
-            float angle = Mathf.Atan2(direction.y, direction.x);
-
-            // use angle to rotate bow
+            direction = new Vector2(rx, ry);
+            angle = Mathf.Atan2(direction.y, direction.x);
             shield.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
             shield.transform.position = pos + -1 * direction.normalized * bowdistance;
             sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
@@ -135,29 +136,16 @@ public class knightControllerOP : MonoBehaviour
             {
                 if (weapon == "shield")
                 {
-
                     weapon = "sword";
                     shield.GetComponent<SpriteRenderer>().enabled = false;
-                    //shield.SetActive(false);
                     sword.GetComponent<SpriteRenderer>().enabled = true;
-                    //sword.GetComponent<EdgeCollider2D>(). = true;
-                    //sword.SetActive(true);
-                    //for (int i = 0; i < sword.transform.childCount; i++)
-                    //    sword.transform.GetChild(i).gameObject.SetActive(true);
-
                 }
                 else
                 {
                     weapon = "shield";
                     sword.GetComponent<SpriteRenderer>().enabled = false;
-                    //sword.GetComponent<EdgeCollider2D>().enabled = false;
-                    //sword.SetActive(false);
                     shield.GetComponent<SpriteRenderer>().enabled = true;
-                    //shield.SetActive(true);
-                    //for (int i = 0; i < shield.transform.childCount; i++)
-                    //    shield.transform.GetChild(i).gameObject.SetActive(true);
                 }
-                gcd = GLOBAL_CD;
             }
             else if (name == "stab")
             {

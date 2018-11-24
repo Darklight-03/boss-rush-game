@@ -192,11 +192,14 @@ public class knightController : MonoBehaviour {
             }
             else if (clicked)
             {
-                snm.sendMessage("pa", "{ \"name\": \"" + "stab" + "\" }");
-                StartCoroutine(stabAnimation(10));
-                clicked = false;
-                gcd = GLOBAL_CD;
-                break;
+                if (weapon == "sword")
+                {
+                    snm.sendMessage("pa", "{ \"name\": \"" + "stab" + "\" }");
+                    StartCoroutine(stabAnimation(10));
+                    clicked = false;
+                    gcd = GLOBAL_CD;
+                    break;
+                }
             }
             break;
         }

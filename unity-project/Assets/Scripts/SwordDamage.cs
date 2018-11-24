@@ -34,6 +34,7 @@ public class SwordDamage : MonoBehaviour {
             }
             else
             {
+                Debug.Log(player.name);
                 Debug.Log("Unknown sword collision HELP");
             }
         }
