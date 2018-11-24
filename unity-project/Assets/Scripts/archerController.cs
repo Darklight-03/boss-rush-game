@@ -44,7 +44,7 @@ public class cooldown{
         nextavailable = Time.time + cd;
     }
     public float getRatio(){
-        return ((nextavailable-Time.time)/cd)*0.9f + 0.1f;
+        return ((nextavailable-Time.time)/cd)*1f;
     }
 }
 
@@ -66,6 +66,7 @@ public class archerController : MonoBehaviour {
     public float MAX_DASH = 2f;
     public float DASH_CD = 10f;
     public float GLOBAL_CD = 0.3f;
+    public float HOTBARITEM_SIZE = 41.0f;
     int knocked;
     Vector2 realvelocity;
     bool clicked;
@@ -150,6 +151,7 @@ public class archerController : MonoBehaviour {
                     if(c.r==null){
                         c.r = Instantiate(Resources.Load<GameObject>("Square"),c.go.GetComponent<Transform>().position,Quaternion.identity,canvas.transform).GetComponent<SpriteRenderer>();
                     }
+                    c.r.transform.localScale = new Vector3(c.getRatio()*HOTBARITEM_SIZE,HOTBARITEM_SIZE,HOTBARITEM_SIZE);
                     c.r.color = new Color(255,255,255,c.getRatio());
                   }
                   else{
@@ -163,7 +165,8 @@ public class archerController : MonoBehaviour {
                       c.p = true;
                     }
                     c.rc.ForEach(delegate (SpriteRenderer r){
-                      r.color = new Color(255,255,255,c.getRatio());
+                        r.transform.localScale = new Vector3(c.getRatio()*HOTBARITEM_SIZE,HOTBARITEM_SIZE,HOTBARITEM_SIZE);
+                        r.color = new Color(255,255,255,c.getRatio());
                     });
                   }
                 }else{
@@ -192,6 +195,7 @@ public class archerController : MonoBehaviour {
     }
     IEnumerator cdFinished(cooldown c, List<SpriteRenderer> cr){
       for(int o = 0;o<c.goc.Length;o++){
+        cr[o].transform.localScale = new Vector3(HOTBARITEM_SIZE, HOTBARITEM_SIZE, HOTBARITEM_SIZE);
         for(float i = 0;i<5;i++){
             Color a = new Color(255,255,255,1);
             Color b = new Color(255,255,255,0);
@@ -204,6 +208,7 @@ public class archerController : MonoBehaviour {
       }
     }
     IEnumerator cdFinished(cooldown c, SpriteRenderer cr){
+      cr.transform.localScale = new Vector3(HOTBARITEM_SIZE, HOTBARITEM_SIZE, HOTBARITEM_SIZE);
         for(float i = 0;i<5;i++){
             Color a = new Color(255,255,255,1);
             Color b = new Color(255,255,255,0);
