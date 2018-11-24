@@ -9,6 +9,7 @@ public class priestController : MonoBehaviour {
     private float bowdistance;
     int knocked;
     public float MOVEMENT_SPEED;
+    public float AUTO_SPEED;
     List<Vector2> forces;
     Vector2 realvelocity;
 
@@ -77,5 +78,10 @@ public class priestController : MonoBehaviour {
         // use angle to rotate bow
         staff.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
         staff.transform.position = pos + -1 * direction.normalized * bowdistance;
+        if (Input.GetMouseButton(0))
+        {
+            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_auto"), staff.transform.position, staff.transform.rotation, GetComponent<Transform>());
+            arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized * AUTO_SPEED * -1;
+        }
     }
 }
