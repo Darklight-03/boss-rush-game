@@ -10,6 +10,7 @@ public class priestController : MonoBehaviour {
     int knocked;
     public float MOVEMENT_SPEED;
     public float AUTO_SPEED;
+    public float GLOBAL_CD = 0.3f;
     List<Vector2> forces;
     Vector2 realvelocity;
 
