@@ -2,87 +2,89 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class priestController : MonoBehaviour {
+public class priestController : playerBase {
 
-    private Rigidbody2D rb;
     private GameObject staff;
     private float bowdistance;
-    int knocked;
-    public float MOVEMENT_SPEED;
+    public float PMOVEMENT_SPEED;
     public float AUTO_SPEED;
-    public float GLOBAL_CD = 0.3f;
-    List<Vector2> forces;
-    Vector2 realvelocity;
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        base.Start();
+        MOVEMENT_SPEED = PMOVEMENT_SPEED;
         staff = gameObject.transform.GetChild(0).gameObject;
         bowdistance = (staff.transform.position - (Vector3)rb.position).magnitude;
-        knocked = 0;
-        forces = new List<Vector2>();
-        realvelocity = new Vector2(0, 0);
+        interfaceplayertext.text = "You: Priest";
     }
 
-    void FixedUpdate()
-    {
-        /* MOVEMENT */
-        // input x and y
-        float ix = Input.GetAxis("Horizontal");
-        float iy = Input.GetAxis("Vertical");
-
-        // get velocity input
-        var inputvelocity = new Vector2(ix, iy);
-
-        // later can add velocity vectors together for knockback and stuff
-        if (knocked == 0)
-        {
-            rb.position = rb.position + inputvelocity * MOVEMENT_SPEED;
-            //rb.velocity = (inputvelocity*MOVEMENT_SPEED);
-        }
-        else
-        {
-            knocked--;
-        }
-
-        var forcesSum = new Vector2(0, 0);
-        foreach (Vector2 v in forces)
-        {
-            forcesSum += v;
-        }
-
-        rb.AddForce(forcesSum);
-        realvelocity = rb.velocity + inputvelocity;
-
-        forces.Clear();
+    protected override void shiftAbilityInit(){
+        SHIFT_CD = GLOBAL_CD;
+        SHIFT_NAME = "notyetimplemented";
     }
 
-    void applyForce(Vector2 force)
+    protected override void lmbAbilityInit(){
+        LMB_NAME = "green fire";
+    }
+
+    protected override void rmbAbilityInit(){
+        RMB_CD = GLOBAL_CD;
+        RMB_NAME = "notyetimplemented";
+    }
+
+    protected override void eAbilityInit(){
+        E_CD = GLOBAL_CD;
+        E_NAME = "notyetimplemented";
+    }
+
+    protected override void qAbilityInit(){
+        Q_CD = GLOBAL_CD;
+        Q_NAME = "notyetimplmented";
+    }
+
+    protected override void FixedUpdate()
     {
-        forces.Add(force);
+        base.FixedUpdate();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        /* ROTATION */
-        // get position of main sprite and mouse
-        Vector2 pos = rb.position;
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        // get directional vector and convert to angle
-        Vector2 direction = pos - mouse;
-        float angle = Mathf.Atan2(direction.y, direction.x);
-
+        base.Update();
         // use angle to rotate bow
         staff.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
-        staff.transform.position = pos + -1 * direction.normalized * bowdistance;
-        if (Input.GetMouseButton(0))
-        {
-            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_auto"), staff.transform.position, staff.transform.rotation, GetComponent<Transform>());
-            arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized * AUTO_SPEED * -1;
-        }
+        staff.transform.position = rb.position + -1 * direction.normalized * bowdistance;
     }
+
+    protected override void LMBClicked(){
+
+    }
+
+    protected override void LMBReleased(){
+         GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_auto"), staff.transform.position, staff.transform.rotation, GetComponent<Transform>());
+        arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized * AUTO_SPEED * -1;
+    }
+
+    protected override void LShiftAbility(Vector2 input){
+        //input is vector from player to mouse but can be changed or added to
+        Debug.Log("notimplementedyet");
+    }
+
+    protected override void RMBAbility(){
+        Debug.Log("notimplementedyet");
+    }
+    
+    protected override void QAbility(){
+        Debug.Log("notimplementedyet");
+    }
+
+    protected override void EAbility(){
+        Debug.Log("notimplementedyet");
+    }
+
+    protected override void Dead(){
+        base.Dead();
+    }
+
 }

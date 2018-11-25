@@ -106,6 +106,8 @@ public abstract class playerBase : MonoBehaviour {
         render = GetComponent<SpriteRenderer>();
         health = GetComponent<Health>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        direction = new Vector2(0,0);
+        angle = 0.0f;
         forces = new List<Vector2>();
         healthbar = GameObject.FindWithTag("Health-bar");
         healthbarback = GameObject.FindWithTag("Health-bar-background");
