@@ -21,7 +21,7 @@ public class SwordDamage : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Player" && !collision.gameObject.name.Contains("OP"))
         {
-          collision.gameObject.GetComponent<archerController>().TakeDamage(10, Vector2.zero);
+          collision.gameObject.GetComponent<playerBase>().TakeDamage(10, Vector2.zero);
         }
     }
 }
