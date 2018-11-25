@@ -95,7 +95,7 @@ io.on('connection', function(socket){
         var lobby = lobbies[msg['lobbyid']];
         var good = true;
         for (i = 0; i < lobby.members.length; i++) {
-          if (msg['plclass'] == lobby.members[i]['plclass']) {
+          if (msg['plclass'] == lobby.members[i]['plclass'] && msg['plclass'] != "None") {
             socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'fail' }) }));
             good = false;
           }
