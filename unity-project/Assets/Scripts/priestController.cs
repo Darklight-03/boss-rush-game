@@ -34,8 +34,8 @@ public class priestController : playerBase {
     }
 
     protected override void eAbilityInit(){
-        E_CD = GLOBAL_CD;
-        E_NAME = "notyetimplemented";
+        E_CD = 12f;
+        E_NAME = "heal";
     }
 
     protected override void qAbilityInit(){
@@ -80,7 +80,14 @@ public class priestController : playerBase {
     }
 
     protected override void EAbility(){
-        Debug.Log("notimplementedyet");
+        GameObject[] healPlayers = GameObject.FindGameObjectsWithTag("Player");
+        foreach(var p in healPlayers){
+            if((mousePosition - (Vector2)p.transform.position).magnitude < .30){
+                Debug.Log(p.transform.position);
+                //HEAL THE P
+                (p).GetComponent<playerBase>().Heal(1000);
+            }
+        }
     }
 
     protected override void Dead(){

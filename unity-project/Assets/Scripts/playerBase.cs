@@ -70,6 +70,7 @@ public abstract class playerBase : MonoBehaviour {
     protected float Q_CD = 0.0f;
     protected string Q_NAME = "q";
     protected string LMB_NAME = "lmb";
+    protected Vector2 mousePosition;
     public float HOTBARITEM_SIZE = 41.0f;
     private int knocked;
     protected Vector2 realvelocity;
@@ -299,10 +300,10 @@ public abstract class playerBase : MonoBehaviour {
         /* ROTATION */
         // get position of main sprite and mouse
         Vector2 pos = rb.position;
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // get directional vector and convert to angle
-        direction = pos - mouse;
+        direction = pos - mousePosition;
         angle = Mathf.Atan2(direction.y, direction.x);
 
 
@@ -433,6 +434,14 @@ public abstract class playerBase : MonoBehaviour {
             //applyForce(dir);
             knocked = 20;
         }
+    }
+
+    public void Heal(float amount){
+        snm.sendMessage("td", "{ \"dmg\": " + -1*amount + " }");
+        health.Heal(amount);
+        var hsize = new Vector3(((health.getCurrentHP() + amount) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
+        healthbar.transform.localScale = hsize;
+        hbarupdatetime = 20;
     }
 
 }
