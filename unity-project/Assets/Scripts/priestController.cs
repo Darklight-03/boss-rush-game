@@ -62,7 +62,7 @@ public class priestController : playerBase {
     }
 
     protected override void LMBReleased(){
-         GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_auto"), staff.transform.position, staff.transform.rotation, GetComponent<Transform>());
+        GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_auto"), staff.transform.position, staff.transform.rotation, GetComponent<Transform>());
         arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized * AUTO_SPEED * -1;
     }
 
