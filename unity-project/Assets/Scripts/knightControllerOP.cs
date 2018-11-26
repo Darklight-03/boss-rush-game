@@ -3,79 +3,44 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class knightControllerOP : MonoBehaviour
+public class knightControllerOP : playerBaseOP
 {
-    private SocketNetworkManager snm;
-    private Rigidbody2D rb;
     private GameObject shield;
     private GameObject sword;
     private float bowdistance;
     private float sworddistance;
-    private Health health;
-    private SpriteRenderer render;
-    private GameObject healthbar;
-    private GameObject healthbarback;
-    private Vector3 healthbarsize;
-    private Text interfaceplayertext;
-    int hbarupdatetime;
     int knocked;
-    public float MOVEMENT_SPEED = 0.1f;
-    List<Vector2> forces;
-    Vector2 realvelocity;
     bool invincible;
-    public int GLOBAL_CD = 20;
-    bool clicked;
-    private Sprite f1;
-    private Sprite f2;
-    int gcd;
-    int autocd;
-    int hit;
     private Vector2 prevPos = new Vector2(0, 0);
     private Vector2 prevRot = new Vector2(0, 0);
     string weapon;
     public bool stabbing = false;
-    public string id;
-    public int healthbar_id;
-    public int playernum;
 
     // Use this for initialization
-    void Start()
+    protected override void Start()
     {
-        snm = GetComponent<SocketNetworkManager>();
-        rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        base.Start();
         shield = gameObject.transform.GetChild(0).gameObject;
         sword = gameObject.transform.GetChild(1).gameObject;
         bowdistance = (shield.transform.position - (Vector3)rb.position).magnitude;
         sworddistance = (sword.transform.position - (Vector3)rb.position).magnitude;
-        health = GetComponent<Health>();
-        render = GetComponent<SpriteRenderer>();
-        healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
-        interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
-        healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
-        interfaceplayertext.text = "Player " + healthbar_id;
-        hbarupdatetime = 0;
-        knocked = 0;
-        forces = new List<Vector2>();
-        realvelocity = new Vector2(0, 0);
         invincible = false;
-        healthbarsize = healthbar.transform.localScale;
-        hit = 0;
         weapon = "shield";
         //at start of game, knight has shield enabled by default
         shield.GetComponent<SpriteRenderer>().enabled = true;
         sword.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    void OnEnable()
+    protected override void OnEnable()
     {
-        SocketNetworkManager.TakeDamageHandle += TakeDamageHandleH;
+        base.OnEnable();
         SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPosH;
         SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandleH;
     }
 
-    void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         SocketNetworkManager.TakeDamageHandle -= TakeDamageHandleH;
         SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPosH;
         SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandleH;
@@ -158,48 +123,15 @@ public class knightControllerOP : MonoBehaviour
         yield break;
     }
 
-    void SpawnProjHandleH(string sender, string name, Vector2 pos, Vector2 dir)
-    {
-        StartCoroutine(SpawnProjHandle(sender, name, pos, dir));
-    }
-    IEnumerator SpawnProjHandle(string sender, string name, Vector2 pos, Vector2 dir)
-    {
-        if (id == sender)
-        {
-
-        }
-        yield break;
-    }
-
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        /* ON HIT */
-        if (hit >= 0)
-        {
-            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit) / Mathf.Sqrt(25));
-            render.color = lerpedColor;
-            hit--;
-        }
-
-        /* HEALTH BAR */
-        if (hbarupdatetime == 0)
-        {
-            healthbarback.transform.localScale = healthbar.transform.localScale;
-            hbarupdatetime = 100;
-        }
-        else
-        {
-            hbarupdatetime--;
-        }
-
-        gcd--;
-        autocd--;
+        base.Update();
     }
 
     IEnumerator stabAnimation(int val)
@@ -218,12 +150,9 @@ public class knightControllerOP : MonoBehaviour
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
-    void Dead()
+    protected override void Dead()
     {
-        healthbarback.transform.localScale = healthbar.transform.localScale;
-        health.enabled = false;
-        render.enabled = false;
-        enabled = false;
+        base.Dead();
     }
 
     // simply adds a force to the list to be applied next update.
@@ -234,30 +163,18 @@ public class knightControllerOP : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        rb.velocity = rb.velocity * -0.5f;
+        
     }
 
     // reduces player health, if its 0 then call Dead(), if not then apply
     // a knockback force given by dir
-    public void TakeDamage(float dmg, Vector2 dir)
+    public override void TakeDamage(float dmg, Vector2 dir)
     {
         if (weapon == "shield")
         {
             dmg = dmg / 2;
         }
-        var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
-        healthbar.transform.localScale = hsize;
-        hit = 25;
-        hbarupdatetime = 20;
-        if (!health.TakeDamage(dmg))
-        {
-            Dead();
-        }
-        else
-        {
-            //applyForce(dir);
-            knocked = 20;
-        }
+        base.TakeDamage(dmg, dir);
     }
 
 }

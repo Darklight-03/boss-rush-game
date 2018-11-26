@@ -3,151 +3,39 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class archerControllerOP : MonoBehaviour {
-    private SocketNetworkManager snm;
-    private Rigidbody2D rb;
+public class archerControllerOP : playerBaseOP {
     private GameObject bow;
-    private Health health;
-    private SpriteRenderer render;
-    private GameObject healthbar;
-    private GameObject healthbarback;
-    private Text interfaceplayertext;
-    float bowdistance;
-    Vector3 healthbarsize;
-    List<Vector2> forces;
-    int hbarupdatetime;
-    public float MOVEMENT_SPEED;
     public float ARROW_SPEED;
-    //public bool isPlayer = true;
-    int knocked;
-    Vector2 realvelocity;
-    bool clicked;
+    private float bowdistance;
     private Sprite f1;
     private Sprite f2;
     private SpriteRenderer bowrender;
-    private Vector2 prevPos;
-    private Vector2 prevRot;
-    public string id;
-    public int healthbar_id;
-    public int playernum;
-    int hit;
-
-
 
 
     // Use this for initialization
-    void Start ()
+    protected override void Start ()
     {
-        snm = GetComponent<SocketNetworkManager>();
-        rb = GetComponent<Rigidbody2D>();
+        base.Start();
         bow = gameObject.transform.GetChild(0).gameObject;
         bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
-        render = GetComponent<SpriteRenderer>();
-        health = GetComponent<Health>();
         f2 = Resources.Load<Sprite>("bow2");
         f1 = Resources.Load<Sprite>("bow");
-        bowrender = bow.GetComponent<SpriteRenderer>();
-        healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
-        interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
-        healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
-        interfaceplayertext.text = "Player " + healthbar_id;
-        healthbarsize = healthbar.transform.localScale;
-        hbarupdatetime = 0;
     }
 
-    void OnEnable()
+    protected override void OnEnable()
     {
-        SocketNetworkManager.TakeDamageHandle += TakeDamageHandleH;
+        base.OnEnable();
         SocketNetworkManager.UpdateOtherPlayerPos += UpdateOtherPlayerPosH;
         SocketNetworkManager.PlayerAnimHandle += PlayerAnimHandleH;
         SocketNetworkManager.SpawnProjHandle += SpawnProjHandleH;
     }
 
-    void OnDisable()
+    protected override void OnDisable()
     {
-        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandleH;
+        base.OnDisable();
         SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPosH;
         SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandleH;
         SocketNetworkManager.SpawnProjHandle -= SpawnProjHandleH;
-    }
-
-  // called in fixed interval
-    void FixedUpdate()
-    {
-
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        /* ON HIT */
-        if (hit >= 0)
-        {
-            Color lerpedColor = Color.Lerp(Color.white, Color.red, Mathf.Sqrt(hit) / Mathf.Sqrt(25));
-            render.color = lerpedColor;
-            hit--;
-        }
-
-        /* HEALTH BAR */
-        if (hbarupdatetime == 0)
-        {
-            healthbarback.transform.localScale = healthbar.transform.localScale;
-            hbarupdatetime = 100;
-        }
-        else
-        {
-            hbarupdatetime--;
-        }
-    }
-
-    // makes player invisible and unresponsive so that they could potentially be
-    // revived
-     void Dead()
-    {
-        healthbarback.transform.localScale = healthbar.transform.localScale;
-        health.enabled = false;
-        for (int i = 0; i < gameObject.transform.childCount; i++)
-        {
-            gameObject.transform.GetChild(i).gameObject.SetActive(false);
-        }
-        //render.enabled = false;
-        this.gameObject.SetActive(false);
-    }
-
-
-    // simply adds a force to the list to be applied next update.
-    void applyForce(Vector2 force)
-    {
-        forces.Add(force);
-    }
-
-    void OnMouseDown()
-    {
-
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-
-    }
-
-    // reduces player health, if its 0 then call Dead(), if not then apply
-    // a knockback force given by dir
-    public void TakeDamage(float dmg, Vector2 dir)
-    {
-        var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
-        healthbar.transform.localScale = hsize;
-        hit = 25;
-        hbarupdatetime = 20;
-        if (!health.TakeDamage(dmg))
-        {
-            Dead();
-        }
-        else
-        {
-            //applyForce(dir);
-            knocked = 20;
-        }
     }
 
     void TakeDamageHandleH(string sender, float dmg)
@@ -230,6 +118,44 @@ public class archerControllerOP : MonoBehaviour {
         }
         yield break;
     }
+
+    // called in fixed interval
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+    }
+
+    // Update is called once per frame
+    protected override void Update()
+    {
+        base.Update();
+        
+    }
+
+    // makes player invisible and unresponsive so that they could potentially be
+    // revived
+    protected override void Dead()
+    {
+        base.Dead();
+    }
+
+
+    // simply adds a force to the list to be applied next update.
+    void applyForce(Vector2 force)
+    {
+        forces.Add(force);
+    }
+
+    void OnMouseDown()
+    {
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+
+    }
+
 
     IEnumerator dashAnim(Vector3 opos)
     {

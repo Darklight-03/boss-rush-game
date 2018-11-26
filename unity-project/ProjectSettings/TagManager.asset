@@ -21,6 +21,9 @@ TagManager:
   - Boss
   - knightsword
   - ability-icons
+  - P1-icon
+  - P2-icon
+  - icon
   layers:
   - Default
   - TransparentFX

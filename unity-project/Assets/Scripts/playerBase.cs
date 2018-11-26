@@ -88,7 +88,9 @@ public abstract class playerBase : MonoBehaviour {
     private Vector2 prevPos = new Vector2(0,0);
     private Vector2 prevRot = new Vector2(0,0);
 
-
+    public int playernum;
+    public string id;
+    public int healthbar_id;
 
 
 	// Use this for initialization
@@ -113,7 +115,7 @@ public abstract class playerBase : MonoBehaviour {
         healthbar = GameObject.FindWithTag("Health-bar");
         healthbarback = GameObject.FindWithTag("Health-bar-background");
         interfaceplayertext = GameObject.FindWithTag("Player-text").GetComponent<Text>();
-        interfaceplayertext.text = "You: Archer";
+        interfaceplayertext.text = "You: base";
         healthbarsize = healthbar.transform.localScale;
         hbarupdatetime = 0;
         knocked = 0;
@@ -175,11 +177,11 @@ public abstract class playerBase : MonoBehaviour {
                     c.r.color = new Color(255,255,255,c.getRatio());
                   }
                   else{
-                  Debug.Log("a");
+                  //Debug.Log("a");
                     if(!c.p){
-                    Debug.Log("b");
+                   // Debug.Log("b");
                       for(int p = 0;p<c.goc.Length;p++){
-                      Debug.Log("c");
+                      //Debug.Log("c");
                         c.addR(Instantiate(Resources.Load<GameObject>("Square"),c.goc[p].GetComponent<Transform>().position,Quaternion.identity,canvas.transform).GetComponent<SpriteRenderer>());
                       }
                       c.p = true;
@@ -436,13 +438,13 @@ public abstract class playerBase : MonoBehaviour {
         }
     }
 
-    public void Heal(float amount){
-        snm.sendMessage("td", "{ \"dmg\": " + -1*amount + " }");
+    public void Heal(float amount)
+    {
+        snm.sendMessage("td", "{ \"dmg\": " + -1 * amount + " }");
         health.Heal(amount);
-        var hsize = new Vector3(((health.getCurrentHP() + amount) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
+        var hsize = new Vector3((((health.getCurrentHP() + amount) % health.getMaxHP()) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hbarupdatetime = 20;
     }
-
 }
 

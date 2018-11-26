@@ -119,7 +119,7 @@ io.on('connection', function(socket){
           for (i = 0; i < lobby.members.length; i++) {
             if (lobby.members[i]['id'] != socket['id']) {
               lobby.members[i].send(JSON.stringify({ msgtype: 'general message', content: JSON.stringify({ sender: socket['id'], ct: msg['ct'], content: JSON.stringify(msg['content']) }) }));
-      }
+      		}
           }
         }
       break;

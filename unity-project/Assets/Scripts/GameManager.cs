@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour {
         snm = GetComponent<SocketNetworkManager>();
         t = GetComponent<Transform>();
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread 1"), t);
-        //boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
 
         playerInitPos.Add(new Vector2(2, -2));
         playerInitPos.Add(new Vector2(0, -2));
@@ -51,10 +50,10 @@ public class GameManager : MonoBehaviour {
         gameStarted = true;
         foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
         {
-            StartPlayer(a.Value, plord[a.Value.theirid]);
+            if (a.Value.theirid != SocketNetworkManager.id)
+                StartPlayer(a.Value, plord[a.Value.theirid]);
         }
-        //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
-        player = (GameObject)Instantiate(Resources.Load<GameObject>("knight"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
+        player = (GameObject)Instantiate(Resources.Load<GameObject>(SocketNetworkManager.newplayers[SocketNetworkManager.id]._plclass), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
         {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
@@ -72,49 +71,43 @@ public class GameManager : MonoBehaviour {
 
     void StartPlayer(newPly a, int ord)
     {
-        // argument will specify class later
-        if (player2 == null)
-        {
-            player2 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
-            player2.GetComponent<archerControllerOP>().playernum = num;
-            player2.GetComponent<archerControllerOP>().id = id;
-            player2.GetComponent<archerControllerOP>().healthbar_id = 1;
-        }
-        else if (player3 == null)
-        {
-            player3 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
-            player3.GetComponent<archerControllerOP>().playernum = num;
-            player3.GetComponent<archerControllerOP>().id = id;
-            player3.GetComponent<archerControllerOP>().healthbar_id = 2;
-        }
+        Debug.Log("Instantiate " + a._plclass + "OP");
+        Debug.Log("ord(" + ord + ")");
+        Debug.Log("num(" + a.theirnum + ")");
+        Debug.Log("id(" + a.theirid + ")");
+        Debug.Log("cl(" + a._plclass + ")");
+        GameObject player = Instantiate(Resources.Load<GameObject>(a._plclass + "OP"), playerInitPos[a.theirnum], Quaternion.identity);
+        player.GetComponent<playerBaseOP>().playernum = a.theirnum;
+        player.GetComponent<playerBaseOP>().id = a.theirid;
+        player.GetComponent<playerBaseOP>().healthbar_id = ord;
     }
-
 
     IEnumerator StartGameHandle()
     {
-        bool allready = true;
-        foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
-        { 
-            if (a.Value._plclass == "None")
-            {
-                allready = false;
-                yield break;
-            }
-        }
-        if (allready)
-            StartGame();
-        else
-            snm.logText("Cannot start not all players have selected a class");
+        StartGame();
         yield return null;
     }
 
     public void OnStartButtonPress()
     {
-        StartGameButton.SetActive(false);
-        snm.sendMessage("startgame", "{ }");
-        StartGame();
+        bool allready = true;
+        foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
+        {
+            if (a.Value._plclass == "None")
+            {
+                allready = false;
+                return;
+            }
+        }
+        if (allready)
+        {
+            StartGameButton.SetActive(false);
+            selectMenu.SetActive(false);
+            snm.sendMessage("startgame", "{ }");
+            StartGame();
+        }
+        else
+            snm.logText("Cannot start not all players have selected a class");
     }
 }
 

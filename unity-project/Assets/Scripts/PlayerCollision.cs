@@ -24,18 +24,7 @@ public class PlayerCollision : MonoBehaviour {
         Vector3 dir = (playerpos - spikepos).normalized * knockback;
         if (collision.gameObject.tag == "Player")
         {
-            if (collision.gameObject.name == "Archer(Clone)")
-            {
-                collision.gameObject.GetComponent<archerController>().TakeDamage(10, dir);
-            }
-            else if (collision.gameObject.name == "knight(Clone)")
-            {
-                collision.gameObject.GetComponent<knightController>().TakeDamage(10, dir);
-            }
-            //else if (collision.gameObject.name == "Priest")
-            //{
-            //    //collision.gameObject.GetComponent<priestController>().TakeDamage(10, dir);
-            //}
+            collision.gameObject.GetComponent<playerBase>().TakeDamage(10, dir);
         }
     }
 }
