@@ -146,7 +146,7 @@ public class BossHandleOP : MonoBehaviour
         yield break;
     }
 
-    void TakeDamage(float dmg)
+    public void TakeDamage(float dmg)
     {
 
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);

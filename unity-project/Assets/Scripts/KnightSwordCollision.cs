@@ -21,8 +21,8 @@ public class KnightSwordCollision : MonoBehaviour {
             //Debug.Log("damaged boss");
             this.transform.parent.gameObject.GetComponent<knightController>().stabbing = false;
             snm.sendMessage("dd", "{ \"dmg\": " + "5" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-            playerController script1 = collision.gameObject.GetComponent<playerController>();
-            playerControllerOP script2 = collision.gameObject.GetComponent<playerControllerOP>();
+            BossHandle script1 = collision.gameObject.GetComponent<BossHandle>();
+            BossHandleOP script2 = collision.gameObject.GetComponent<BossHandleOP>();
             if (script1 != null)
                 script1.TakeDamage(5);
             if (script2 != null)
