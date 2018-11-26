@@ -115,7 +115,7 @@ public class priestController : playerBase {
             if ((mousePosition - (Vector2)p.transform.position).magnitude < .30)
             {
                 Debug.Log(p.transform.position);
-                (p).GetComponent<playerBase>().Heal(100);
+                (p).GetComponent<playerBase>().Heal(50);
             }
         }
         UnityEngine.Object.Destroy(circle);
