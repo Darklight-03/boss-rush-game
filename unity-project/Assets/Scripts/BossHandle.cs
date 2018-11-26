@@ -175,7 +175,7 @@ public class BossHandle : MonoBehaviour
 
             if (Vector2.Distance(prevv1, v1) > 0.1f || Vector2.Distance(prevv2, v2) > 0.1f)
             {
-                snm.sendMessage("bp", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
+                snm.sendMessage("bossposition", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
                 prevv1 = v1;
                 prevv2 = v2;
             }
