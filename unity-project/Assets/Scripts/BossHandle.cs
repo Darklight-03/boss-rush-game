@@ -183,10 +183,11 @@ public class BossHandle : MonoBehaviour
         if(isstone)
         {
             Vector2 v2 = player.transform.position;
-          
+           // v1 = new Vector2(v1.x + 5, v1.y+5);
 
             if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
             {
+
                 if (v2.x > v1.x)
                 {
                     v2 = new Vector2(v1.x, v2.y);
@@ -198,6 +199,7 @@ public class BossHandle : MonoBehaviour
             }
             else
             {
+                //v1 = new Vector2(v1.x, v1.y - 2);
                 if (v2.y > v1.y)
                 {
                     v2 = new Vector2(v2.x, v1.y);
@@ -207,7 +209,16 @@ public class BossHandle : MonoBehaviour
                     v2 = new Vector2(v2.x, v1.y);
                 }
             }
-              rb.velocity = v2 - v1;
+            if (Mathf.Abs(v2.x - v1.x)<=1.5f)
+            {
+                v1 = new Vector2(v1.x - 4f,v1.y);
+            }
+            if (Mathf.Abs(v2.y - v1.y) <= 1.5f)
+            {
+                v1 = new Vector2(v1.x , v1.y- 4f);
+            }
+  
+            rb.velocity = v2 - v1;
         }
     }
 
@@ -270,7 +281,9 @@ public class BossHandle : MonoBehaviour
         if(collider.tag=="stone")
         {
             isstone = true;
+       
             isMove = false;
+
         }
         if(collider.tag=="Player")
         {
