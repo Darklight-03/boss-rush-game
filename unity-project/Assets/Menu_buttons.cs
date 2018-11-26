@@ -12,6 +12,7 @@ public class Menu_buttons : MonoBehaviour {
     public GameObject LobbySelectErrorText;
     public GameObject LobbyCreateErrorText;
     public GameObject DropdownLabel;
+    public GameObject ControlsPanel;
     Dropdown droplist;
     int droplistprev = 55;
     SocketNetworkManager snm;
@@ -23,6 +24,7 @@ public class Menu_buttons : MonoBehaviour {
         MenuPanel.SetActive(true);
         LobbySelectPanel.SetActive(false);
         LobbyCreatePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
         droplist = dropdown.GetComponent<Dropdown>();
     }
 
@@ -63,6 +65,7 @@ public class Menu_buttons : MonoBehaviour {
         MenuPanel.SetActive(false);
         LobbySelectPanel.SetActive(true);
         LobbyCreatePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 
     IEnumerator GetLobbiesHandle(lobbyInfo[] listoflobbies)
@@ -121,6 +124,7 @@ public class Menu_buttons : MonoBehaviour {
         MenuPanel.SetActive(true);
         LobbySelectPanel.SetActive(false);
         LobbyCreatePanel.SetActive(false);
+        ControlsPanel.SetActive(false);
     }
 
     public void ShowCreateLobbyPanel()
@@ -128,6 +132,15 @@ public class Menu_buttons : MonoBehaviour {
         MenuPanel.SetActive(false);
         LobbySelectPanel.SetActive(false);
         LobbyCreatePanel.SetActive(true);
+        ControlsPanel.SetActive(false);
+    }
+
+    public void ShowControlsPanel()
+    {
+        MenuPanel.SetActive(false);
+        LobbySelectPanel.SetActive(false);
+        LobbyCreatePanel.SetActive(false);
+        ControlsPanel.SetActive(true);
     }
 
     public void GoToNewLobby()
