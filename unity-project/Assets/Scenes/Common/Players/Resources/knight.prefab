@@ -39,11 +39,11 @@ GameObject:
   - component: {fileID: 212228153923704756}
   - component: {fileID: 50600765901147558}
   - component: {fileID: 61080500136690912}
-  - component: {fileID: 114752373412048830}
+  - component: {fileID: 114094793758714488}
   - component: {fileID: 114488961310107386}
   - component: {fileID: 114220584704416194}
   m_Layer: 0
-  m_Name: Knight
+  m_Name: knight
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -211,6 +211,20 @@ EdgeCollider2D:
   m_Points:
   - {x: -0.9, y: -0.00000017881393}
   - {x: 0.9, y: -0.00000017881393}
+--- !u!114 &114094793758714488
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749826616931816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c88a89457e1959b4189ca5d31732547b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HOTBARITEM_SIZE: 41
+  KMOVEMENT_SPEED: 0.1
+  stabbing: 0
 --- !u!114 &114220584704416194
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -235,20 +249,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: 100
   max_hp: 100
---- !u!114 &114752373412048830
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1749826616931816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88a89457e1959b4189ca5d31732547b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MOVEMENT_SPEED: 0.08
-  GLOBAL_CD: 20
-  stabbing: 0
 --- !u!114 &114915497265902052
 MonoBehaviour:
   m_ObjectHideFlags: 1

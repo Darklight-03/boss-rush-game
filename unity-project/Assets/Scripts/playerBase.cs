@@ -59,8 +59,8 @@ public abstract class playerBase : MonoBehaviour {
     protected Vector3 healthbarsize;
     protected List<Vector2> forces;
     protected int hbarupdatetime;
-    public float MOVEMENT_SPEED=0.1f;
-    public float GLOBAL_CD = 0.3f;
+    protected float MOVEMENT_SPEED=0.1f;
+    protected float GLOBAL_CD = 0.3f;
     protected float SHIFT_CD = 0.0f;
     protected string SHIFT_NAME = "shift";
     protected float RMB_CD = 0.0f;
@@ -418,7 +418,7 @@ public abstract class playerBase : MonoBehaviour {
 
     // reduces player health, if its 0 then call Dead(), if not then apply
     // a knockback force given by dir
-    public void TakeDamage(float dmg, Vector2 dir)
+    public virtual void TakeDamage(float dmg, Vector2 dir)
     {
         snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);

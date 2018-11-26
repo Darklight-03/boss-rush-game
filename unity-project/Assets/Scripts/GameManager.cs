@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour {
             StartPlayer(t.theirid, t.cl, t.theirnum);
         }
         //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
-        player = (GameObject)Instantiate(Resources.Load<GameObject>("Knight"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
+        player = (GameObject)Instantiate(Resources.Load<GameObject>("knight"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
         {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
