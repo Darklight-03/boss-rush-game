@@ -13,7 +13,7 @@ public class SwordDamage : MonoBehaviour {
 	}
 	
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" && !collision.gameObject.name.Contains("OP"))
         {
@@ -38,9 +38,5 @@ public class SwordDamage : MonoBehaviour {
                 Debug.Log("Unknown sword collision HELP");
             }
         }
-        
-
-
     }
-
 }

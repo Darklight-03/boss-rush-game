@@ -134,8 +134,8 @@ MonoBehaviour:
   MOVEMENT_SPEED: 0.08
   ARROW_SPEED: 10
   MAX_DASH: 2
-  DASH_CD: 500
-  GLOBAL_CD: 20
+  DASH_CD: 10
+  GLOBAL_CD: 0.5
 --- !u!114 &114927458386824952
 MonoBehaviour:
   m_ObjectHideFlags: 1

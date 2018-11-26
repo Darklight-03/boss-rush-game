@@ -20,6 +20,7 @@ TagManager:
   - P2-healthbg
   - Boss
   - knightsword
+  - ability-icons
   layers:
   - Default
   - TransparentFX

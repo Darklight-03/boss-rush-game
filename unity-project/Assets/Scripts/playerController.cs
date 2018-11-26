@@ -42,8 +42,6 @@ public class playerController : MonoBehaviour {
         gameObjects = GameObject.FindGameObjectsWithTag("Player");
         target = gameObjects[0];
         StartCoroutine(playSwordSwing());
-        Debug.Log(GetComponentInParent<Component>().name);
-        image = this.GetComponentInChildren<RectTransform>();
     }
 
     private void OnEnable()
@@ -90,38 +88,7 @@ public class playerController : MonoBehaviour {
 
         Vector2 v2 = target.transform.position;
 
-        rb.velocity = v2 - v1;
-
-        if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
-        {
-            if (v2.x > v1.x)
-            {
-                this.transform.localEulerAngles = new Vector3(0, 0, 0);
-                //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                image.localEulerAngles = new Vector3(0, 0, 0);
-            }
-            else
-            {
-                this.transform.localEulerAngles = new Vector3(0, 180f, 0);
-                //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                image.localEulerAngles = new Vector3(0, 180, 0);
-            }
-        }
-        else
-        {
-            if (v2.y > v1.y)
-            {
-                this.transform.localEulerAngles = new Vector3(0, 0, 90f);
-                //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                image.localEulerAngles = new Vector3(0, 0, 90);
-            }
-            else
-            {
-                this.transform.localEulerAngles = new Vector3(0, 0, -90f);
-                //this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                image.localEulerAngles = new Vector3(0, 0, -90);
-            }
-        }
+        //rb.velocity = v2 - v1;
     }
 
     // Update is called once per frame
@@ -129,7 +96,7 @@ public class playerController : MonoBehaviour {
     {
         if (Vector2.Distance(prevPos, rb.position) > 0.1f)
         {
-            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"ry\": " + image.localEulerAngles.y + ", \"rz\": " + image.localEulerAngles.z + ", \"ty\": " + this.transform.localEulerAngles.y + ", \"tz\": " + this.transform.localEulerAngles.z + " }");
+            snm.sendMessage("bp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + "0" + ", \"ry\": " + "0" + " }");
             prevPos = rb.position;
         }
 
@@ -179,7 +146,7 @@ public class playerController : MonoBehaviour {
 
         if (health.TakeDamage(10))
             {
-                StartCoroutine(damageAnimation());
+                damageAnimation();
             }
             else
             {

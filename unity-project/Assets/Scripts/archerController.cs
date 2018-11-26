@@ -1,10 +1,54 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class archerController : MonoBehaviour {
+public class cooldown{
+    public string name;
+    public float cd;
+    public float nextavailable;
+    public string key;
+    public SpriteRenderer r;
+    public List<SpriteRenderer> rc;
+    public GameObject go;
+    public GameObject[] goc;
+    public bool p;
 
+    public cooldown(string name, float cd, string key, GameObject go){
+        this.name = name;
+        this.cd = cd;
+        this.key = key;
+        nextavailable = 0;
+        this.go = go;
+    }
+
+    public cooldown(float cd, GameObject[] go){
+        this.name="GLOBALCD";
+        this.cd = cd;
+        this.key = "none";
+        nextavailable = 0;
+        this.goc = go;
+        this.rc = new List<SpriteRenderer>();
+        this.p = false;
+    }
+
+    public void addR(SpriteRenderer sr){
+      rc.Add(sr); 
+    }
+
+    public bool isReady(){
+        return Time.time > nextavailable;
+    }
+    public void setCd(){
+        nextavailable = Time.time + cd;
+    }
+    public float getRatio(){
+        return ((nextavailable-Time.time)/cd)*0.9f + 0.1f;
+    }
+}
+
+public class archerController : MonoBehaviour {
     private SocketNetworkManager snm;
     private Rigidbody2D rb;
     private GameObject bow;
@@ -20,18 +64,19 @@ public class archerController : MonoBehaviour {
     public float MOVEMENT_SPEED=0.1f;
     public float ARROW_SPEED;
     public float MAX_DASH = 2f;
-    public int DASH_CD = 500;
-    public int GLOBAL_CD = 20;
+    public float DASH_CD = 10f;
+    public float GLOBAL_CD = 0.3f;
     int knocked;
     Vector2 realvelocity;
     bool clicked;
     private Sprite f1;
     private Sprite f2;
     private SpriteRenderer bowrender;
+    private Canvas canvas;
     int numarrows;
-    int dashcd;
-    int gcd;
-    int autocd;
+    cooldown dashcd;
+    cooldown glcd;
+    cooldown globalcd;
     int hit;
     private Vector2 prevPos = new Vector2(0,0);
     private Vector2 prevRot = new Vector2(0,0);
@@ -44,6 +89,7 @@ public class archerController : MonoBehaviour {
 	void Start ()
   {
         snm = GetComponent<SocketNetworkManager>();
+        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
         rb = GetComponent<Rigidbody2D>();
         bow = gameObject.transform.GetChild(0).gameObject;
         bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
@@ -66,7 +112,108 @@ public class archerController : MonoBehaviour {
         hit = 0;
         numarrows = 0;
 
+        /* ABILITIES */
+        GameObject[] icons = GameObject.FindGameObjectsWithTag("ability-icons");
+        Array.Sort(icons,CompareIcons);
+
+        List<cooldown> cds = new List<cooldown>();
+        glcd = new cooldown("auto",GLOBAL_CD,"LMB",icons[0]);
+        cds.Add(glcd);
+        dashcd = new cooldown("dash",DASH_CD,"LShift",icons[1]);
+        cds.Add(dashcd);
+
+        /* SET CD TEXT */
+        cds.ForEach(delegate(cooldown c){
+            Text t = c.go.GetComponentInChildren(typeof(Text)) as Text;
+            t.text = c.key;
+        });
+
+        /* GLOBAL CD */
+        globalcd = new cooldown(GLOBAL_CD,icons);
+        cds.Add(globalcd);
+        StartCoroutine(cdUpdater(cds));
+
 	}
+
+  int CompareIcons(GameObject x, GameObject y){
+    return x.name.CompareTo(y.name);
+  }
+
+    IEnumerator cdUpdater(List<cooldown> l){
+      while(true){
+        while(l.Count>0){
+            int i = 1;
+            l.ForEach(delegate(cooldown c){
+                if(!c.isReady()){
+                  if(!Equals(c.name,"GLOBALCD")){
+                    // display square or update it at correct position
+                    if(c.r==null){
+                        c.r = Instantiate(Resources.Load<GameObject>("Square"),c.go.GetComponent<Transform>().position,Quaternion.identity,canvas.transform).GetComponent<SpriteRenderer>();
+                    }
+                    c.r.color = new Color(255,255,255,c.getRatio());
+                  }
+                  else{
+                  Debug.Log("a");
+                    if(!c.p){
+                    Debug.Log("b");
+                      for(int p = 0;p<c.goc.Length;p++){
+                      Debug.Log("c");
+                        c.addR(Instantiate(Resources.Load<GameObject>("Square"),c.goc[p].GetComponent<Transform>().position,Quaternion.identity,canvas.transform).GetComponent<SpriteRenderer>());
+                      }
+                      c.p = true;
+                    }
+                    c.rc.ForEach(delegate (SpriteRenderer r){
+                      r.color = new Color(255,255,255,c.getRatio());
+                    });
+                  }
+                }else{
+                    // if square still being rendered, play flash animation then
+                    // stop rendering.
+                  if(!Equals(c.name,"GLOBALCD")){
+                    if(c.r!=null){
+                        StartCoroutine(cdFinished(c,c.r));
+                        c.r = null;
+                    }
+                  }
+                  else{
+                    for(int p = 0;i<c.goc.Length;i++){
+                      if(!c.p){
+                        StartCoroutine(cdFinished(c,c.rc));
+                        c.p = false;
+                      }
+                    }
+                  }
+                }
+                i++;
+            });
+        yield return null;
+        }
+      }
+    }
+    IEnumerator cdFinished(cooldown c, List<SpriteRenderer> cr){
+      for(int o = 0;o<c.goc.Length;o++){
+        for(float i = 0;i<5;i++){
+            Color a = new Color(255,255,255,1);
+            Color b = new Color(255,255,255,0);
+            float e = i/5;
+            Color lc = Color.Lerp(a,b,e);
+            cr[o].color = lc;
+            yield return null;
+        }
+        Destroy(cr[o].gameObject);
+      }
+    }
+    IEnumerator cdFinished(cooldown c, SpriteRenderer cr){
+        for(float i = 0;i<5;i++){
+            Color a = new Color(255,255,255,1);
+            Color b = new Color(255,255,255,0);
+            float e = i/5;
+            Color lc = Color.Lerp(a,b,e);
+            cr.color = lc;
+            yield return null;
+        }
+        Destroy(cr.gameObject);
+    }
 
     void OnEnable()
     {
@@ -76,6 +223,11 @@ public class archerController : MonoBehaviour {
     void OnDisable()
     {
         forces.Clear(); 
+    }
+    
+    void gcd(){
+        glcd.setCd();
+        globalcd.setCd();
     }
 	
     // called in fixed interval
@@ -137,28 +289,29 @@ public class archerController : MonoBehaviour {
         bow.transform.position = pos + -1 * direction.normalized * bowdistance;
 
         /* ABILITIES */
-        while(gcd<0){
+        while(glcd.isReady()){
 
           if(Input.GetKey("q")){
             addArrow();
-            gcd = GLOBAL_CD;
+            gcd();
             break;
           }
-          if(Input.GetKey("e")){
+          else if(Input.GetKey("e")){
             poisonArrow();
-            gcd = GLOBAL_CD;
+            gcd();
             break;
           }
-          if(Input.GetKey(KeyCode.LeftShift)){
-            if(dashcd<0){
+          else if(Input.GetKey(KeyCode.LeftShift)){
+            if(dashcd.isReady()){
               dash(direction);
+              gcd();
+              dashcd.setCd();
             }
-            gcd = GLOBAL_CD;
             break;
           }
        
           /* ARROW */
-          if(Input.GetMouseButton(0)){
+          else if(Input.GetMouseButton(0)){
             if(!clicked){
               clicked = true;
               bowrender.sprite = f2;
@@ -171,7 +324,7 @@ public class archerController : MonoBehaviour {
             GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
             arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
             clicked = false;
-            gcd = GLOBAL_CD;
+            gcd();
             break;
           }
           break;
@@ -197,9 +350,6 @@ public class archerController : MonoBehaviour {
     
     
 
-        dashcd--;
-        gcd--;
-        autocd--;
 	}
 
   void addArrow(){
@@ -219,7 +369,6 @@ public class archerController : MonoBehaviour {
     }
     v*=m;
     v = rb.position - v;
-    dashcd = DASH_CD;
     StartCoroutine(dashAnim(rb.position,v));
   }
 
@@ -228,21 +377,22 @@ public class archerController : MonoBehaviour {
       Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i)-10)/10);
       render.color = c;
       Vector3 curpos = Vector3.Lerp(opos,mpos,(float)i/10);
-      Debug.Log(Mathf.Abs(Mathf.Abs(i)-15));
       rb.position = curpos;
       yield return null;
     }
   }
 
 
-  // makes player invisible and unresponsive so that they could potentially be
-  // revived
-  void Dead(){
-    bowrender.enabled = false;
-    health.enabled = false;
-    render.enabled = false;
-    enabled = false;
-  }
+    // makes player invisible and unresponsive so that they could potentially be
+    // revived
+    void Dead()
+    {
+        healthbarback.transform.localScale = healthbar.transform.localScale;
+        bowrender.enabled = false;
+        health.enabled = false;
+        render.enabled = false;
+        enabled = false;
+    }
 
 
     // simply adds a force to the list to be applied next update.
@@ -261,7 +411,7 @@ public class archerController : MonoBehaviour {
     public void TakeDamage(float dmg, Vector2 dir)
     {
         snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
-        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
+        var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
         hbarupdatetime = 20;
