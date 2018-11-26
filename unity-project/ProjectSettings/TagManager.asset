@@ -24,6 +24,7 @@ TagManager:
   - P1-icon
   - P2-icon
   - icon
+  - stone
   layers:
   - Default
   - TransparentFX
