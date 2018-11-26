@@ -285,7 +285,7 @@ public class BossHandle : MonoBehaviour
         }
         if (collider.tag == "Player")
         {
-            isMove = false;
+            //isMove = false;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
