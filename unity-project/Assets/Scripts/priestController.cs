@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
+
 
 public class priestController : playerBase {
 
@@ -8,6 +12,10 @@ public class priestController : playerBase {
     private float bowdistance;
     public float PMOVEMENT_SPEED;
     public float AUTO_SPEED;
+    public float radius = 0.3f;
+    public float linewidth = 0.2f;
+    public int vertexcount = 40;
+    LineRenderer lineRenderer;
 
     // Use this for initialization
     protected override void Start()
@@ -17,6 +25,7 @@ public class priestController : playerBase {
         staff = gameObject.transform.GetChild(0).gameObject;
         bowdistance = (staff.transform.position - (Vector3)rb.position).magnitude;
         interfaceplayertext.text = "You: Priest";
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     protected override void shiftAbilityInit(){
@@ -80,6 +89,7 @@ public class priestController : playerBase {
     }
 
     protected override void EAbility(){
+        StartCoroutine(EAbilityAnim(mousePosition));
         GameObject[] healPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach(var p in healPlayers){
             if((mousePosition - (Vector2)p.transform.position).magnitude < .30){
@@ -92,6 +102,22 @@ public class priestController : playerBase {
 
     protected override void Dead(){
         base.Dead();
+    }
+
+    IEnumerator EAbilityAnim(Vector3 c)
+    {
+
+        GameObject circle = (GameObject)Instantiate(Resources.Load<GameObject>("HealCircle"), c, Quaternion.identity);
+
+        float x = circle.gameObject.transform.position.x;
+        float y = circle.gameObject.transform.position.y;
+        circle.transform.position = new Vector3(x, y, -3f);
+
+        yield return new WaitForSeconds(1f);
+
+        UnityEngine.Object.Destroy(circle);
+
+        yield return null;
     }
 
 }
