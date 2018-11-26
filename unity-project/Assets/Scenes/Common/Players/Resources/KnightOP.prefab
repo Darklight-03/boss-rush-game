@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 114964921150166186}
   m_Layer: 0
   m_Name: KnightOP
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,12 +201,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9421618218dbd4aaa069bda8c41b20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MOVEMENT_SPEED: 0.1
-  GLOBAL_CD: 20
-  stabbing: 0
+  HOTBARITEM_SIZE: 41
+  playernum: 0
   id: 
   healthbar_id: 0
-  playernum: 0
+  stabbing: 0
 --- !u!212 &212584493080544744
 SpriteRenderer:
   m_ObjectHideFlags: 1

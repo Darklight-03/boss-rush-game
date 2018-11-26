@@ -127,13 +127,6 @@ public abstract class playerBaseOP : MonoBehaviour
         {
             hbarupdatetime--;
         }
-
-        if (Vector2.Distance(prevPos, rb.position) > 0.1f || Vector2.Angle(prevRot, direction) > Vector2.Angle(new Vector2(1, 0.1f), Vector2.right))
-        {
-            snm.sendMessage("pp", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
-            prevPos = rb.position;
-            prevRot = direction;
-        }
     }
 
     // makes player invisible and unresponsive so that they could potentially be
@@ -142,8 +135,12 @@ public abstract class playerBaseOP : MonoBehaviour
     {
         healthbarback.transform.localScale = healthbar.transform.localScale;
         health.enabled = false;
-        render.enabled = false;
-        enabled = false;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
+            gameObject.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        //render.enabled = false;
+        this.gameObject.SetActive(false);
     }
 
 
@@ -162,7 +159,7 @@ public abstract class playerBaseOP : MonoBehaviour
     // a knockback force given by dir
     public virtual void TakeDamage(float dmg, Vector2 dir)
     {
-        snm.sendMessage("td", "{ \"dmg\": " + dmg + " }");
+        //snm.sendMessage("takedamage", "{ \"dmg\": " + dmg + " }");
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
@@ -180,7 +177,7 @@ public abstract class playerBaseOP : MonoBehaviour
 
     public virtual void Heal(float amount)
     {
-        snm.sendMessage("td", "{ \"dmg\": " + -1 * amount + " }");
+        //snm.sendMessage("takedamage", "{ \"dmg\": " + -1 * amount + " }");
         health.Heal(amount);
         var hsize = new Vector3((((health.getCurrentHP() + amount) % health.getMaxHP()) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;

@@ -5,11 +5,13 @@ using UnityEngine;
 public class PlayerCollision : MonoBehaviour {
     public int knockback;
     private Rigidbody2D rb;
+    SocketNetworkManager snm;
     
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         knockback = 1;
+        snm = new SocketNetworkManager();
 	}
 	
 	// Update is called once per frame

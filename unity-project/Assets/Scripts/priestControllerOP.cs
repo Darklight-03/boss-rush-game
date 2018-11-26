@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class archerControllerOP : playerBaseOP {
-    private GameObject bow;
-    public float ARROW_SPEED;
+public class priestControllerOP : playerBaseOP
+{
+    private GameObject staff;
     private float bowdistance;
-    private Sprite f1;
-    private Sprite f2;
-    private SpriteRenderer bowrender;
-
+    public float PMOVEMENT_SPEED;
+    public float AUTO_SPEED;
+    public float radius = 0.3f;
+    public float linewidth = 0.2f;
+    public int vertexcount = 40;
+    LineRenderer lineRenderer;
 
     // Use this for initialization
-    protected override void Start ()
+    protected override void Start()
     {
         base.Start();
-        bow = gameObject.transform.GetChild(0).gameObject;
-        bowdistance = (bow.transform.position - (Vector3)rb.position).magnitude;
-        bowrender = bow.GetComponent<SpriteRenderer>();
-        f2 = Resources.Load<Sprite>("bow2");
-        f1 = Resources.Load<Sprite>("bow");
+        staff = gameObject.transform.GetChild(0).gameObject;
+        bowdistance = (staff.transform.position - (Vector3)rb.position).magnitude;
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     protected override void OnEnable()
@@ -61,16 +61,18 @@ public class archerControllerOP : playerBaseOP {
     {
         if (id == sender)
         {
-            Vector2 pos = transform.position;
+            Vector2 pos;
+            Vector2 direction;
+            float angle;
+            pos = transform.position;
             pos.x = x;
             pos.y = y;
             transform.position = pos;
 
-            Vector2 dir = new Vector2(rx, ry);
-
-            // use angle to rotate bow
-            bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
-            bow.transform.position = pos + -1 * dir.normalized * bowdistance;
+            direction = new Vector2(rx, ry);
+            angle = Mathf.Atan2(direction.y, direction.x);
+            staff.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
+            staff.transform.position = pos + -1 * direction.normalized * bowdistance;
         }
         yield break;
     }
@@ -83,24 +85,7 @@ public class archerControllerOP : playerBaseOP {
     {
         if (id == sender)
         {
-            // handle the weird way the bow works
-            if (name == "drawbow")
-            {
-                bowrender.sprite = f1;
-            }
-            else if (name == "relebow")
-            {
-                bowrender.sprite = f2;
-            }
-            else if (name == "dashanim")
-            {
-                StartCoroutine(dashAnim(rb.position));
-            }
-            // handle actual animations
-            else
-            {
-                // animation.Play(name)
-            }
+
         }
         yield break;
     }
@@ -114,24 +99,45 @@ public class archerControllerOP : playerBaseOP {
         if (id == sender)
         {
             // for now just do arrows, name could specify the projectile
-            GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>(name), pos, rot);
-            arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * ARROW_SPEED * -1;
+            if (name == "EAbility")
+            {
+                StartCoroutine(EAbilityAnim(pos));
+            }
+            else if (name == "p_autoOP")
+            {
+                GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_autoOP"), pos, rot);
+                arrow.GetComponent<Rigidbody2D>().velocity = dir.normalized * AUTO_SPEED * -1;
+            } 
         }
         yield break;
     }
 
-    // called in fixed interval
+    IEnumerator EAbilityAnim(Vector3 c)
+    {
+        GameObject circle = (GameObject)Instantiate(Resources.Load<GameObject>("HealCircle"), c, Quaternion.identity);
+
+        float x = circle.gameObject.transform.position.x;
+        float y = circle.gameObject.transform.position.y;
+        circle.transform.position = new Vector3(x, y, -3f);
+
+        yield return new WaitForSeconds(1f);
+
+        UnityEngine.Object.Destroy(circle);
+
+        yield return null;
+    }
+
     protected override void FixedUpdate()
     {
-        base.FixedUpdate();
+
     }
 
     // Update is called once per frame
     protected override void Update()
     {
         base.Update();
-        
     }
+
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
@@ -140,16 +146,10 @@ public class archerControllerOP : playerBaseOP {
         base.Dead();
     }
 
-
     // simply adds a force to the list to be applied next update.
     void applyForce(Vector2 force)
     {
         forces.Add(force);
-    }
-
-    void OnMouseDown()
-    {
-
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -157,14 +157,12 @@ public class archerControllerOP : playerBaseOP {
 
     }
 
-
-    IEnumerator dashAnim(Vector3 opos)
+    // reduces player health, if its 0 then call Dead(), if not then apply
+    // a knockback force given by dir
+    public override void TakeDamage(float dmg, Vector2 dir)
     {
-        for (int i = -10; i <= 10; i++)
-        {
-            Color c = Color.Lerp(Color.white, Color.green, (float)Mathf.Abs(Mathf.Abs(i) - 10) / 10);
-            render.color = c;
-            yield return null;
-        }
+         base.TakeDamage(dmg, dir);
     }
+
 }
+

@@ -222,11 +222,6 @@ public class BossHandle : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name == "arrowOP(Clone)")
-        {
-            Destroy(collider.gameObject);
-            return;
-        }
         if (collider.gameObject.tag == "projectile")
         {
             Destroy(collider.gameObject);

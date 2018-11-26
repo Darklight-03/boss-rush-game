@@ -41,7 +41,6 @@ public class knightControllerOP : playerBaseOP
     protected override void OnDisable()
     {
         base.OnDisable();
-        SocketNetworkManager.TakeDamageHandle -= TakeDamageHandleH;
         SocketNetworkManager.UpdateOtherPlayerPos -= UpdateOtherPlayerPosH;
         SocketNetworkManager.PlayerAnimHandle -= PlayerAnimHandleH;
     }
@@ -172,9 +171,12 @@ public class knightControllerOP : playerBaseOP
     {
         if (weapon == "shield")
         {
-            dmg = dmg / 2;
+            base.TakeDamage(dmg / 2, dir);
         }
-        base.TakeDamage(dmg, dir);
+        else
+        {
+            base.TakeDamage(dmg, dir);
+        }
     }
 
 }

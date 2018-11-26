@@ -69,19 +69,20 @@ public class archerController : playerBase {
 
     protected override void LMBClicked(){
         bowrender.sprite = f2;
-        snm.sendMessage("pa", "{ \"name\": \"" + "relebow" + "\" }");
+        snm.sendMessage("playeranimation", "{ \"name\": \"" + "relebow" + "\" }");
     }
 
     protected override void LMBReleased(){
         bowrender.sprite = f1;
-        snm.sendMessage("pa", "{ \"name\": \"" + "drawbow" + "\" }");
-        snm.sendMessage("sp", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"rx\": " + direction.x + ", \"ry\": " + direction.y + " }");
+        snm.sendMessage("playeranimation", "{ \"name\": \"" + "drawbow" + "\" }");
+        Vector2 direction = rb.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "arrowOP" + "\" , \"x\": " + bow.transform.position.x + " , \"y\": " + bow.transform.position.y + ", \"dx\": " + direction.x + " , \"dy\": " + direction.y + ", \"rx\": " + bow.transform.rotation.x + ", \"ry\": " + bow.transform.rotation.y + ", \"rz\": " + bow.transform.rotation.z + ", \"rw\": " + bow.transform.rotation.w + " }");
         GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("arrow"),bow.transform.position,bow.transform.rotation,GetComponent<Transform>());
         arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized*ARROW_SPEED*-1;
     }
 
     protected override void LShiftAbility(Vector2 input){
-        snm.sendMessage("pa", "{ \"name\": \"" + "dashanim" + "\" }");
+        snm.sendMessage("playeranimation", "{ \"name\": \"" + "dashanim" + "\" }");
         float m = input.magnitude;
         var v = input.normalized;
         if(m>MAX_DASH){ 

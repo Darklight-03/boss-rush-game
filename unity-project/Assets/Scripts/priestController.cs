@@ -71,6 +71,7 @@ public class priestController : playerBase {
     }
 
     protected override void LMBReleased(){
+        snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "p_autoOP" + "\" , \"x\": " + staff.transform.position.x + " , \"y\": " + staff.transform.position.y + ", \"dx\": " + direction.x + " , \"dy\": " + direction.y + ", \"rx\": " + staff.transform.rotation.x + ", \"ry\": " + staff.transform.rotation.y + ", \"rz\": " + staff.transform.rotation.z + ", \"rw\": " + staff.transform.rotation.w + " }");
         GameObject arrow = (GameObject)Instantiate(Resources.Load<GameObject>("p_auto"), staff.transform.position, staff.transform.rotation, GetComponent<Transform>());
         arrow.GetComponent<Rigidbody2D>().velocity = direction.normalized * AUTO_SPEED * -1;
     }
@@ -89,6 +90,7 @@ public class priestController : playerBase {
     }
 
     protected override void EAbility(){
+        snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "EAbility" + "\" , \"x\": " + mousePosition.x + " , \"y\": " + mousePosition.y + ", \"dx\": " + 0 + " , \"dy\": " + 0 + ", \"rx\": " + 0 + ", \"ry\": " + 0 + ", \"rz\": " + 0 + ", \"rw\": " + 0 + " }");
         StartCoroutine(EAbilityAnim(mousePosition));
         GameObject[] healPlayers = GameObject.FindGameObjectsWithTag("Player");
         foreach(var p in healPlayers){

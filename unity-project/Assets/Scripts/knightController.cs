@@ -72,7 +72,7 @@ public class knightController : playerBase {
     protected override void LMBReleased(){
         if (weapon == "sword")
         {
-            snm.sendMessage("pa", "{ \"name\": \"" + "stab" + "\" }");
+            snm.sendMessage("playeranimation", "{ \"name\": \"" + "stab" + "\" }");
             StartCoroutine(stabAnimation(10));
         }
     }
@@ -91,30 +91,19 @@ public class knightController : playerBase {
     }
 
     protected override void QAbility(){
-        snm.sendMessage("pa", "{ \"name\": \"" + "switch" + "\" }");
+        snm.sendMessage("playeranimation", "{ \"name\": \"" + "switch" + "\" }");
         if (weapon == "shield")
         {
             
             weapon = "sword";
             shield.GetComponent<SpriteRenderer>().enabled = false;
-            //shield.SetActive(false);
             sword.GetComponent<SpriteRenderer>().enabled = true;
-            //sword.GetComponent<EdgeCollider2D>(). = true;
-            //sword.SetActive(true);
-            //for (int i = 0; i < sword.transform.childCount; i++)
-            //    sword.transform.GetChild(i).gameObject.SetActive(true);
-
         }
         else
         {
             weapon = "shield";
             sword.GetComponent<SpriteRenderer>().enabled = false;
-            //sword.GetComponent<EdgeCollider2D>().enabled = false;
-            //sword.SetActive(false);
             shield.GetComponent<SpriteRenderer>().enabled = true;
-            //shield.SetActive(true);
-            //for (int i = 0; i < shield.transform.childCount; i++)
-            //    shield.transform.GetChild(i).gameObject.SetActive(true);
         }
     }
 
@@ -146,9 +135,12 @@ public class knightController : playerBase {
     {
         if (weapon == "shield")
         {
-            dmg = dmg / 2;
+            base.TakeDamage(dmg / 2, dir);
         }
-        base.TakeDamage(dmg,dir);
+        else
+        {
+            base.TakeDamage(dmg, dir);
+        }
     }
 
 }

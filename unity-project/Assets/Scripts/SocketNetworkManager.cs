@@ -268,6 +268,7 @@ public class SocketNetworkManager : MonoBehaviour
 
                             default:
                                 Debug.Log("unknown general message type");
+                                Debug.Log(gms.ct);
                                 break;
                         }
                         break;
