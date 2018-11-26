@@ -12,16 +12,12 @@ public class SwordDamage : MonoBehaviour {
 	    
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" && !collision.gameObject.name.Contains("OP"))
         {
-          collision.gameObject.GetComponent<archerController>().TakeDamage(10, Vector2.zero);
+            collision.gameObject.GetComponent<playerBase>().TakeDamage(10, Vector2.zero);
         }
     }
 }

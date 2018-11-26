@@ -77,7 +77,7 @@ public class BossHandle : MonoBehaviour
         yield break;
     }
 
-    void TakeDamage(float dmg)
+    public void TakeDamage(float dmg)
     {
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
@@ -124,13 +124,16 @@ public class BossHandle : MonoBehaviour
         float temp = float.MaxValue - 1000;
         foreach (GameObject g in gameObjects)
         {
-            Vector2 vg1 = g.transform.position;
-            float max1 = (v1 - vg1).magnitude;
-            if(max1 < temp)
-            {
-                temp = max1;
-                player = g;
-            }
+			if (g.activeSelf)
+			{
+				Vector2 vg1 = g.transform.position;
+				float max1 = (v1 - vg1).magnitude;
+				if(max1 < temp)
+				{
+					temp = max1;
+					player = g;
+				}
+			}
         }
 
        
@@ -170,7 +173,7 @@ public class BossHandle : MonoBehaviour
 
         if (Vector2.Distance(prevv1, v1) > 0.1f || Vector2.Distance(prevv2, v2) > 0.1f)
         {
-            snm.sendMessage("bp", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
+            snm.sendMessage("bossposition", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
             prevv1 = v1;
             prevv2 = v2;
         }
@@ -184,7 +187,7 @@ public class BossHandle : MonoBehaviour
         Vector2 v2 = player.transform.position;
         if ((v1 - v2).magnitude < 3 && state)
         {
-            snm.sendMessage("ba", "{ \"name\": \"" + "huijian" + "\" }");
+            snm.sendMessage("bossanimation", "{ \"name\": \"" + "huijian" + "\" }");
             animation.Play("huijian");
             
             state = false;
@@ -219,16 +222,11 @@ public class BossHandle : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.name == "arrowOP(Clone)")
-        {
-            Destroy(collider.gameObject);
-            return;
-        }
         if (collider.gameObject.tag == "projectile")
         {
             Destroy(collider.gameObject);
             TakeDamage(10);
-            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
+            snm.sendMessage("dealdamage", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
 
             // do stuff only for the circle collider
         }

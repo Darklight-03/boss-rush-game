@@ -5,16 +5,17 @@ using System;
 
 public class SocketNetworkManager : MonoBehaviour
 {
-    static WebSocket w;
+    public static WebSocket w;
     public static int lobbyid = -1;
     static bool contli;
     static bool started = false;
     public static string id;
     public static bool isHost = true;
     public static int playernum;
+    public static string plclass = "";
     private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
-    public static Queue<newPly> newplayers = new Queue<newPly>();
+    public static Dictionary<string, newPly> newplayers = new Dictionary<string, newPly>();
     public static int numberofplayers = 0;
     private static Queue<string> logqueue = new Queue<string>();
     private static PlayerLog eventLog;
@@ -53,11 +54,17 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator BossAnimRes(string name);
     public static event BossAnimRes BossAnimHandle;
 
-    public delegate void SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir);
+    public delegate void SpawnProjRes(string sender, string name, Vector2 pos, Vector2 dir, Quaternion rot);
     public static event SpawnProjRes SpawnProjHandle;
 
     public delegate IEnumerator BossDeadRes();
     public static event BossDeadRes BossDeadHandle;
+
+    public delegate IEnumerator SelectClassRes(string ret, string _plclass);
+    public static event SelectClassRes SelectClassHandle;
+
+    public delegate IEnumerator UpdateClassRes(string playerid, string _plclass);
+    public static event UpdateClassRes UpdateClassHandle;
 
 
 
@@ -83,15 +90,28 @@ public class SocketNetworkManager : MonoBehaviour
         w.Close();
     }
 
-    public void createLobby()
+    public void createLobby(string lobbyname)
     {
-        w.SendString("{ \"msgtype\":\"create lobby\" }");
+        w.SendString("{ \"msgtype\":\"create lobby\", \"name\": \"" + lobbyname + "\" }");
     }
 
     public void joinLobby(int lobbyid)
     {
         SocketNetworkManager.lobbyid = lobbyid;
         w.SendString("{ \"msgtype\":\"join lobby\", \"lobbyid\": " + lobbyid.ToString() + " }");
+    }
+
+    public void selectClass(string _plclass)
+    {
+        if (lobbyid == -1)
+        {
+            Debug.LogError("selecting class in nonexistent lobby");
+        }
+        else
+        {
+            plclass = _plclass;
+            w.SendString("{ \"msgtype\":\"select class\", \"lobbyid\": " + lobbyid + ", \"plclass\": \"" + _plclass + "\" }");
+        }
     }
 
     public void sendMessage(string contenttype, string content)
@@ -151,11 +171,14 @@ public class SocketNetworkManager : MonoBehaviour
                     case "new connection":
                         newCon nc = JsonUtility.FromJson<newCon>(msgo.content);
                         SocketNetworkManager.id = nc.yourid;
+                        newPly n = new newPly();
+                        n.theirid = id;
+                        newplayers[id] = n;
                         break;
 
                     case "new player":
                         newPly np = JsonUtility.FromJson<newPly>(msgo.content);
-                        newplayers.Enqueue(np);
+                        newplayers[np.theirid] = np;
                         numberofplayers++;
                         if (NewPlayerHandle != null)
                             StartCoroutine(NewPlayerHandle(np));
@@ -172,6 +195,18 @@ public class SocketNetworkManager : MonoBehaviour
                             StartCoroutine(JoinLobbyHandle(jnl.lobbyid, jnl.playernum, jnl.ret));
                         break;
 
+                    case "select class":
+                        selClass scl = JsonUtility.FromJson<selClass>(msgo.content);
+                        if (SelectClassHandle != null)
+                            StartCoroutine(SelectClassHandle(scl.ret, scl.plclass));
+                        break;
+
+                    case "update class":
+                        updClass ucl = JsonUtility.FromJson<updClass>(msgo.content);
+                        if (UpdateClassHandle != null)
+                            StartCoroutine(UpdateClassHandle(ucl.player, ucl.plclass));
+                        break;
+
                     case "get lobbies":
                         lobbyList ll = JsonUtility.FromJson<lobbyList>(msgo.content);
                         if (GetLobbiesHandle != null)
@@ -184,55 +219,56 @@ public class SocketNetworkManager : MonoBehaviour
                         genMess gms = JsonUtility.FromJson<genMess>(msgo.content);
                         switch (gms.ct)
                         {
-                            case "pp": // player position
+                            case "playerposition": // player position
                                 playerPos pp = JsonUtility.FromJson<playerPos>(gms.content);
                                 if (UpdateOtherPlayerPos != null)
                                     UpdateOtherPlayerPos(gms.sender, pp.x, pp.y, pp.rx, pp.ry);
                                 break;
 
-                            case "sg": // start game
+                            case "startgame": // start game
                                 if (StartGameHandle != null)
                                     StartCoroutine(StartGameHandle());
                                 break;
 
-                            case "td": // take damage (from boss)
+                            case "takedamage": // (from boss)
                                 opTakeDam otd = JsonUtility.FromJson<opTakeDam>(gms.content);
                                 if (TakeDamageHandle != null)
                                     TakeDamageHandle(gms.sender, otd.dmg);
                                 break;
 
-                            case "dd": // deal damage (to boss)
+                            case "dealdamage": // (to boss)
                                 opDealDam odd = JsonUtility.FromJson<opDealDam>(gms.content);
                                 if (DealDamageHandle != null)
                                     DealDamageHandle(gms.sender, odd.dmg, new Vector2(odd.dirx, odd.diry));
                                 break;
 
-                            case "bp": // boss position
+                            case "bossposition": // boss position
                                 bossPos bp = JsonUtility.FromJson<bossPos>(gms.content);
                                 if (UpdateBossPositionHandle != null)
                                     StartCoroutine(UpdateBossPositionHandle(bp.x, bp.y, bp.rx, bp.ry));
                                 break;
 
-                            case "pa": // player animation
+                            case "playeranimation": // player animation
                                 playerAnim pa = JsonUtility.FromJson<playerAnim>(gms.content);
                                 if (PlayerAnimHandle != null)
                                     PlayerAnimHandle(gms.sender, pa.name);
                                 break;
 
-                            case "ba": // boss animation
+                            case "bossanimation": // boss animation
                                 bossAnim ba = JsonUtility.FromJson<bossAnim>(gms.content);
                                 if (BossAnimHandle != null)
                                     StartCoroutine(BossAnimHandle(ba.name));
                                 break;
 
-                            case "sp": // spawn projectile
+                            case "spawnprojectile": // spawn projectile
                                 spawnProj sp = JsonUtility.FromJson<spawnProj>(gms.content);
                                 if (SpawnProjHandle != null)
-                                    SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.rx, sp.ry));
+                                    SpawnProjHandle(gms.sender, sp.name, new Vector2(sp.x, sp.y), new Vector2(sp.dx, sp.dy), new Quaternion(sp.rx, sp.ry, sp.rz, sp.rw));
                                 break;
 
                             default:
                                 Debug.Log("unknown general message type");
+                                Debug.Log(gms.ct);
                                 break;
                         }
                         break;
@@ -267,7 +303,7 @@ public class newPly
 {
     public int theirnum;
     public string theirid;
-    public int cl;
+    public string _plclass;
 }
 
 [Serializable]
@@ -297,6 +333,7 @@ public class genMess
 public class lobbyInfo
 {
     public int players;
+		public string name;
 }
 
 [Serializable]
@@ -355,6 +392,24 @@ public class spawnProj
     public string name;
     public float x;
     public float y;
+	public float dx;
+	public float dy;
     public float rx;
     public float ry;
+	public float rz;
+	public float rw;
+}
+
+[Serializable]
+public class selClass
+{
+    public string ret;
+    public string plclass;
+}
+
+[Serializable]
+public class updClass
+{
+    public string player;
+    public string plclass;
 }

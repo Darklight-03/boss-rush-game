@@ -105,10 +105,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2faa2670c185e364eb06c1bd019a9e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MOVEMENT_SPEED: 0
-  ARROW_SPEED: 10
-  id: 
+  HOTBARITEM_SIZE: 41
   playernum: 0
+  id: 
+  healthbar_id: 0
+  ARROW_SPEED: 10
 --- !u!114 &114927458386824952
 MonoBehaviour:
   m_ObjectHideFlags: 1

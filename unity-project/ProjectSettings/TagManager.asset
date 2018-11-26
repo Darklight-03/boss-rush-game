@@ -18,7 +18,12 @@ TagManager:
   - P2-name
   - P2-health
   - P2-healthbg
+  - Boss
+  - knightsword
   - ability-icons
+  - P1-icon
+  - P2-icon
+  - icon
   layers:
   - Default
   - TransparentFX
@@ -28,7 +33,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - ForwardUI
   - 
   - 
   - 

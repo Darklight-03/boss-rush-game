@@ -37,9 +37,9 @@ GameObject:
   - component: {fileID: 4663671624715990}
   - component: {fileID: 212423562171437862}
   - component: {fileID: 50626725684891156}
+  - component: {fileID: 61509826198589080}
   - component: {fileID: 114873816907695274}
   - component: {fileID: 114927458386824952}
-  - component: {fileID: 61509826198589080}
   - component: {fileID: 114981697246486582}
   m_Layer: 0
   m_Name: Archer

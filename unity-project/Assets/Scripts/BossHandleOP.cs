@@ -146,7 +146,7 @@ public class BossHandleOP : MonoBehaviour
         yield break;
     }
 
-    void TakeDamage(float dmg)
+    public void TakeDamage(float dmg)
     {
 
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
@@ -219,7 +219,7 @@ public class BossHandleOP : MonoBehaviour
         {
             Destroy(collider.gameObject);
             TakeDamage(10);
-            snm.sendMessage("dd", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
+            snm.sendMessage("dealdamage", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
 
             // do stuff only for the circle collider
         }
