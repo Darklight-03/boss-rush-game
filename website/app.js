@@ -75,9 +75,9 @@ io.on('connection', function(socket){
 			// send messages to the new member about each lobby member
 			for (i = 0; i < lobby.members.length; i++) {
 				console.log("sent to " + lobby.members[i]['id']);
-				lobby.members[i].send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: lobby.members.length, theirid: socket['id'], cl: 0 }) }));
+				lobby.members[i].send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: lobby.members.length, theirid: socket['id'], _plclass: "None" }) }));
 				console.log("sent to " + socket.id + "-");
-				socket.send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: i, theirid: lobby.members[i]['id'], cl: 0 }) }));
+				socket.send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: i, theirid: lobby.members[i]['id'], _plclass: "None" }) }));
 			}
 			socket.inlobby = true;
           lobby.members[lobby.members.length] = socket;
@@ -96,7 +96,7 @@ io.on('connection', function(socket){
         var good = true;
         for (i = 0; i < lobby.members.length; i++) {
           if (msg['plclass'] == lobby.members[i]['plclass'] && msg['plclass'] != "None") {
-            socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'fail' }) }));
+            socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'fail', plclass: "" }) }));
             good = false;
           }
         }
@@ -104,7 +104,7 @@ io.on('connection', function(socket){
           for (i = 0; i < lobby.members.length; i++) {
             if (lobby.members[i]['id'] == socket.id) {
               lobby.members[i]['plclass'] = msg['plclass'];
-              socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'success' }) }));
+              socket.send(JSON.stringify({ msgtype: 'select class', content: JSON.stringify({ ret: 'success', plclass: msg['plclass'] }) }));
             }
             else {
               lobby.members[i].send(JSON.stringify({msgtype: 'update class', content: JSON.stringify({ player: socket.id, plclass: msg['plclass'] }) }))

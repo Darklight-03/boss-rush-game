@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
     GameObject player3;
     GameObject boss;
     GameObject obstacle1;
+    public GameObject selectMenu;
     public GameObject StartGameButton;
     private bool gameStarted = false;
     private List<Vector2> playerInitPos = new List<Vector2>(3);
@@ -46,11 +47,12 @@ public class GameManager : MonoBehaviour {
 
     void StartGame()
     {
+        Dictionary<string, int> plord = selectMenu.GetComponent<ClassSelectManager>().plord;
+        selectMenu.SetActive(false);
         gameStarted = true;
-        for (int i = 0; i < SocketNetworkManager.newplayers.Count; i++)
+        foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
         {
-            newPly t = SocketNetworkManager.newplayers.Dequeue();
-            StartPlayer(t.theirid, t.cl, t.theirnum);
+            StartPlayer(a.Value, plord[a.Value.theirid]);
         }
         //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
         player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
@@ -69,31 +71,31 @@ public class GameManager : MonoBehaviour {
 	void Update () {
     }
 
-    void StartPlayer(string id, int cl, int num)
+    void StartPlayer(newPly a, int ord)
     {
-        // argument will specify class later
-        if (player2 == null)
-        {
-            player2 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
-            player2.GetComponent<archerControllerOP>().playernum = num;
-            player2.GetComponent<archerControllerOP>().id = id;
-            player2.GetComponent<archerControllerOP>().healthbar_id = 1;
-        }
-        else if (player3 == null)
-        {
-            player3 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
-            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
-            player3.GetComponent<archerControllerOP>().playernum = num;
-            player3.GetComponent<archerControllerOP>().id = id;
-            player3.GetComponent<archerControllerOP>().healthbar_id = 2;
-        }
+        //// argument will specify class later
+        GameObject player = Instantiate(Resources.Load<GameObject>(a._plclass), playerInitPos[a.theirnum], Quaternion.identity);
+        player.GetComponent<playerBase>.playernum = a.theirnum;
+        player.GetComponent<playerBase>.id = a.theirid;
+        player.GetComponent<playerBase>.healthbar_id = ord;
     }
 
 
     IEnumerator StartGameHandle()
     {
-        StartGame();
+        bool allready = true;
+        foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
+        { 
+            if (a.Value._plclass == "None")
+            {
+                allready = false;
+                yield break;
+            }
+        }
+        if (allready)
+            StartGame();
+        else
+            snm.logText("Cannot start not all players have selected a class");
         yield return null;
     }
 

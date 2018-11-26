@@ -12,9 +12,10 @@ public class SocketNetworkManager : MonoBehaviour
     public static string id;
     public static bool isHost = true;
     public static int playernum;
+    public static string plclass = "";
     private static int instances = 0;
     public static string serverurl = "ws://teamproject1.ddns.net:3000/";
-    public static Queue<newPly> newplayers = new Queue<newPly>();
+    public static Dictionary<string, newPly> newplayers = new Dictionary<string, newPly>();
     public static int numberofplayers = 0;
     private static Queue<string> logqueue = new Queue<string>();
     private static PlayerLog eventLog;
@@ -59,6 +60,12 @@ public class SocketNetworkManager : MonoBehaviour
     public delegate IEnumerator BossDeadRes();
     public static event BossDeadRes BossDeadHandle;
 
+    public delegate IEnumerator SelectClassRes(string ret, string _plclass);
+    public static event SelectClassRes SelectClassHandle;
+
+    public delegate IEnumerator UpdateClassRes(string playerid, string _plclass);
+    public static event UpdateClassRes UpdateClassHandle;
+
 
 
 
@@ -94,7 +101,7 @@ public class SocketNetworkManager : MonoBehaviour
         w.SendString("{ \"msgtype\":\"join lobby\", \"lobbyid\": " + lobbyid.ToString() + " }");
     }
 
-    public void selectClass(string plclass)
+    public void selectClass(string _plclass)
     {
         if (lobbyid == -1)
         {
@@ -102,7 +109,8 @@ public class SocketNetworkManager : MonoBehaviour
         }
         else
         {
-            w.SendString("{ \"msgtype\":\"select class\", \"lobbyid\": " + lobbyid + ", \"plclass\": " + plclass + " }");
+            plclass = _plclass;
+            w.SendString("{ \"msgtype\":\"select class\", \"lobbyid\": " + lobbyid + ", \"plclass\": \"" + _plclass + "\" }");
         }
     }
 
@@ -163,11 +171,14 @@ public class SocketNetworkManager : MonoBehaviour
                     case "new connection":
                         newCon nc = JsonUtility.FromJson<newCon>(msgo.content);
                         SocketNetworkManager.id = nc.yourid;
+                        newPly n = new newPly();
+                        n.theirid = id;
+                        newplayers[id] = n;
                         break;
 
                     case "new player":
                         newPly np = JsonUtility.FromJson<newPly>(msgo.content);
-                        newplayers.Enqueue(np);
+                        newplayers[np.theirid] = np;
                         numberofplayers++;
                         if (NewPlayerHandle != null)
                             StartCoroutine(NewPlayerHandle(np));
@@ -182,6 +193,18 @@ public class SocketNetworkManager : MonoBehaviour
                         joinLobby jnl = JsonUtility.FromJson<joinLobby>(msgo.content);
                         if (JoinLobbyHandle != null)
                             StartCoroutine(JoinLobbyHandle(jnl.lobbyid, jnl.playernum, jnl.ret));
+                        break;
+
+                    case "select class":
+                        selClass scl = JsonUtility.FromJson<selClass>(msgo.content);
+                        if (SelectClassHandle != null)
+                            StartCoroutine(SelectClassHandle(scl.ret, scl.plclass));
+                        break;
+
+                    case "update class":
+                        updClass ucl = JsonUtility.FromJson<updClass>(msgo.content);
+                        if (UpdateClassHandle != null)
+                            StartCoroutine(UpdateClassHandle(ucl.player, ucl.plclass));
                         break;
 
                     case "get lobbies":
@@ -279,7 +302,7 @@ public class newPly
 {
     public int theirnum;
     public string theirid;
-    public int cl;
+    public string _plclass;
 }
 
 [Serializable]
@@ -380,6 +403,7 @@ public class spawnProj
 public class selClass
 {
     public string ret;
+    public string plclass;
 }
 
 [Serializable]
