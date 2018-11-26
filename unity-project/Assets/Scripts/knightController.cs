@@ -3,149 +3,152 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class knightController : MonoBehaviour {
-
-    private Rigidbody2D rb;
+public class knightController : playerBase {
     private GameObject shield;
+    private GameObject sword;
     private float bowdistance;
-    private KnightHealth health;
-    private SpriteRenderer render;
-    private GameObject healthbar;
-    private GameObject healthbarback;
-    private Text playername;
-    int hbarupdatetime;
-    Vector3 healthbarsize;
-    int knocked;
-    public float MOVEMENT_SPEED;
-    List<Vector2> forces;
-    Vector2 realvelocity;
+    private float sworddistance;
+    public float KMOVEMENT_SPEED = 0.1f;
     bool invincible;
+    string weapon;
+    public bool stabbing = false;
 
     // Use this for initialization
-    void Start () {
-        rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+    protected override void Start ()
+    {
+        base.Start();
+        MOVEMENT_SPEED = KMOVEMENT_SPEED;
         shield = gameObject.transform.GetChild(0).gameObject;
+        sword = gameObject.transform.GetChild(1).gameObject;
         bowdistance = (shield.transform.position - (Vector3)rb.position).magnitude;
-        health = GetComponent<KnightHealth>();
-        render = GetComponent<SpriteRenderer>();
-        healthbar = GameObject.FindWithTag("Health-bar");
-        healthbarback = GameObject.FindWithTag("Health-bar-background");
-        playername = GameObject.FindWithTag("Player-text").GetComponent<Text>();
-        playername.text = "You: Knight";
-        hbarupdatetime = 0;
-        knocked = 0;
-        forces = new List<Vector2>();
-        realvelocity = new Vector2(0, 0);
+        sworddistance = (sword.transform.position - (Vector3)rb.position).magnitude;
+        interfaceplayertext.text = "You: Knight";
         invincible = false;
-        healthbarsize = healthbar.transform.localScale;
-
+        weapon = "shield";
+        //at start of game, knight has shield enabled by default
+        shield.GetComponent<SpriteRenderer>().enabled = true;
+        sword.GetComponent<SpriteRenderer>().enabled = false;
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        /* MOVEMENT */
-        // input x and y
-        float ix = Input.GetAxis("Horizontal");
-        float iy = Input.GetAxis("Vertical");
+        base.FixedUpdate();
+    }
 
-        // get velocity input
-        var inputvelocity = new Vector2(ix, iy);
+    protected override void shiftAbilityInit(){
+        SHIFT_CD = GLOBAL_CD;
+        SHIFT_NAME = "notyetimplemented";
+    }
 
-        // later can add velocity vectors together for knockback and stuff
-        if (knocked == 0)
+    protected override void lmbAbilityInit(){
+        LMB_NAME = "sword";
+    }
+
+    protected override void rmbAbilityInit(){
+        RMB_CD = GLOBAL_CD;
+        RMB_NAME = "notyetimplemented";
+    }
+
+    protected override void eAbilityInit(){
+        E_CD = GLOBAL_CD;
+        E_NAME = "notyetimplemented";
+    }
+
+    protected override void qAbilityInit(){
+        Q_CD = GLOBAL_CD;
+        Q_NAME = "switch";
+    }
+
+    // Update is called once per frame
+    protected override void Update ()
+    {
+        base.Update();
+        shield.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
+        shield.transform.position = rb.position + -1 * direction.normalized * bowdistance;
+        sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
+        sword.transform.position = rb.position + -1 * direction.normalized * sworddistance;
+    }
+
+    protected override void LMBReleased(){
+        if (weapon == "sword")
         {
-            rb.position = rb.position + inputvelocity * MOVEMENT_SPEED;
-            //rb.velocity = (inputvelocity*MOVEMENT_SPEED);
+            snm.sendMessage("pa", "{ \"name\": \"" + "stab" + "\" }");
+            StartCoroutine(stabAnimation(10));
+        }
+    }
+
+    protected override void LMBClicked(){
+        Debug.Log("notyetimplemented");
+    }
+    protected override void LShiftAbility(Vector2 input){
+        Debug.Log("notyetimplemented");
+    }
+    protected override void EAbility(){
+        Debug.Log("notyetimplemented");
+    }
+    protected override void RMBAbility(){
+        Debug.Log("notyetimplemented");
+    }
+
+    protected override void QAbility(){
+        snm.sendMessage("pa", "{ \"name\": \"" + "switch" + "\" }");
+        if (weapon == "shield")
+        {
+            
+            weapon = "sword";
+            shield.GetComponent<SpriteRenderer>().enabled = false;
+            //shield.SetActive(false);
+            sword.GetComponent<SpriteRenderer>().enabled = true;
+            //sword.GetComponent<EdgeCollider2D>(). = true;
+            //sword.SetActive(true);
+            //for (int i = 0; i < sword.transform.childCount; i++)
+            //    sword.transform.GetChild(i).gameObject.SetActive(true);
+
         }
         else
         {
-            knocked--;
+            weapon = "shield";
+            sword.GetComponent<SpriteRenderer>().enabled = false;
+            //sword.GetComponent<EdgeCollider2D>().enabled = false;
+            //sword.SetActive(false);
+            shield.GetComponent<SpriteRenderer>().enabled = true;
+            //shield.SetActive(true);
+            //for (int i = 0; i < shield.transform.childCount; i++)
+            //    shield.transform.GetChild(i).gameObject.SetActive(true);
         }
-
-        var forcesSum = new Vector2(0, 0);
-        foreach (Vector2 v in forces)
-        {
-            forcesSum += v;
-        }
-
-        rb.AddForce(forcesSum);
-        realvelocity = rb.velocity + inputvelocity;
-
-        forces.Clear();
     }
 
-    void applyForce(Vector2 force)
+    IEnumerator stabAnimation(int val)
     {
-        forces.Add(force);
+        stabbing = true;
+        float olddist = sworddistance;
+        sworddistance = olddist + 0.5f;
+        while (val >= 0)
+        {
+            val -= 1;
+            yield return new WaitForEndOfFrame();
+        }
+        sworddistance = olddist;
+        stabbing = false;
     }
 
     // makes player invisible and unresponsive so that they could potentially be
     // revived
-    void Dead()
+    protected override void Dead()
     {
-        render.enabled = false;
-        enabled = false;
+        base.Dead();
     }
 
-
-
-    // Update is called once per frame
-    void Update () {
-
-
-        /* ROTATION */
-        // get position of main sprite and mouse
-        Vector2 pos = rb.position;
-        Vector2 mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        // get directional vector and convert to angle
-        Vector2 direction = pos - mouse;
-        float angle = Mathf.Atan2(direction.y, direction.x);
-
-        // use angle to rotate bow
-        shield.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
-        shield.transform.position = pos + -1 * direction.normalized * bowdistance;
-
-        //Health bar
-        if (hbarupdatetime == 0)
-        {
-            healthbarback.transform.localScale = healthbar.transform.localScale;
-            hbarupdatetime = 100;
-        }
-        else
-        {
-            hbarupdatetime--;
-        }
-    }
 
     // reduces player health, if its 0 then call Dead(), if not then apply
     // a knockback force given by dir
-    public void TakeDamage(float dmg, Vector2 dir)
+    public override void TakeDamage(float dmg, Vector2 dir)
     {
-        var hsize = new Vector3((health.getCurrentHP() / health.getMaxHP()) * healthbarsize.x, healthbarsize.y, healthbarsize.z);
-        healthbar.transform.localScale = hsize;
-        hbarupdatetime = 20;
-        if (!health.TakeDamage(dmg))
+        if (weapon == "shield")
         {
-            Dead();
+            dmg = dmg / 2;
         }
-        else if (invincible == false)
-        {
-            applyForce(dir);
-            knocked = 20;
-            StartCoroutine(damageflash());
-        }
-    }
-
-    IEnumerator damageflash()
-    {
-        GetComponent<SpriteRenderer>().color = Color.red;
-        invincible = true;
-        yield return new WaitForSeconds(0.5f);
-        invincible = false;
-        GetComponent<SpriteRenderer>().color = Color.white;
-
+        base.TakeDamage(dmg,dir);
     }
 
 }

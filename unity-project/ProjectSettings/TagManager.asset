@@ -18,6 +18,8 @@ TagManager:
   - P2-name
   - P2-health
   - P2-healthbg
+  - Boss
+  - knightsword
   - ability-icons
   layers:
   - Default

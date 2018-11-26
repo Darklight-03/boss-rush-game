@@ -4,7 +4,6 @@ using UnityEngine;
 using System;
 
 public class GameManager : MonoBehaviour {
-
     private Transform t;
     private SocketNetworkManager snm;
     GameObject player;
@@ -55,7 +54,7 @@ public class GameManager : MonoBehaviour {
             StartPlayer(a.Value, plord[a.Value.theirid]);
         }
         //Debug.Log("instantiate " + SocketNetworkManager.playernum.ToString() + " at " + playerInitPos[SocketNetworkManager.playernum].ToString());
-        player = (GameObject)Instantiate(Resources.Load<GameObject>("Archer"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
+        player = (GameObject)Instantiate(Resources.Load<GameObject>("knight"), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         if (SocketNetworkManager.isHost)
         {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
@@ -73,11 +72,23 @@ public class GameManager : MonoBehaviour {
 
     void StartPlayer(newPly a, int ord)
     {
-        //// argument will specify class later
-        GameObject player = Instantiate(Resources.Load<GameObject>(a._plclass), playerInitPos[a.theirnum], Quaternion.identity);
-        player.GetComponent<playerBase>.playernum = a.theirnum;
-        player.GetComponent<playerBase>.id = a.theirid;
-        player.GetComponent<playerBase>.healthbar_id = ord;
+        // argument will specify class later
+        if (player2 == null)
+        {
+            player2 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
+            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
+            player2.GetComponent<archerControllerOP>().playernum = num;
+            player2.GetComponent<archerControllerOP>().id = id;
+            player2.GetComponent<archerControllerOP>().healthbar_id = 1;
+        }
+        else if (player3 == null)
+        {
+            player3 = Instantiate(Resources.Load<GameObject>(playerClasses[cl]), playerInitPos[num], Quaternion.identity);
+            Debug.Log("instantiate " + id + " at " + playerInitPos[num].ToString());
+            player3.GetComponent<archerControllerOP>().playernum = num;
+            player3.GetComponent<archerControllerOP>().id = id;
+            player3.GetComponent<archerControllerOP>().healthbar_id = 2;
+        }
     }
 
 
