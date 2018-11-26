@@ -4,13 +4,10 @@ web address: teamproject1.ddns.net:3000
 
 ## Instructions
 
-to play the game, there are 3 commands to start:  
-o creates a lobby. **Only press this once**  
-p joins the first lobby created. **press this only on clients that did not create the lobby, and only join with up to 2 additional clients**  
-l starts the game **press this on the host of the lobby**  
-
-
-all of this functionality will later be added to menus.
+to play the game, simply navigate the menus and press the create lobby, or join lobby button.
+Once everybody is in the lobby, the host needs to click the start game button in the top left
+this will cause the game to start.
+Have fun!
 
 ## Requirements
 
