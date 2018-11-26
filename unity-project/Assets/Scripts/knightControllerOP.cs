@@ -9,10 +9,7 @@ public class knightControllerOP : playerBaseOP
     private GameObject sword;
     private float bowdistance;
     private float sworddistance;
-    int knocked;
     bool invincible;
-    private Vector2 prevPos = new Vector2(0, 0);
-    private Vector2 prevRot = new Vector2(0, 0);
     string weapon;
     public bool stabbing = false;
 

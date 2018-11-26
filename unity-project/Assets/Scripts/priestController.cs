@@ -92,14 +92,6 @@ public class priestController : playerBase {
     protected override void EAbility(){
         snm.sendMessage("spawnprojectile", "{ \"name\": \"" + "EAbility" + "\" , \"x\": " + mousePosition.x + " , \"y\": " + mousePosition.y + ", \"dx\": " + 0 + " , \"dy\": " + 0 + ", \"rx\": " + 0 + ", \"ry\": " + 0 + ", \"rz\": " + 0 + ", \"rw\": " + 0 + " }");
         StartCoroutine(EAbilityAnim(mousePosition));
-        GameObject[] healPlayers = GameObject.FindGameObjectsWithTag("Player");
-        foreach(var p in healPlayers){
-            if((mousePosition - (Vector2)p.transform.position).magnitude < .30){
-                Debug.Log(p.transform.position);
-                //HEAL THE P
-                (p).GetComponent<playerBase>().Heal(1000);
-            }
-        }
     }
 
     protected override void Dead(){
@@ -117,8 +109,16 @@ public class priestController : playerBase {
 
         yield return new WaitForSeconds(1f);
 
+        GameObject[] healPlayers = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var p in healPlayers)
+        {
+            if ((mousePosition - (Vector2)p.transform.position).magnitude < .30)
+            {
+                Debug.Log(p.transform.position);
+                (p).GetComponent<playerBase>().Heal(100);
+            }
+        }
         UnityEngine.Object.Destroy(circle);
-
         yield return null;
     }
 
