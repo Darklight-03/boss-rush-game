@@ -166,14 +166,7 @@ public class knightControllerOP : playerBaseOP
     // a knockback force given by dir
     public override void TakeDamage(float dmg, Vector2 dir)
     {
-        if (weapon == "shield")
-        {
-            base.TakeDamage(dmg / 2, dir);
-        }
-        else
-        {
-            base.TakeDamage(dmg, dir);
-        }
+        base.TakeDamage(dmg, dir);
     }
 
 }

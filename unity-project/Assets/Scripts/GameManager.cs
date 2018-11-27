@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour {
                 StartPlayer(a.Value, plord[a.Value.theirid]);
         }
         player = (GameObject)Instantiate(Resources.Load<GameObject>(SocketNetworkManager.newplayers[SocketNetworkManager.id]._plclass), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
+        player.GetComponent<playerBase>().plclass = SocketNetworkManager.newplayers[SocketNetworkManager.id]._plclass;
         if (SocketNetworkManager.isHost)
         {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
@@ -80,6 +81,7 @@ public class GameManager : MonoBehaviour {
         player.GetComponent<playerBaseOP>().playernum = a.theirnum;
         player.GetComponent<playerBaseOP>().id = a.theirid;
         player.GetComponent<playerBaseOP>().healthbar_id = ord;
+        player.GetComponent<playerBaseOP>().plclass = a._plclass;
     }
 
     IEnumerator StartGameHandle()

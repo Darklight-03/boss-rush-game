@@ -87,14 +87,17 @@ public abstract class playerBase : MonoBehaviour {
     protected int hit;
     private Vector2 prevPos = new Vector2(0,0);
     private Vector2 prevRot = new Vector2(0,0);
+    private Dictionary<string, string> dict = new Dictionary<string, string>() { { "Archer", "dps-100" }, { "Knight", "tank-100" }, { "Priest", "healer-100" } };
+    private GameObject icon;
 
     public int playernum;
     public string id;
     public int healthbar_id;
+    public string plclass;
 
 
-	// Use this for initialization
-  protected abstract void lmbAbilityInit();
+    // Use this for initialization
+    protected abstract void lmbAbilityInit();
   protected abstract void shiftAbilityInit();
   protected abstract void rmbAbilityInit();
   protected abstract void eAbilityInit();
@@ -116,6 +119,9 @@ public abstract class playerBase : MonoBehaviour {
         healthbarback = GameObject.FindWithTag("Health-bar-background");
         interfaceplayertext = GameObject.FindWithTag("Player-text").GetComponent<Text>();
         interfaceplayertext.text = "You: base";
+        icon = GameObject.FindWithTag("icon");
+        Debug.Log(dict[plclass]);
+        icon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(dict[plclass]);
         healthbarsize = healthbar.transform.localScale;
         hbarupdatetime = 0;
         knocked = 0;
