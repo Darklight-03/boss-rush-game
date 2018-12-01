@@ -11,6 +11,8 @@ public class BossHandleOP : MonoBehaviour
     private GameObject healthbar;
     private GameObject healthbarbg;
     private Text bossname;
+    private Vector2 prevPos;
+    private Vector2 prevRot;
     SpriteRenderer render;
     public Health health;
     int hit;
@@ -48,6 +50,7 @@ public class BossHandleOP : MonoBehaviour
         gameObject.transform.parent = canvas;
         gameObject.GetComponent<RectTransform>().localScale = new Vector3(25.0f, 25.0f, 25.0f);
         gameObject.GetComponent<RectTransform>().localPosition = Vector3.one;
+        prevPos = transform.position;
     }
 
     private void OnEnable()
@@ -68,6 +71,8 @@ public class BossHandleOP : MonoBehaviour
     {
         Vector2 v1 = new Vector2(x, y);
         Vector2 v2 = new Vector2(rx, ry);
+        prevPos = v1;
+        prevRot = v2;
         transform.position = v1;
 
         if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
@@ -195,6 +200,39 @@ public class BossHandleOP : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.position = prevPos;
+
+        if (Mathf.Abs(prevRot.x - prevPos.x) > Mathf.Abs(prevRot.y - prevPos.y))
+        {
+            if (prevRot.x > prevPos.x)
+            {
+                this.transform.localEulerAngles = new Vector3(0, 0, 0);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
+                image.localEulerAngles = new Vector3(0, 0, 0);
+            }
+            else
+            {
+                this.transform.localEulerAngles = new Vector3(0, 180f, 0);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                image.localEulerAngles = new Vector3(0, 180, 0);
+            }
+        }
+        else
+        {
+            if (prevRot.y > prevPos.y)
+            {
+                this.transform.localEulerAngles = new Vector3(0, 0, 90f);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
+                image.localEulerAngles = new Vector3(0, 0, -90);
+            }
+            else
+            {
+                this.transform.localEulerAngles = new Vector3(0, 0, -90f);
+                this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                image.localEulerAngles = new Vector3(0, 0, 90);
+            }
+        }
+
         /* HEALTH BAR */
         if (hbarupdatetime == 0)
         {
