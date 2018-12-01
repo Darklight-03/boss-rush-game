@@ -153,7 +153,7 @@ public class BossHandleOP : MonoBehaviour
         healthbar.transform.localScale = hsize;
         hit = 25;
         hbarupdatetime = 20;
-
+        snm.logText("Boss took 10 damage");
         if (health.TakeDamage(10))
         {
             StartCoroutine(damageAnimation());

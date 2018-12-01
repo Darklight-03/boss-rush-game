@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 50857266616168456}
   - component: {fileID: 61355648952334820}
   - component: {fileID: 114612024712830820}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: spikedwall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 212838003004585192}
   - component: {fileID: 50914307513112378}
   - component: {fileID: 61015354871864588}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: rock2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ GameObject:
   - component: {fileID: 50155684079398912}
   - component: {fileID: 61103371974107158}
   - component: {fileID: 114392790432777642}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: spikedwall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 50165210144796182}
   - component: {fileID: 61426940235533630}
   - component: {fileID: 114488494486584782}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: spikedwall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 50747338742604156}
   - component: {fileID: 61662575036115286}
   - component: {fileID: 114085813138551736}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: spikedwall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 212210780852894360}
   - component: {fileID: 50657856205761076}
   - component: {fileID: 61862388393595482}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: rock2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -73,6 +73,8 @@ public class priestControllerOP : playerBaseOP
             angle = Mathf.Atan2(direction.y, direction.x);
             staff.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * angle, transform.forward);
             staff.transform.position = pos + -1 * direction.normalized * bowdistance;
+
+            base.UpdateHealthbarPosition();
         }
         yield break;
     }
