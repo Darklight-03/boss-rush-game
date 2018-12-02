@@ -71,6 +71,8 @@ public class archerControllerOP : playerBaseOP {
             // use angle to rotate bow
             bow.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * Mathf.Atan2(dir.y, dir.x), Vector3.forward);
             bow.transform.position = pos + -1 * dir.normalized * bowdistance;
+
+            base.UpdateHealthbarPosition();
         }
         yield break;
     }

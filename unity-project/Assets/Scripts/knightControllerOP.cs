@@ -78,6 +78,8 @@ public class knightControllerOP : playerBaseOP
             shield.transform.position = pos + -1 * direction.normalized * bowdistance;
             sword.transform.rotation = Quaternion.AngleAxis(Mathf.Rad2Deg * (angle), transform.forward);
             sword.transform.position = pos + -1 * direction.normalized * sworddistance;
+
+            base.UpdateHealthbarPosition();
         }
         yield break;
     }

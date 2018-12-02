@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
@@ -30,6 +30,7 @@ public class BossHandle : MonoBehaviour
     public bool isstone;
     public GameObject player;
     public GameObject[] gameObjects;
+    private bool alt = true;
     public bool move = true;
     public GameObject wintext;
 
@@ -89,7 +90,7 @@ public class BossHandle : MonoBehaviour
         healthbar.transform.localScale = hsize;
         hit = 25;
         hbarupdatetime = 20;
-
+        snm.logText("Boss took 10 damage");
         if (health.TakeDamage(10))
         {
             StartCoroutine(damageAnimation());
@@ -250,15 +251,23 @@ public class BossHandle : MonoBehaviour
             }
         }
 
-        /* HEALTH BAR */
-        if (hbarupdatetime == 0)
+        if (alt)
         {
-            healthbarbg.transform.localScale = healthbar.transform.localScale;
-            hbarupdatetime = 100;
+            /* HEALTH BAR */
+            if (hbarupdatetime == 0)
+            {
+                healthbarbg.transform.localScale = healthbar.transform.localScale;
+                hbarupdatetime = 100;
+            }
+            else
+            {
+                hbarupdatetime--;
+            }
+            alt = false;
         }
         else
         {
-            hbarupdatetime--;
+            alt = true;
         }
     }
     public void PlayGameeffects()
@@ -282,7 +291,7 @@ public class BossHandle : MonoBehaviour
             Destroy(collider.gameObject);
             TakeDamage(10);
             snm.sendMessage("dealdamage", "{ \"dmg\": " + "10" + " , \"dirx\": " + 0 + ", \"diry\": " + 0 + " }");
-
+            
             // do stuff only for the circle collider
         }
         if (collider.tag == "stone")

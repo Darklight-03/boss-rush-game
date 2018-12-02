@@ -34,34 +34,34 @@ function defaultRoute(req, response) {
 
 var lobbies = [];
 
-io.on('connection', function(socket){
+  io.on('connection', function(socket){
   socket.id = getUniqueID();
   socket.inlobby = false;
   socket.send(JSON.stringify({ msgtype: 'new connection', content: JSON.stringify({ yourid: socket['id'] }) }));
 
-	console.log((new Date()) + ' user ' + socket.id + ' connected');
-	log_msg(socket, "connected");
+console.log((new Date()) + ' user ' + socket.id + ' connected');
+  log_msg(socket, "connected");
 
   socket.on('message', function (msgs) {
 
     console.log(msgs.toString('utf8'));
     log_msg(socket, msgs.toString('utf8'));
-		msg = JSON.parse(msgs.toString('utf8'));
-		
+    msg = JSON.parse(msgs.toString('utf8'));
+    
     switch (msg['msgtype']) {
 
       case 'create lobby':
         if (socket.inlobby) {
           // fail
           socket.send(JSON.stringify({ msgtype: 'create lobby', content: JSON.stringify({ playernum: -1, lobbyid: -1 }) }));
-  			}
+        }
         else {
-					// success
-					socket.inlobby = true;
-					var lobby = { name: msg['name'], members: [ socket ] };
-					var thislobbyid = lobbies.length;
-					lobbies[thislobbyid] = lobby;
-					socket.send(JSON.stringify({ msgtype: 'create lobby', content: JSON.stringify({ playernum: 0, lobbyid: thislobbyid }) }));
+          // success
+          socket.inlobby = true;
+          var lobby = { name: msg['name'], members: [ socket ] };
+          var thislobbyid = lobbies.length;
+          lobbies[thislobbyid] = lobby;
+          socket.send(JSON.stringify({ msgtype: 'create lobby', content: JSON.stringify({ playernum: 0, lobbyid: thislobbyid }) }));
         }
       break;
 
@@ -71,15 +71,15 @@ io.on('connection', function(socket){
           socket.send(JSON.stringify({ msgtype: 'join lobby', content: JSON.stringify({ lobbyid: -1, playernum: -1, ret: 'fail' }) }));
         }
         else {
-			// send messages to each lobby member about the new member
-			// send messages to the new member about each lobby member
-			for (i = 0; i < lobby.members.length; i++) {
-				console.log("sent to " + lobby.members[i]['id']);
-				lobby.members[i].send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: lobby.members.length, theirid: socket['id'], _plclass: "None" }) }));
-				console.log("sent to " + socket.id + "-");
-				socket.send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: i, theirid: lobby.members[i]['id'], _plclass: "None" }) }));
-			}
-			socket.inlobby = true;
+          // send messages to each lobby member about the new member
+          // send messages to the new member about each lobby member
+          for (i = 0; i < lobby.members.length; i++) {
+            console.log("sent to " + lobby.members[i]['id']);
+            lobby.members[i].send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: lobby.members.length, theirid: socket['id'], _plclass: "None" }) }));
+            console.log("sent to " + socket.id + "-");
+            socket.send(JSON.stringify({ msgtype: 'new player', content: JSON.stringify({ theirnum: i, theirid: lobby.members[i]['id'], _plclass: lobby.members[i]['plclass'] }) }));
+          }
+          socket.inlobby = true;
           lobby.members[lobby.members.length] = socket;
           lobbies[msg['lobbyid']] = lobby;
           socket.send(JSON.stringify({ msgtype: 'join lobby', content: JSON.stringify({ lobbyid: msg['lobbyid'], playernum: lobby.members.length - 1, ret: 'success' }) }));
@@ -119,7 +119,7 @@ io.on('connection', function(socket){
           for (i = 0; i < lobby.members.length; i++) {
             if (lobby.members[i]['id'] != socket['id']) {
               lobby.members[i].send(JSON.stringify({ msgtype: 'general message', content: JSON.stringify({ sender: socket['id'], ct: msg['ct'], content: JSON.stringify(msg['content']) }) }));
-      		}
+            }
           }
         }
       break;
@@ -131,14 +131,13 @@ io.on('connection', function(socket){
           var lobby = lobbies[i];
           for (j = 0; j < lobby.members.length; j++) {
            
-    			}
-					lobbyInfo['players'] = lobby.members.length;
-					lobbyInfo['name'] = lobby.name;
+          }
+          lobbyInfo['players'] = lobby.members.length;
+          lobbyInfo['name'] = lobby.name;
           lobbiesInfo[lobbiesInfo.length] = lobbyInfo;
         }
         socket.send(JSON.stringify({ msgtype: 'get lobbies', content: JSON.stringify({ lobbiesInfo: lobbiesInfo }) }));
       break;
-
     }
   });
 
@@ -167,8 +166,8 @@ io.on('connection', function(socket){
 
 
 getUniqueID = function () {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-    }
-    return s4() + s4() + '-' + s4();
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+  }
+  return s4() + s4() + '-' + s4();
 };

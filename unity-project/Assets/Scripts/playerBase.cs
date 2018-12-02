@@ -162,7 +162,6 @@ public abstract class playerBase : MonoBehaviour {
         globalcd = new cooldown(GLOBAL_CD,icons);
         cds.Add(globalcd);
         StartCoroutine(cdUpdater(cds));
-
 	}
 
   protected int CompareIcons(GameObject x, GameObject y){
@@ -435,6 +434,7 @@ public abstract class playerBase : MonoBehaviour {
     public virtual void TakeDamage(float dmg, Vector2 dir)
     {
         snm.sendMessage("takedamage", "{ \"dmg\": " + dmg + " }");
+        snm.logText("You took 10 damage");
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;

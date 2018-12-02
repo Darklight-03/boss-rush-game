@@ -24,6 +24,12 @@ public class ClassSelectManager : MonoBehaviour {
         clToObj["Priest"] = buttonPriest;
         clToObj["None"] = null;
         plord[SocketNetworkManager.id] = 0;
+        foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
+        {
+            Debug.Log("update from start");
+            if (a.Value.theirid != SocketNetworkManager.id)
+                StartCoroutine(UpdateClassHandle(a.Value.theirid, a.Value._plclass));
+        }
     }
 
     private void OnEnable()

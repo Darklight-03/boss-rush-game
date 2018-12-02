@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour {
 
         snm = GetComponent<SocketNetworkManager>();
         t = GetComponent<Transform>();
-        obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread 1"), t);
         losetext = GameObject.FindWithTag("lose-text");
         losetext.SetActive(false);
         wintext = GameObject.FindWithTag("win-text");
@@ -53,6 +52,7 @@ public class GameManager : MonoBehaviour {
     {
         Dictionary<string, int> plord = selectMenu.GetComponent<ClassSelectManager>().plord;
         selectMenu.SetActive(false);
+        obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread 1"), new Vector3(-2.2f,0.7f,0), Quaternion.identity);
         gameStarted = true;
         foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
         {

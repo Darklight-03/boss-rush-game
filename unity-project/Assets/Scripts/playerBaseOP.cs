@@ -13,6 +13,7 @@ public abstract class playerBaseOP : MonoBehaviour
     protected SpriteRenderer render;
     protected GameObject healthbar;
     protected GameObject healthbarback;
+    protected GameObject healthedge;
     protected Text interfaceplayertext;
     protected Vector3 healthbarsize;
     protected List<Vector2> forces;
@@ -68,9 +69,10 @@ public abstract class playerBaseOP : MonoBehaviour
         healthbar = GameObject.FindWithTag("P" + healthbar_id + "-health");
         interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
         healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
+        healthedge = GameObject.FindWithTag("P" + healthbar_id + "-hp-edge");
         interfaceplayertext.text = "Player " + healthbar_id;
         icon = GameObject.FindWithTag("P" + healthbar_id + "-icon");
-        icon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(dict[plclass]);
+        //icon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(dict[plclass]);
         healthbarsize = healthbar.transform.localScale;
         hbarupdatetime = 0;
         knocked = 0;
@@ -102,6 +104,17 @@ public abstract class playerBaseOP : MonoBehaviour
             TakeDamage(dmg, Vector2.zero);
         }
         yield break;
+    }
+
+    protected void UpdateHealthbarPosition()
+    {
+        Vector3 a = new Vector3(rb.position.x - 0.9f, rb.position.y + 0.4f, healthbar.GetComponent<Transform>().position.z);
+        Vector3 b = new Vector3(rb.position.x + 0.52f, rb.position.y + 0.4f, healthbar.GetComponent<Transform>().position.z);
+        Vector3 c = new Vector3(rb.position.x + 0.2f, rb.position.y + 0.7f, interfaceplayertext.GetComponent<RectTransform>().position.z);
+        healthedge.GetComponent<Transform>().position = b;
+        healthbar.GetComponent<Transform>().position = a;
+        healthbarback.GetComponent<Transform>().position = a;
+        interfaceplayertext.GetComponent<RectTransform>().position = c;
     }
 
 
@@ -145,6 +158,8 @@ public abstract class playerBaseOP : MonoBehaviour
             gameObject.transform.GetChild(i).gameObject.SetActive(false);
         }
         //render.enabled = false;
+        healthedge.SetActive(false);
+        interfaceplayertext.GetComponent<Text>().color = Color.red;
         this.gameObject.SetActive(false);
         GameObject.FindWithTag("lose-text").SetActive(true);
         if (GameObject.FindWithTag("Boss").GetComponent<BossHandle>() != null)
@@ -167,7 +182,7 @@ public abstract class playerBaseOP : MonoBehaviour
     // a knockback force given by dir
     public virtual void TakeDamage(float dmg, Vector2 dir)
     {
-        //snm.sendMessage("takedamage", "{ \"dmg\": " + dmg + " }");
+        snm.logText("Player " + healthbar_id.ToString() + " took 10 damage");
         var hsize = new Vector3(((health.getCurrentHP() - dmg) / health.getMaxHP()) * (healthbarsize.x), healthbarsize.y, healthbarsize.z);
         healthbar.transform.localScale = hsize;
         hit = 25;
