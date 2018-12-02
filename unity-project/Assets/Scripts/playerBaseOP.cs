@@ -45,10 +45,13 @@ public abstract class playerBaseOP : MonoBehaviour
     protected int hit;
     private Vector2 prevPos = new Vector2(0, 0);
     private Vector2 prevRot = new Vector2(0, 0);
+    private Dictionary<string, string> dict = new Dictionary<string, string>() { { "Archer","dps-100" }, { "Knight","tank-100" }, { "Priest","healer-100" } };
+    private GameObject icon;
 
     public int playernum;
     public string id;
     public int healthbar_id;
+    public string plclass;
 
 
     protected virtual void Start()
@@ -66,6 +69,8 @@ public abstract class playerBaseOP : MonoBehaviour
         interfaceplayertext = GameObject.FindWithTag("P" + healthbar_id + "-name").GetComponent<Text>();
         healthbarback = GameObject.FindWithTag("P" + healthbar_id + "-healthbg");
         interfaceplayertext.text = "Player " + healthbar_id;
+        icon = GameObject.FindWithTag("P" + healthbar_id + "-icon");
+        icon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>(dict[plclass]);
         healthbarsize = healthbar.transform.localScale;
         hbarupdatetime = 0;
         knocked = 0;
@@ -141,6 +146,9 @@ public abstract class playerBaseOP : MonoBehaviour
         }
         //render.enabled = false;
         this.gameObject.SetActive(false);
+        GameObject.FindWithTag("lose-text").SetActive(true);
+        if (GameObject.FindWithTag("Boss").GetComponent<BossHandle>() != null)
+            GameObject.FindWithTag("Boss").GetComponent<BossHandle>().move = false;
     }
 
 

@@ -340,6 +340,8 @@ MonoBehaviour:
   daoguang: {fileID: 1942596835373920}
   image: {fileID: 224594903413831320}
   state: 0
+  isMove: 0
+  isstone: 0
   player: {fileID: 0}
   gameObjects: []
 --- !u!114 &114319081610335060
@@ -429,8 +431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b628fff08d274156b4677821a9616c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 100
-  max_hp: 100
+  hp: 1000
+  max_hp: 1000
 --- !u!212 &212807979050239652
 SpriteRenderer:
   m_ObjectHideFlags: 1
