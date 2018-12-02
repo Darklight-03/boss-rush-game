@@ -146,6 +146,9 @@ public abstract class playerBaseOP : MonoBehaviour
         }
         //render.enabled = false;
         this.gameObject.SetActive(false);
+        GameObject.FindWithTag("lose-text").SetActive(true);
+        if (GameObject.FindWithTag("Boss").GetComponent<BossHandle>() != null)
+            GameObject.FindWithTag("Boss").GetComponent<BossHandle>().move = false;
     }
 
 

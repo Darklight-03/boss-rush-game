@@ -90,6 +90,7 @@ public abstract class playerBase : MonoBehaviour {
     private Dictionary<string, string> dict = new Dictionary<string, string>() { { "Archer", "dps-100" }, { "Knight", "tank-100" }, { "Priest", "healer-100" } };
     private GameObject icon;
 
+    public GameObject losetext;
     public int playernum;
     public string id;
     public int healthbar_id;
@@ -389,10 +390,7 @@ public abstract class playerBase : MonoBehaviour {
             snm.sendMessage("playerposition", "{ \"x\": " + rb.position.x.ToString() + " , \"y\": " + rb.position.y.ToString() + ", \"rx\": " + direction.normalized.x.ToString() + ", \"ry\": " + direction.normalized.y.ToString() + " }");
             prevPos = rb.position;
             prevRot = direction;
-        }
-    
-    
-
+        }    
     }
 
     protected abstract void LMBClicked();
@@ -414,6 +412,10 @@ public abstract class playerBase : MonoBehaviour {
         }
         //render.enabled = false;
         this.gameObject.SetActive(false);
+     
+        losetext.SetActive(true);
+        if (GameObject.FindWithTag("Boss").GetComponent<BossHandle>() != null)
+            GameObject.FindWithTag("Boss").GetComponent<BossHandle>().move = false;
     }
 
 

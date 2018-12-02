@@ -26,6 +26,7 @@ public class BossHandleOP : MonoBehaviour
     public bool state;
     public GameObject player;
     public GameObject[] gameObjects;
+    public GameObject wintext;
 
     // Use this for initialization
     void Start()
@@ -175,6 +176,7 @@ public class BossHandleOP : MonoBehaviour
         }
         //render.enabled = false;
         this.gameObject.SetActive(false);
+        wintext.SetActive(true);
     }
 
     IEnumerator damageAnimation()

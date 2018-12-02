@@ -25,6 +25,8 @@ TagManager:
   - P2-icon
   - icon
   - stone
+  - win-text
+  - lose-text
   layers:
   - Default
   - TransparentFX

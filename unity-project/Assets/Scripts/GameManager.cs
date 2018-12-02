@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
     GameObject player3;
     GameObject boss;
     GameObject obstacle1;
+    GameObject losetext;
+    GameObject wintext;
     public GameObject selectMenu;
     public GameObject StartGameButton;
     private bool gameStarted = false;
@@ -19,10 +21,14 @@ public class GameManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+
         snm = GetComponent<SocketNetworkManager>();
         t = GetComponent<Transform>();
         obstacle1 = (GameObject)Instantiate(Resources.Load<GameObject>("rockspread 1"), t);
-
+        losetext = GameObject.FindWithTag("lose-text");
+        losetext.SetActive(false);
+        wintext = GameObject.FindWithTag("win-text");
+        wintext.SetActive(false);
         playerInitPos.Add(new Vector2(2, -2));
         playerInitPos.Add(new Vector2(0, -2));
         playerInitPos.Add(new Vector2(-2, -2));
@@ -55,14 +61,18 @@ public class GameManager : MonoBehaviour {
         }
         player = (GameObject)Instantiate(Resources.Load<GameObject>(SocketNetworkManager.newplayers[SocketNetworkManager.id]._plclass), playerInitPos[SocketNetworkManager.playernum], Quaternion.identity);
         player.GetComponent<playerBase>().plclass = SocketNetworkManager.newplayers[SocketNetworkManager.id]._plclass;
+        player.GetComponent<playerBase>().losetext = losetext;
         if (SocketNetworkManager.isHost)
         {
             boss = (GameObject)Instantiate(Resources.Load<GameObject>("boss"), t);
+            boss.GetComponent<BossHandle>().wintext = wintext;
         }
         else
         {
             boss = Instantiate(Resources.Load<GameObject>("bossOP"), new Vector2(-2, 2), Quaternion.identity, t);
+            boss.GetComponent<BossHandleOP>().wintext = wintext;
         }
+        
     }
 
 	
@@ -95,7 +105,7 @@ public class GameManager : MonoBehaviour {
         bool allready = true;
         foreach (KeyValuePair<string, newPly> a in SocketNetworkManager.newplayers)
         {
-            if (a.Value._plclass == "None")
+            if (a.Value._plclass == "None" || a.Value._plclass == null)
             {
                 allready = false;
                 return;
