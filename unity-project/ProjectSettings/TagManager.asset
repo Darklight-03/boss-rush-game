@@ -27,6 +27,8 @@ TagManager:
   - stone
   - P1-hp-edge
   - P2-hp-edge
+  - win-text
+  - lose-text
   layers:
   - Default
   - TransparentFX

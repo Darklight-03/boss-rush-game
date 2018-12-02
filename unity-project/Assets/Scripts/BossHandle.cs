@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
@@ -31,6 +31,8 @@ public class BossHandle : MonoBehaviour
     public GameObject player;
     public GameObject[] gameObjects;
     private bool alt = true;
+    public bool move = true;
+    public GameObject wintext;
 
     // Use this for initialization
     void Start()
@@ -120,126 +122,133 @@ public class BossHandle : MonoBehaviour
         }
         //render.enabled = false;
         this.gameObject.SetActive(false);
+        wintext.SetActive(true);
     }
 
     // called in fixed interval
     void FixedUpdate()
     {
-        Vector2 v1 = transform.position;
-        float temp = float.MaxValue - 1000;
-        foreach (GameObject g in gameObjects)
+        if (move)
         {
-            if (g.activeSelf)
+            Vector2 v1 = transform.position;
+            float temp = float.MaxValue - 1000;
+            foreach (GameObject g in gameObjects)
             {
-                Vector2 vg1 = g.transform.position;
-                float max1 = (v1 - vg1).magnitude;
-                if (max1 < temp)
+                if (g.activeSelf)
                 {
-                    temp = max1;
-                    player = g;
+                    Vector2 vg1 = g.transform.position;
+                    float max1 = (v1 - vg1).magnitude;
+                    if (max1 < temp)
+                    {
+                        temp = max1;
+                        player = g;
+                    }
                 }
             }
-        }
 
-        if (isMove)
-        {
-            Vector2 v2 = player.transform.position;
-            rb.velocity = v2 - v1;
-
-            if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
+            if (isMove)
             {
-                if (v2.x > v1.x)
+                Vector2 v2 = player.transform.position;
+                rb.velocity = v2 - v1;
+
+                if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
                 {
-                    this.transform.localEulerAngles = new Vector3(0, 0, 0);
-                    this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                    image.localEulerAngles = new Vector3(0, 0, 0);
+                    if (v2.x > v1.x)
+                    {
+                        this.transform.localEulerAngles = new Vector3(0, 0, 0);
+                        this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
+                        image.localEulerAngles = new Vector3(0, 0, 0);
+                    }
+                    else
+                    {
+                        this.transform.localEulerAngles = new Vector3(0, 180f, 0);
+                        this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                        image.localEulerAngles = new Vector3(0, 180, 0);
+                    }
                 }
                 else
                 {
-                    this.transform.localEulerAngles = new Vector3(0, 180f, 0);
-                    this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                    image.localEulerAngles = new Vector3(0, 180, 0);
+                    if (v2.y > v1.y)
+                    {
+                        this.transform.localEulerAngles = new Vector3(0, 0, 90f);
+                        this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
+                        image.localEulerAngles = new Vector3(0, 0, -90);
+                    }
+                    else
+                    {
+                        this.transform.localEulerAngles = new Vector3(0, 0, -90f);
+                        this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
+                        image.localEulerAngles = new Vector3(0, 0, 90);
+                    }
+                }
+
+                if (Vector2.Distance(prevv1, v1) > 0.1f || Vector2.Distance(prevv2, v2) > 0.1f)
+                {
+                    snm.sendMessage("bossposition", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
+                    prevv1 = v1;
+                    prevv2 = v2;
                 }
             }
-            else
+            if (isstone)
             {
-                if (v2.y > v1.y)
+                Vector2 v2 = player.transform.position;
+                // v1 = new Vector2(v1.x + 5, v1.y+5);
+
+                if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
                 {
-                    this.transform.localEulerAngles = new Vector3(0, 0, 90f);
-                    this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 90.036f);
-                    image.localEulerAngles = new Vector3(0, 0, -90);
+
+                    if (v2.x > v1.x)
+                    {
+                        v2 = new Vector2(v1.x, v2.y);
+                    }
+                    else
+                    {
+                        v2 = new Vector2(v1.x, v2.y);
+                    }
                 }
                 else
                 {
-                    this.transform.localEulerAngles = new Vector3(0, 0, -90f);
-                    this.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition3D = new Vector3(2.817f, -0.024f, 0f);
-                    image.localEulerAngles = new Vector3(0, 0, 90);
+                    //v1 = new Vector2(v1.x, v1.y - 2);
+                    if (v2.y > v1.y)
+                    {
+                        v2 = new Vector2(v2.x, v1.y);
+                    }
+                    else
+                    {
+                        v2 = new Vector2(v2.x, v1.y);
+                    }
                 }
-            }
-
-            if (Vector2.Distance(prevv1, v1) > 0.1f || Vector2.Distance(prevv2, v2) > 0.1f)
-            {
-                snm.sendMessage("bossposition", "{ \"x\": " + v1.x + " , \"y\": " + v1.y + ", \"rx\": " + v2.x + ", \"ry\": " + v2.y + " }");
-                prevv1 = v1;
-                prevv2 = v2;
-            }
-        }
-        if (isstone)
-        {
-            Vector2 v2 = player.transform.position;
-            // v1 = new Vector2(v1.x + 5, v1.y+5);
-
-            if (Mathf.Abs(v2.x - v1.x) > Mathf.Abs(v2.y - v1.y))
-            {
-
-                if (v2.x > v1.x)
+                if (Mathf.Abs(v2.x - v1.x) <= 1.5f)
                 {
-                    v2 = new Vector2(v1.x, v2.y);
+                    v1 = new Vector2(v1.x - 4f, v1.y);
                 }
-                else
+                if (Mathf.Abs(v2.y - v1.y) <= 1.5f)
                 {
-                    v2 = new Vector2(v1.x, v2.y);
+                    v1 = new Vector2(v1.x, v1.y - 4f);
                 }
-            }
-            else
-            {
-                //v1 = new Vector2(v1.x, v1.y - 2);
-                if (v2.y > v1.y)
-                {
-                    v2 = new Vector2(v2.x, v1.y);
-                }
-                else
-                {
-                    v2 = new Vector2(v2.x, v1.y);
-                }
-            }
-            if (Mathf.Abs(v2.x - v1.x) <= 1.5f)
-            {
-                v1 = new Vector2(v1.x - 4f, v1.y);
-            }
-            if (Mathf.Abs(v2.y - v1.y) <= 1.5f)
-            {
-                v1 = new Vector2(v1.x, v1.y - 4f);
-            }
 
-            rb.velocity = v2 - v1;
+                rb.velocity = v2 - v1;
+            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //player = GameObject.FindWithTag("Player");
-        Vector2 v1 = transform.position;
-        Vector2 v2 = player.transform.position;
-        if ((v1 - v2).magnitude < 3 && state)
+        if (move)
         {
-            snm.sendMessage("bossanimation", "{ \"name\": \"" + "huijian" + "\" }");
-            animation.Play("huijian");
+            //player = GameObject.FindWithTag("Player");
+            Vector2 v1 = transform.position;
+            Vector2 v2 = player.transform.position;
+            if ((v1 - v2).magnitude < 3 && state)
+            {
+                snm.sendMessage("bossanimation", "{ \"name\": \"" + "huijian" + "\" }");
+                animation.Play("huijian");
 
-            state = false;
-            Invoke("PlayGameeffects", 0.3f);
-            Invoke("ChangeStae", 1f);
+                state = false;
+                Invoke("PlayGameeffects", 0.3f);
+                Invoke("ChangeStae", 1f);
+            }
         }
 
         if (alt)
